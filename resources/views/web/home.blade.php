@@ -67,7 +67,7 @@
 								<li class="has-children">
 									<a href="category.html">PRODUTOS</a>
 									<ul class="dropdown">
-										<li><a href="search-result.html">Search Result</a></li>
+										<li><a href="/produtos/canetas">Canetas</a></a></li>
 										<li><a href="blog.html">Blog</a></li>
 										<li><a href="single.html">Blog Single</a></li>
 										<li><a href="category.html">Category</a></li>
@@ -87,11 +87,12 @@
 								</li>
 								<li><a href="category.html">DATAS COMEMORATIVAS</a></li>
 								<li class="has-children">
-									<a href="category.html">SOBRE NÓS</a>
+									<a href="#">ACESSOS</a>
 									<ul class="dropdown">
-											<li><a href="search-result.html">Nossa História</a></li>
-											<li><a href="blog.html">Nossa Equipe</a></li>
-											<li><a href="single.html">Contato</a></li>
+											<li><a href="/login">Afiliados</a></li>
+											<li><a href="/login">Vendedor</a></li>
+											<li><a href="/login">Cliente</a></li>
+											<li><a href="/registrar">Cadastrar / Registrar</a></li>
 									</ul>
 								</li>
 								

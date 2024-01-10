@@ -1,13 +1,14 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+
+@section('title', 'Painel de Controle')
 
 @section('content_header')
-    <h1>Dashboard</h1>
+    <h1>Painel de Controle</h1>
 @stop
 
 @section('content')
-    <p>Welcome to this beautiful admin panel.</p>
+    <p>Bem vindo! Ao Painel de Controle.</p>
 @stop
 
 @section('css')
@@ -15,5 +16,5 @@
 @stop
 
 @section('js')
-    <script> console.log('Hi!'); </script>
+    <script> console.log('Olá!'); </script>
 @stop
