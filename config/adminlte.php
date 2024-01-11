@@ -319,6 +319,18 @@ return [
             'label'       => 0,
             'label_color' => 'success',
         ],
+        [
+            'text'        => 'Categorias',
+            'url'         => '/categorias',
+            'icon'        => 'far fa-fw fa-file'            
+           
+        ],
+        [
+            'text'        => 'Tipo Personalização',
+            'url'         => '/tipo',
+            'icon'        => 'far fa-fw fa-file'            
+           
+        ],
         ['header' => 'account_settings'],
         [
             'text' => 'profile',

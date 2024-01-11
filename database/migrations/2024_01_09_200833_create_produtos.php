@@ -17,17 +17,18 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('codigo');
             $table->string('nome');
-            $table->string('descricao');
+            $table->string('descricao')->nullable();;
             $table->string('imagem');
-            $table->string('prazo_producao');
-            $table->string('altura');
-            $table->string('largura');
-            $table->string('comprimento');
-            $table->string('peso');
-            $table->string('minimo');
-            $table->float('valor', 8, 2);
+            $table->string('prazo_producao')->nullable();;
+            $table->string('altura')->nullable();;
+            $table->string('largura')->nullable();;
+            $table->string('comprimento')->nullable();;
+            $table->string('peso')->nullable();;
+            $table->string('minimo')->nullable();;
+            $table->float('valor', 8, 2)->nullable();;
             $table->integer('id_categoria');
-            $table->integer('quantidade');
+            $table->integer('id_tipo');
+            $table->integer('quantidade')->nullable();;
             $table->timestamps();
         });
     }

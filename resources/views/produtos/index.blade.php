@@ -29,19 +29,14 @@
                 <td><img src="{{ asset('storage/images/'.$produto->imagem)}}" width="80px"></td>
                 <td>{{$produto->nome}}</td>
                 <td>{{$produto->quantidade}}</td>
-                <td>{{$produto->id_categoria}}</td>
+                <td>{{$produto->nome_categoria}}</td>
                 <td>R$<?php echo number_format($produto->valor,2); ?></td>
                 <td>
                         <a href="{{ url('produtos\/') .$produto->id .'/atacado'}}" class="btn btn-outline-secondary btn-sm">Atacado<i class="fa fa-pencil" aria-hidden="true"></i></a>
                         <a href="{{ url('produtos\/') .$produto->id .'/tecnicas'}}" class="btn btn-outline-secondary btn-sm">Técnicas<i class="fa fa-pencil" aria-hidden="true"></i></a>
-                        <a href="{{ url('produtos\/') .$produto->id .'/variacoes'}}" class="btn btn-outline-secondary btn-sm">Variações<i class="fa fa-pencil" aria-hidden="true"></i></a>
+                        <a href="{{ url('produtos\/') .$produto->id .'/variacao'}}" class="btn btn-outline-secondary btn-sm">Variações<i class="fa fa-pencil" aria-hidden="true"></i></a>
                         <a href="{{ url('produtos\/') .$produto->id .'/editar'}}" class="btn btn-outline-secondary btn-sm">Editar<i class="fa fa-pencil" aria-hidden="true"></i></a>
-                        <a href="#" class="btn btn-outline-danger btn-sm btn-excluir"
-                            data-professor = {{$produto}}
-                            data-route = "{{ route('produto.destroy',['produto'=>$produto]) }}"
-                            data-id="{{ $produto->id }}"
-                            data-nome="{{ $produto->nome }}"
-                            data-rota="{{ route('produto.destroy',['produto'=>$produto]) }}">
+                        <a href="{{ url('produtos\/') .$produto->id .'/delete'}}" class="btn btn-outline-danger btn-sm btn-excluir">
                             <i class="fa fa-trash" aria-hidden="true"></i>
                         </a>
                 </td>
