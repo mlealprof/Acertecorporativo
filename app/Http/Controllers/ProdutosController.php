@@ -20,7 +20,7 @@ class ProdutosController extends Controller
         ->join('tipo','tipo.id','=','produtos.id_tipo')    
         ->select('produtos.nome as nome','produtos.imagem as imagem','produtos.codigo as codigo',
                  'produtos.quantidade as quantidade','produtos.valor as valor','categorias.nome as nome_categoria',
-                 'produtos.id as id')            
+                 'produtos.id as id','produtos.descricao as descricao')            
         ->orderBy('produtos.nome','asc')                      
         ->get();
 
@@ -37,10 +37,19 @@ class ProdutosController extends Controller
         $produtos = Produto::findOrFail($id); 
         $categorias = Categoria::all();
         $tipos = Tipo::all();
+
+        $dados = DB::table('produtos')
+        ->where('produtos.id','=',$id)
+        ->join('categorias','categorias.id','=','produtos.id_categoria')
+        ->join('tipo','tipo.id','=','produtos.id_tipo')    
+        ->select('categorias.nome as categoria','tipo.descricao as tipo','categorias.id as id_categoria','tipo.id as id_tipo') 
+        ->get();
+        
         return view('produtos.edit',[
             'produtos' => $produtos,
             'categorias'=> $categorias,
-            'tipos'=>$tipos
+            'tipos'=>$tipos,
+            'dados' =>$dados
         ]);
     }
 
@@ -88,6 +97,7 @@ class ProdutosController extends Controller
         $produto->valor = $request->valor;
         $produto->descricao = $request->descricao;
         $produto->id_categoria= $request->id_categoria;
+        $produto->id_tipo= $request->id_tipo;
         $produto->quantidade= $request->quantidade;
         $produto->prazo_producao =$request->prazo_producao;
         $produto->imagem = $fileNameToStore;

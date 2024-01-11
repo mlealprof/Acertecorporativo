@@ -25,7 +25,7 @@
         </div>
         <div class="form-group">
             <label for="exampleFormControlTextarea1">Descrição</label>
-            <textarea class="form-control" id="descricao" name="descricao" rows="3"value="{{$produtos->descricao}}"></textarea>
+            <textarea class="form-control" id="descricao" name="descricao" rows="3">{{$produtos->descricao}}</textarea>
         </div>
         <div class="row">
            <div class="form-group mb-2 col-lg-3">
@@ -51,7 +51,7 @@
         <div class="form-group col-lg-3">
                 <label for="exampleFormControlSelect1">Selecione a Categoria</label>
                 <select class="form-control" id="id_categoria" name="id_categoria">
-                   <option value="{{$produtos->id_categoria}}">...</option> 
+                   <option value="{{$dados[0]->id_categoria}}">{{$dados[0]->categoria}}</option> 
                     @foreach ($categorias as $categoria)
                         <option value="{{$categoria->id}}">{{$categoria->nome}}</option>         
                     @endforeach
@@ -60,7 +60,7 @@
            <div class="form-group col-lg-3">
                 <label for="exampleFormControlSelect1">Tipo Personalização</label>
                 <select class="form-control" id="id_tipo" name="id_tipo">
-                   <option value="{{$produtos->id_tipo}}">...</option> 
+                   <option value="{{$dados[0]->id_tipo}}">{{$dados[0]->tipo}}</option> 
                     @foreach ($tipos as $tipo)
                         <option value="{{$tipo->id}}">{{$tipo->descricao}}</option>         
                     @endforeach

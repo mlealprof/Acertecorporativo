@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('codigo');
             $table->string('nome');
-            $table->string('descricao')->nullable();;
+            $table->longText('descricao')->nullable();;
             $table->string('imagem');
             $table->string('prazo_producao')->nullable();;
             $table->string('altura')->nullable();;
