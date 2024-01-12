@@ -21,6 +21,10 @@
                     <label for="exampleFormControlInput1">Nome</label>
                     <input type="text" class="form-control" id="nome" name="nome">
                 </div>
+                <div class="form-group">
+                   
+                   <button type="button" class="btn btn-secondary">ADD Carrinho</button>
+                </div>
             </div>
         </div>
         <div class="form-group">

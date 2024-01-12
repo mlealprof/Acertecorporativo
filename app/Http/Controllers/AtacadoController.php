@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Preco_Atacado;
+use App\Models\preco_atacado;
 
 class AtacadoController extends Controller
 {

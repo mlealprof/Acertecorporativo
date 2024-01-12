@@ -202,6 +202,42 @@ class ProdutosController extends Controller
         
     }
 
+    public function produtos($id)
+    {
+        $categoria = Categoria::findOrFail($id); 
+        $categorias = DB::table('categorias')->orderby('nome')->get();
+        $atacado = DB::table('produtos')
+                ->where('produtos.id_categoria','=',$id)
+                ->join('atacado','atacado.id_produto','=','produtos.id')
+                ->select('atacado.quantidade as quantidade', 'atacado.valor as valor')
+                ->orderby('atacado.valor')
+                ->get();
+        $produtos = DB::table('produtos')
+                    ->where('produtos.id_categoria','=',$id)
+                    ->join('tipo','tipo.id','=','produtos.id_tipo')
+                    ->select('produtos.*','tipo.descricao as tipo')
+                    ->orderby('valor')
+                    ->get();
+
+    
+        
+        return view('web.produtos',[
+            'categoria'=>$categoria,
+            'categorias'=>$categorias,
+            'produtos'=>$produtos,
+            'atacado'=>$atacado
+        
+        ]);
+    }
+
+    public function portifolio()
+    {
+        $categorias = DB::table('categorias')->orderby('nome')->get();
+        return view('web.portifolio',[
+          'categorias'=>$categorias 
+        ] );
+    }
+
 
 
 }
