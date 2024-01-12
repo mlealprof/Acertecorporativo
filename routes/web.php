@@ -23,6 +23,8 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/', [App\Http\Controllers\web\HomerController::class, 'home']);
+Route::get('/categorias/{id}', [App\Http\Controllers\HomeController::class, 'produtos','id']);
+Route::get('/portifolio', [App\Http\Controllers\HomeController::class, 'portifolio']);
 Route::get('/produtos', [App\Http\Controllers\ProdutosController::class, 'index']);
 Route::get('/produtos/novo', [App\Http\Controllers\ProdutosController::class, 'novo']);
 Route::post('/produtos/salvar', [App\Http\Controllers\ProdutosController::class, 'inserir']);

@@ -331,6 +331,12 @@ return [
             'icon'        => 'far fa-fw fa-file'            
            
         ],
+        [
+            'text'        => 'Portifólio',
+            'url'         => '/cadastro_potifolio',
+            'icon'        => 'far fa-fw fa-file'            
+           
+        ],
         ['header' => 'account_settings'],
         [
             'text' => 'profile',
