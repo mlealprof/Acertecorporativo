@@ -22,7 +22,7 @@ class ProdutosController extends Controller
                  'produtos.quantidade as quantidade','produtos.valor as valor','categorias.nome as nome_categoria',
                  'produtos.id as id','produtos.descricao as descricao')            
         ->orderBy('produtos.nome','asc')                      
-        ->paginate(15);
+        ->paginate(10);
 
 
         $categorias = Categoria::all();

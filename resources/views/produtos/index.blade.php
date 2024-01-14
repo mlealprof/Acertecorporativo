@@ -42,6 +42,6 @@
            </tr>
         @endforeach     
     </table>
-    {{ $produtos->links() }}
+    {{ $produtos->onEachSide(0)->links() }}
 @stop
 
