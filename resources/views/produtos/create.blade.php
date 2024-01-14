@@ -21,10 +21,6 @@
                     <label for="exampleFormControlInput1">Nome</label>
                     <input type="text" class="form-control" id="nome" name="nome">
                 </div>
-                <div class="form-group">
-                   
-                   <button type="button" class="btn btn-secondary">ADD Carrinho</button>
-                </div>
             </div>
         </div>
         <div class="form-group">
@@ -95,7 +91,7 @@
         <div class="row">
             <div class="form-group mb-2 col-lg-2">
                 <label for="exampleFormControlInput1">Prazo de Produção</label>
-                <input type="text" class="form-control" id="prazo_producao" name="prazo_producao" placeholder="7">
+                <input type="text" class="form-control" id="prazo_producao" name="prazo_producao" value="7">
             </div>
 
            <div class="mb-3 col-lg-10">

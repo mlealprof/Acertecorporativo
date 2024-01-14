@@ -22,7 +22,7 @@ class ProdutosController extends Controller
                  'produtos.quantidade as quantidade','produtos.valor as valor','categorias.nome as nome_categoria',
                  'produtos.id as id','produtos.descricao as descricao')            
         ->orderBy('produtos.nome','asc')                      
-        ->get();
+        ->paginate(15);
 
 
         $categorias = Categoria::all();
@@ -206,12 +206,10 @@ class ProdutosController extends Controller
     {
         $categoria = Categoria::findOrFail($id); 
         $categorias = DB::table('categorias')->orderby('nome')->get();
-        $atacado = DB::table('produtos')
-                ->where('produtos.id_categoria','=',$id)
-                ->join('atacado','atacado.id_produto','=','produtos.id')
-                ->select('atacado.quantidade as quantidade', 'atacado.valor as valor')
-                ->orderby('atacado.valor')
+        $atacado = DB::table('preco_atacado')
+                ->orderby('quantidade')
                 ->get();
+                
         $produtos = DB::table('produtos')
                     ->where('produtos.id_categoria','=',$id)
                     ->join('tipo','tipo.id','=','produtos.id_tipo')
@@ -220,7 +218,7 @@ class ProdutosController extends Controller
                     ->get();
 
     
-        
+ 
         return view('web.produtos',[
             'categoria'=>$categoria,
             'categorias'=>$categorias,

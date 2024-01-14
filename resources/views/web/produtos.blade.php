@@ -9,7 +9,7 @@
             <div class="bg-image hover-overlay ripple shadow-1-strong rounded" data-ripple-color="light"   >
                 <img src="{{ asset('storage/images/'.$produto->imagem)}}" class="w-100"/>                   
                 <div class="text-justify">
-                    <h5>{{$produto->nome}}</h5>                    
+                    <h5>{{$produto->codigo}}-{{$produto->nome}}</h5>                    
                 </div>
                 
 
@@ -19,10 +19,12 @@
                 </div>
                 <div  class="row text-right">
                     <table >
-                       @foreach ($atacado as $produto)
-                        <tr>
-                            <td class="font-italic text-right x-small">Acima de {{$produto->quantidade}} unidades R$ <?php echo number_format($produto->valor,2); ?> cada</td>
+                       @foreach ($atacado as $prod)
+                        <tr> @if ($prod->id_produto == $produto->id)
+                               <td class="font-italic text-right x-small">Acima de {{$prod->quantidade}} unidades R$ <?php echo number_format($prod->valor,2);?> cada</td>
+                            @endif
                         </tr>
+                       @endforeach
                         
                     </table>
                    

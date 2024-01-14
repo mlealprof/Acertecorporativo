@@ -32,8 +32,7 @@
                 <td>{{$produto->nome_categoria}}</td>
                 <td>R$<?php echo number_format($produto->valor,2); ?></td>
                 <td>
-                        <a href="{{ url('produtos\/') .$produto->id .'/atacado'}}" class="btn btn-outline-secondary btn-sm">Atacado<i class="fa fa-pencil" aria-hidden="true"></i></a>
-                        <a href="{{ url('produtos\/') .$produto->id .'/tecnicas'}}" class="btn btn-outline-secondary btn-sm">Técnicas<i class="fa fa-pencil" aria-hidden="true"></i></a>
+                        <a href="{{ url('produtos\/') .$produto->id .'/atacado'}}" class="btn btn-outline-secondary btn-sm">Atacado<i class="fa fa-pencil" aria-hidden="true"></i></a>                        
                         <a href="{{ url('produtos\/') .$produto->id .'/variacao'}}" class="btn btn-outline-secondary btn-sm">Variações<i class="fa fa-pencil" aria-hidden="true"></i></a>
                         <a href="{{ url('produtos\/') .$produto->id .'/editar'}}" class="btn btn-outline-secondary btn-sm">Editar<i class="fa fa-pencil" aria-hidden="true"></i></a>
                         <a href="{{ url('produtos\/') .$produto->id .'/delete'}}" class="btn btn-outline-danger btn-sm btn-excluir">
@@ -41,7 +40,8 @@
                         </a>
                 </td>
            </tr>
-        @endforeach
+        @endforeach     
     </table>
+    {{ $produtos->links() }}
 @stop
 
