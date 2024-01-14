@@ -1,15 +1,82 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
 @include ('web.header')
 <div class='container'>
 
    <img width='100%' src="{{ asset('storage/images/categorias/'.$categoria->imagem)}}">
    
-   <div class="row">              
+   <div class="row">    
+    @php
+        $aberto = 0;
+    @endphp          
     @foreach ($produtos as $produto)
         <div class="col-lg-4 col-md-12 mb-4 mb-lg-0 border">
             <div class="bg-image hover-overlay ripple shadow-1-strong rounded" data-ripple-color="light"   >
-                <img src="{{ asset('storage/images/'.$produto->imagem)}}" class="w-100"/>                   
+                <img src="{{ asset('storage/images/'.$produto->imagem)}}" class="w-100"/> 
+
+                
+                <div id="carrossel">
+                    <div class="col-md-12 col-md">
+                        <div class="carousel slide" id="myCarousel{{$produto->id}}">
+                          <div class="carousel-inner">
+                               @php
+                                  $active = 0;
+                                  $cont = 1;                                  
+                               @endphp
+                               @foreach ($variacoes as $variacao)
+                                  @if ($variacao->id_produto == $produto->id)
+                                        @if ($active == 0)
+                                            <div class="item active">                                      
+                                            @php
+                                                $active=1;
+                                                $aberto=1;
+                                            @endphp    
+                                        @else
+                                           @if ($cont==1)
+                                              <div class="item">  
+                                              @php
+                                                  $aberto = 1;
+                                              @endphp       
+                                           @endif    
+                                            
+                                        @endif                                        
+                                        <div class="col-xs-4"><img src="{{ asset('storage/images/'.$variacao->imagem)}}" class="img-responsive"></div>       
+                                        @php
+                                            $cont = $cont +1;
+                                        @endphp
+                                        @if ($cont == 4)
+                                            @php                                        
+                                                $cont = 1;
+                                                $aberto = 0;
+                                            @endphp 
+                                            </div>        
+                                        @endif                                           
+                                  @endif                                                                      
+                               @endforeach
+                               @if ($aberto == 1)
+                                  </div>                   
+                               @endif                                  
+                          </div>     
+                          <a class="left carousel-control" href="#myCarousel{{$produto->id}}" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+                          <a class="right carousel-control" href="#myCarousel{{$produto->id}}" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            
+
+
+
+
+
+
+                
+
+
                 <div class="text-justify">
-                    <h5>{{$produto->codigo}}-{{$produto->nome}}</h5>                    
+                    <h3>{{$produto->codigo}}-{{$produto->nome}}</h3>                    
                 </div>
                 
 
@@ -47,5 +114,24 @@
    </div>
 
 </div>
+
+
+@section('js')
+    <script> 
+        $('#myCarousel').carousel({
+                interval: 10000
+        })
+
+        $('.carousel .item').each(function(){
+        var next = $(this).next();
+        if (!next.length) {
+            next = $(this).siblings(':first');
+        }
+        
+        next.children(':first-child').clone().appendTo($(this));
+        });
+    </script>
+@stop
+
 
 @include ('web.footer')

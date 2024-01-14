@@ -21,8 +21,8 @@ class ProdutosController extends Controller
         ->select('produtos.nome as nome','produtos.imagem as imagem','produtos.codigo as codigo',
                  'produtos.quantidade as quantidade','produtos.valor as valor','categorias.nome as nome_categoria',
                  'produtos.id as id','produtos.descricao as descricao')            
-        ->orderBy('produtos.nome','asc')                      
-        ->paginate(10);
+        ->orderBy('produtos.id','desc')                      
+        ->get();
 
 
         $categorias = Categoria::all();
@@ -216,14 +216,21 @@ class ProdutosController extends Controller
                     ->select('produtos.*','tipo.descricao as tipo')
                     ->orderby('valor')
                     ->get();
+        
+        $variacoes =DB::table('produtos')    
+                    ->where('produtos.id_categoria','=',$id)               
+                    ->join('variacao','variacao.id_produto','=','produtos.id')     
+                    ->select('variacao.imagem as imagem', 'produtos.id as id_produto')              
+                    ->get();
 
     
- 
+     //  dd($variacoes);
         return view('web.produtos',[
             'categoria'=>$categoria,
             'categorias'=>$categorias,
             'produtos'=>$produtos,
-            'atacado'=>$atacado
+            'atacado'=>$atacado,
+            'variacoes'=>$variacoes
         
         ]);
     }

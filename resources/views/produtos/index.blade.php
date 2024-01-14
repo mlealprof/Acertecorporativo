@@ -9,10 +9,11 @@
 @stop
 
 @section('content')
-    <p>Lista de Produtos</p>
-    <table class="display table table-striped">
-    <thead>
+   
+    <table class="display table table-striped" id="myTable">
+        <thead>
         <tr>
+        <th scope="col">ID</th>
         <th scope="col">Código</th>
         <th scope="col">Imagem</th>
         <th scope="col">Produto</th>
@@ -25,6 +26,7 @@
     <tbody>
         @foreach ($produtos as $produto)
            <tr>
+                <td>{{$produto->id}}</td>
                 <td>{{$produto->codigo}}</td>
                 <td><img src="{{ asset('storage/images/'.$produto->imagem)}}" width="80px"></td>
                 <td>{{$produto->nome}}</td>
@@ -42,6 +44,39 @@
            </tr>
         @endforeach     
     </table>
-    {{ $produtos->onEachSide(0)->links() }}
+   
 @stop
 
+@section('css')
+    <link rel="stylesheet" href="/css/admin_custom.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    
+@stop
+
+@section('js')
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+<script>
+    $("h3.symple-toggle-trigger").click(function(){
+        $(this).toggleClass("active").next().slideToggle("fast");
+        return false;
+    });
+
+    new DataTable('#myTable', {
+    language: {
+        info: 'Mostrando _PAGE_ de _PAGES_',
+        infoEmpty: 'Sem registros',
+        infoFiltered: '(Filtrado de _MAX_ Total de Registros)',
+        lengthMenu: 'Monstrar _MENU_ registros por pagina',
+        search:         "Procurar:",
+        paginate: {
+            first:      "Primeiro",
+            last:       "Último",
+            next:       "Próximo",
+            previous:   "Anterior"
+        },
+        zeroRecords: 'Não existe registro...'
+    }
+});
+</script>
+
+@stop
