@@ -43,7 +43,9 @@
                                            @endif    
                                             
                                         @endif                                        
-                                        <div class="col-xs-4"><img src="{{ asset('storage/images/'.$variacao->imagem)}}" class="img-responsive"></div>       
+                                        <div class="col-xs-4">
+                                            <img src="{{asset('storage/images/'.$variacao->imagem)}}" alt="{{ asset('storage/images/'.$variacao->imagem)}}" class="img-responsive">
+                                        </div>       
                                         @php
                                             $cont = $cont +1;
                                         @endphp
@@ -65,14 +67,7 @@
                         </div>
                     </div>
                 </div>
-            
-
-
-
-
-
-
-                
+                        
 
 
                 <div class="text-justify">
@@ -80,9 +75,9 @@
                 </div>
                 
 
-                <div class="row     text-sm-left p-3 mb-2 bg-dark text-white">              
-                <div class="col-lg-4 text-left small">Mínimo: {{$produto->minimo}} Unidades</div>
-                    <div class="col-lg-8 text-right h3">R$<?php echo number_format($produto->valor,2); ?> <span class="h6"> cada</span></div>
+                <div class="row  text-sm-left p-3 mb-2 bg-dark text-white">              
+                <div class="col-lg-5 text-left ">Mínimo: {{$produto->minimo}} Unidades</div>
+                    <div class="col-lg-7 text-right h2">R$<?php echo number_format($produto->valor,2); ?> <span class="h6"> cada</span></div>
                 </div>
                 <div  class="row text-right">
                     <table >

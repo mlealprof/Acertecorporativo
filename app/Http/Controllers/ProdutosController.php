@@ -220,7 +220,7 @@ class ProdutosController extends Controller
         $variacoes =DB::table('produtos')    
                     ->where('produtos.id_categoria','=',$id)               
                     ->join('variacao','variacao.id_produto','=','produtos.id')     
-                    ->select('variacao.imagem as imagem', 'produtos.id as id_produto')              
+                    ->select('variacao.imagem as imagem', 'produtos.id as id_produto','variacao.descricao as descricao')              
                     ->get();
 
     
