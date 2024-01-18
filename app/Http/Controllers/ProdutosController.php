@@ -243,6 +243,36 @@ class ProdutosController extends Controller
         ] );
     }
 
+    public function busca(Request $request)
+    {
+       $categorias = Categoria::all();
+       
+        $atacado = DB::table('preco_atacado')
+                ->orderby('quantidade')
+                ->get();
+                
+        $produtos = DB::table('produtos')
+                    ->where('produtos.codigo','like','%'.$request->busca.'%')
+                    ->orwhere('produtos.nome','like','%'.$request->busca.'%')
+                    ->join('tipo','tipo.id','=','produtos.id_tipo')
+                    ->select('produtos.*','tipo.descricao as tipo')
+                    ->orderby('valor')
+                    ->get();
+        
+        $variacoes =DB::table('produtos')                                       
+                    ->join('variacao','variacao.id_produto','=','produtos.id')     
+                    ->select('variacao.imagem as imagem', 'produtos.id as id_produto','variacao.descricao as descricao')              
+                    ->get();
+
+       // dd($produtos);
+        return view('web.resultado_busca',[
+            'categorias'=>$categorias,  
+            'produtos'=>$produtos,
+            'atacado'=>$atacado,
+            'variacoes'=>$variacoes
+        
+        ]);
+    }
 
 
 }

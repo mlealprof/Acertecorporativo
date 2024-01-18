@@ -54,10 +54,14 @@
 				<span class="icofont-close js-menu-toggle"></span>
 			</div>
 		</div>
-		<div class="site-mobile-menu-body"></div>
+		<div class="site-mobile-menu-body">
+			<ul>
+				<li>Teste1</li>
+			</ul>
+		</div>
 	</div>
 
-	<nav class="site-nav">
+	<nav class="site-nav ">
 		<div class="container">
 			<div class="menu-bg-wrap">
 				<div class="site-navigation">
@@ -71,7 +75,7 @@
 								<span class="bi-search"></span>
 							</form>
 
-							<ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu mx-auto">
+							<ul class=" site-menu mx-auto">
 								<li class="active"><a href="/portifolio">PORTIFÓRIO</a></li>
 								<li class="has-children">									
 									<a href="#">PRODUTOS</a>
@@ -105,11 +109,10 @@
 							</ul>
 						</div>
 						<div class="col-2 text-end">
-							<a href="#" class="burger ms-auto float-end site-menu-toggle js-menu-toggle d-inline-block d-lg-none light">
-								<span></span>
-							</a>
-							<form action="#" class="search-form d-none d-lg-inline-block">
-								<input type="text" class="form-control" placeholder="Pesquisa...">
+							
+							
+							<form action="/busca" class="search-form d-none d-lg-inline-block" method="get">
+								<input type="text" class="form-control" name="busca" placeholder="Pesquisa...">
 								<span class="bi-search"></span>
 							</form>
 						</div>

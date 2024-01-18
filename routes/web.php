@@ -43,3 +43,5 @@ Route::post('/tipos/add', [App\Http\Controllers\TipoController::class, 'adiciona
 Route::get('/tipos/{tipo}/delete', [App\Http\Controllers\TipoController::class, 'delete','tipo'])->middleware('auth');
 Route::get('/produtos/{produto}/editar', [App\Http\Controllers\ProdutosController::class, 'editar','produto'])->middleware('auth');
 Route::post('/produtos/editar', [App\Http\Controllers\ProdutosController::class, 'update','produto'])->middleware('auth');
+
+Route::get('/busca', [App\Http\Controllers\ProdutosController::class, 'busca']);

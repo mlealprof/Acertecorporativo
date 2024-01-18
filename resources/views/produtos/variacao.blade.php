@@ -2,6 +2,9 @@
 
 @section('content_header')
     <h1>Cadastro Variações</h1>
+    <div class="col-lg-12" style="text-align: right;">
+        <a href="/produtos/{{$produto->id}}/atacado">  <button type="button" class="btn btn-primary">Atacado</button></a>
+      </div>
     
     <table class="table">
         <tr>

@@ -7,7 +7,7 @@
 <br>
 <div class='container'>
 
-   <img width='100%' src="{{ asset('storage/images/categorias/'.$categoria->imagem)}}">
+ 
    
    <div class="row">    
     @php

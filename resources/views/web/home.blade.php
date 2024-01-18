@@ -8,9 +8,7 @@
   </ol>
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img class="d-block w-100" src="assets/images/banner/1.jpg?auto=yes&bg=777&fg=555&text=Primeiro Slide" alt="Primeiro Slide">
-	  <img class="d-block w-100" src="assets/images/banner/2.jpg?auto=yes&bg=666&fg=444&text=Segundo Slide" alt="Segundo Slide">
-	  <img class="d-block w-100" src="assets/images/banner/2.jpg?auto=yes&bg=666&fg=444&text=Segundo Slide" alt="Segundo Slide">
+      <img class="d-block w-100" src="assets/images/banner/1.jpg?auto=yes&bg=777&fg=555&text=Primeiro Slide" alt="Primeiro Slide">	  
     </div>
     <div class="carousel-item">
       <img class="d-block w-100" src="assets/images/banner/2.jpg?auto=yes&bg=666&fg=444&text=Segundo Slide" alt="Segundo Slide">
