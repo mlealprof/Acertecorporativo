@@ -1,0 +1,30 @@
+StartFontMetrics 4.1
+Notice Converted by PHP-font-lib
+Comment https://github.com/dompdf/php-font-lib
+EncodingScheme FontSpecific
+Copyright 
+FontName Flaticon
+FontSubfamily Regular
+UniqueID FontForge 2.0 : Flaticon : 27-12-2020
+FullName Flaticon
+Version Version 001.000 
+PostScriptName Flaticon
+Weight Medium
+ItalicAngle 0
+IsFixedPitch false
+UnderlineThickness 49
+UnderlinePosition -125
+FontHeightOffset 90
+Ascender 898
+Descender -125
+FontBBox 0 -125 1002 898
+StartCharMetrics 10
+U 32 ; WX 391 ; N space ; G 3
+U 61696 ; WX 1000 ; N 001-financial ; G 4
+U 61697 ; WX 1000 ; N 002-security ; G 5
+U 61698 ; WX 1000 ; N 003-savings ; G 6
+U 61699 ; WX 1000 ; N 004-phone-call ; G 7
+U 61700 ; WX 1000 ; N 005-money ; G 8
+U 61701 ; WX 1000 ; N 006-pie-chart ; G 9
+EndCharMetrics
+EndFontMetrics

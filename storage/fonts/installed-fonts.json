@@ -6,5 +6,11 @@
         "normal": "C:\\xampp\\htdocs\\AcerteNoPresente\\corporativo\\storage\\fonts\/work_sans_normal_155638d82c044167a12fc15f085a09f9",
         "600": "C:\\xampp\\htdocs\\AcerteNoPresente\\corporativo\\storage\\fonts\/work_sans_600_66044a8d8e02d5a0e88de91cd6299b71",
         "bold": "work_sans_bold_788e18efc0927851f7c2d4f7fc5a2e3f"
+    },
+    "icomoon": {
+        "normal": "icomoon_normal_b702c2ce2a5240ecf8970170bd2c015f"
+    },
+    "flaticon": {
+        "normal": "flaticon_normal_3d56023a7695464afc1f651fc0dd99a3"
     }
 }

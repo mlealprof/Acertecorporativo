@@ -300,7 +300,15 @@ class ProdutosController extends Controller
         ->setPaper('A4');
         return $pdf->download('Acerte no Presente - Catálogo Geral .pdf');
     
-
+    /*
+    return view('produtos.pdf_produtos',[
+        'categorias'=>$categorias,  
+        'produtos'=>$produtos,
+        'atacado'=>$atacado,
+        'variacoes'=>$variacoes
+    
+    //]);
+    */
 
 
     }
