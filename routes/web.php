@@ -46,3 +46,4 @@ Route::post('/produtos/editar', [App\Http\Controllers\ProdutosController::class,
 
 Route::get('/busca', [App\Http\Controllers\ProdutosController::class, 'busca']);
 Route::get('/gerar_pdf', [App\Http\Controllers\ProdutosController::class, 'gera_pdf']);
+Route::get('/gerar_pdf/{categoria}', [App\Http\Controllers\ProdutosController::class, 'gera_pdf_categoria','categoria']);

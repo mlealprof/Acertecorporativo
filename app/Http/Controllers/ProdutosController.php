@@ -276,7 +276,7 @@ class ProdutosController extends Controller
     }
     public function gera_pdf()
     {
-        $categorias = Categoria::all();
+        $categoria = Categoria::findOrFail(0); 
        
         $atacado = DB::table('preco_atacado')
                 ->orderby('quantidade')
@@ -284,7 +284,7 @@ class ProdutosController extends Controller
                 
         $produtos = DB::table('produtos')
                     
-                    ->where('produtos.nome','like','%garrafa%')
+                  //  ->where('produtos.nome','like','%garrafa%')
                     ->join('tipo','tipo.id','=','produtos.id_tipo')
                     ->select('produtos.*','tipo.descricao as tipo')
                     ->orderby('valor')
@@ -296,7 +296,7 @@ class ProdutosController extends Controller
                     ->get();
 
     
-        $pdf=PDF::loadView('produtos.pdf_produtos', compact('atacado','produtos','variacoes'))
+        $pdf=PDF::loadView('produtos.pdf_produtos', compact('atacado','produtos','variacoes','categoria'))
         ->setPaper('A4');
         return $pdf->download('Acerte no Presente - Catálogo Geral .pdf');
     
@@ -312,5 +312,37 @@ class ProdutosController extends Controller
 
 
     }
+
+    public function gera_pdf_categoria($id)
+    {
+        $categoria = Categoria::findOrFail($id); 
+        
+        $atacado = DB::table('preco_atacado')
+                ->orderby('quantidade')
+                ->get();
+                
+        $produtos = DB::table('produtos')
+                    
+                    ->where('produtos.id_categoria','=',$id)
+                    ->join('tipo','tipo.id','=','produtos.id_tipo')
+                    ->select('produtos.*','tipo.descricao as tipo')
+                    ->orderby('valor')
+                    ->get();
+        
+        $variacoes =DB::table('produtos')                                       
+                    ->join('variacao','variacao.id_produto','=','produtos.id')     
+                    ->select('variacao.imagem as imagem', 'produtos.id as id_produto','variacao.descricao as descricao')              
+                    ->get();
+            
+        $pdf=PDF::loadView('produtos.pdf_produtos', compact('atacado','produtos','variacoes','categoria'))
+        ->setPaper('A4');
+        return $pdf->download('Acerte no Presente - '.$categoria->nome.'.pdf');
+    
+
+
+
+    }
+
+
 
 }

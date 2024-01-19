@@ -30,9 +30,11 @@
 	
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <body style="margin:0;padding:0">
-
-<div class='site-nav p-4'>
-
+    @php
+         date_default_timezone_set ("America/Sao_Paulo");
+         $hoje = date('d/m/Y  -  h:i:s');
+    @endphp
+<div class='site-nav p-3'>
     <div class="row">
          <div class=" col-md-2 ">							
              <img src="{{public_path('assets/images/logo.png')}}" width="20%" alt="Logo da empresa" /> 
@@ -41,11 +43,19 @@
             <h4> Catálogo de Produtos - Geral</h4>	
            Whatsapp: 37-99906-2728<br>
            acertenopresente.com <br>
-           Instagram: @acertenopresente 						    
+           Instagram: @acertenopresente <br>
+           Validade: 7 Dias -
+           @php
+               echo "Data Atual: ".$hoje
+           @endphp						    
         </div>       
-
     </div>
 </div>
+    @if ($categoria->imagem <>'')
+        <img src="{{public_path('storage/images/categorias/'.$categoria->imagem)}}" width="100%"  /> 
+    
+    @endif
+
 
     <table class="">
             
@@ -63,12 +73,12 @@
 
                     <td>
                         <img src="{{ public_path('storage/images/'.$produto->imagem)}}" width="70%"/>                     
-                        <div>
+                        <div class="small">
                             <b>{{$produto->codigo}}-{{$produto->nome}}</b>                    
                         </div>
                         
         
-                        <div class="text-white" style="background-color: black;">     
+                        <div class="text-white" style="background-color: #212529;">     
                                
                             <div class=" text-left  small ">Mínimo: {{$produto->minimo}} Unidades</div>
                             <div class=" text-right"><h3>R$<?php echo number_format($produto->valor,2); ?></h3> <span class=""> cada</span></div>

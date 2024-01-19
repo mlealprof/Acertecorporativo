@@ -107,6 +107,8 @@
                 
         </div>  
     @endforeach
+    <a href="/gerar_pdf/{{$categoria->id}}">Catálogo PDF de {{$categoria->nome}}</a>
+
    </div>
 
 </div>
