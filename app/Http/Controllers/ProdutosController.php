@@ -8,6 +8,7 @@ use App\Models\preco_atacado;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 Use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class ProdutosController extends Controller
@@ -273,6 +274,35 @@ class ProdutosController extends Controller
         
         ]);
     }
+    public function gera_pdf()
+    {
+        $categorias = Categoria::all();
+       
+        $atacado = DB::table('preco_atacado')
+                ->orderby('quantidade')
+                ->get();
+                
+        $produtos = DB::table('produtos')
+                    
+                    ->where('produtos.nome','like','%garrafa%')
+                    ->join('tipo','tipo.id','=','produtos.id_tipo')
+                    ->select('produtos.*','tipo.descricao as tipo')
+                    ->orderby('valor')
+                    ->get();
+        
+        $variacoes =DB::table('produtos')                                       
+                    ->join('variacao','variacao.id_produto','=','produtos.id')     
+                    ->select('variacao.imagem as imagem', 'produtos.id as id_produto','variacao.descricao as descricao')              
+                    ->get();
 
+    
+        $pdf=PDF::loadView('produtos.pdf_produtos', compact('atacado','produtos','variacoes'))
+        ->setPaper('A4');
+        return $pdf->download('Acerte no Presente - Catálogo Geral .pdf');
+    
+
+
+
+    }
 
 }

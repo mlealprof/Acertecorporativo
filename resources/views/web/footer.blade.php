@@ -22,7 +22,7 @@
 						<h3 class="mb-4">Empresa</h3>
 						<ul class="list-unstyled float-start links">
 							<li><a href="#">Sobre Nós</a></li>
-							<li><a href="#">Catálogo PDF</a></li>
+							<li><a href="/gerar_pdf">Catálogo PDF</a></li>
 							<li><a href="#">Visão</a></li>
 							<li><a href="#">Missão</a></li>
 							<li><a href="#">Termos</a></li>

@@ -45,3 +45,4 @@ Route::get('/produtos/{produto}/editar', [App\Http\Controllers\ProdutosControlle
 Route::post('/produtos/editar', [App\Http\Controllers\ProdutosController::class, 'update','produto'])->middleware('auth');
 
 Route::get('/busca', [App\Http\Controllers\ProdutosController::class, 'busca']);
+Route::get('/gerar_pdf', [App\Http\Controllers\ProdutosController::class, 'gera_pdf']);
