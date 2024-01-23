@@ -276,12 +276,15 @@ class ProdutosController extends Controller
     }
     public function gera_pdf()
     {
-        $categoria = Categoria::findOrFail(0); 
-       
+        
+        $categoria = new Categoria;
+        
         $atacado = DB::table('preco_atacado')
                 ->orderby('quantidade')
                 ->get();
-                
+
+        
+        
         $produtos = DB::table('produtos')
                     
                   //  ->where('produtos.nome','like','%garrafa%')
@@ -289,28 +292,18 @@ class ProdutosController extends Controller
                     ->select('produtos.*','tipo.descricao as tipo')
                     ->orderby('valor')
                     ->get();
+
+                            
         
         $variacoes =DB::table('produtos')                                       
                     ->join('variacao','variacao.id_produto','=','produtos.id')     
                     ->select('variacao.imagem as imagem', 'produtos.id as id_produto','variacao.descricao as descricao')              
                     ->get();
-
-    
+                    
+                  
         $pdf=PDF::loadView('produtos.pdf_produtos', compact('atacado','produtos','variacoes','categoria'))
         ->setPaper('A4');
-        return $pdf->download('Acerte no Presente - Catálogo Geral .pdf');
-    
-    /*
-    return view('produtos.pdf_produtos',[
-        'categorias'=>$categorias,  
-        'produtos'=>$produtos,
-        'atacado'=>$atacado,
-        'variacoes'=>$variacoes
-    
-    //]);
-    */
-
-
+        return $pdf->download('Acerte no Presente - Catálogo Geral .pdf');  
     }
 
     public function gera_pdf_categoria($id)

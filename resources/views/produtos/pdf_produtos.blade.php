@@ -33,7 +33,7 @@
     @php
          date_default_timezone_set ("America/Sao_Paulo");
          $hoje = date('d/m/Y  -  h:i:s');
-         ini_set('max_execution_time', 300);
+         ini_set('max_execution_time', 400);
     @endphp
 <div class='site-nav p-3'>
     <div class="row">
@@ -89,7 +89,7 @@
                             <table >
                                @foreach ($atacado as $prod)
                                 <tr style="font-size: 8px;"> @if ($prod->id_produto == $produto->id)
-                                       <td class="font-italic text-right x-small">Acima de {{$prod->quantidade}} unidades R$ <?php echo number_format($prod->valor,2);?> cada</td>
+                                       <td class="font-italic x-small">Acima de {{$prod->quantidade}} unidades R$ <?php echo number_format($prod->valor,2);?> cada</td>
                                     @endif
                                 </tr>
                                @endforeach
@@ -105,11 +105,16 @@
                             $cont=1;
                         @endphp 
                     @endif
-                
-            
+ 
         @endforeach
 
 
 </table>
+<br><br><br>
+<div class="text-center">
+    <h6> Valores válidos por 7 dias a contar da data de geração deste arquivo.</h6>
+    <h6> Consultar disponibilidade de estoque com o vendedor</h6>
+    <h6>Consultar prazo de produção e data de entrega</h6>
+</div>
 
 </body>
