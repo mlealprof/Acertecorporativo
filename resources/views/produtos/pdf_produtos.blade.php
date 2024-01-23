@@ -33,6 +33,7 @@
     @php
          date_default_timezone_set ("America/Sao_Paulo");
          $hoje = date('d/m/Y  -  h:i:s');
+         ini_set('max_execution_time', 300);
     @endphp
 <div class='site-nav p-3'>
     <div class="row">
@@ -43,7 +44,7 @@
             <h4> Catálogo de Produtos - Geral</h4>	
            Whatsapp: 37-99906-2728<br>
            acertenopresente.com <br>
-           Instagram: @acertenopresente <br>
+           Instagram: @acerte.no.presente <br>
            Validade: 7 Dias -
            @php
                echo "Data Atual: ".$hoje
@@ -73,7 +74,7 @@
 
                     <td>
                         <img src="{{ public_path('storage/images/'.$produto->imagem)}}" width="70%"/>                     
-                        <div class="small">
+                        <div class="small" style="height: 40px;">
                             <b>{{$produto->codigo}}-{{$produto->nome}}</b>                    
                         </div>
                         
@@ -81,7 +82,20 @@
                         <div class="text-white" style="background-color: #212529;">     
                                
                             <div class=" text-left  small ">Mínimo: {{$produto->minimo}} Unidades</div>
-                            <div class=" text-right"><h3>R$<?php echo number_format($produto->valor,2); ?></h3> <span class=""> cada</span></div>
+                            <div class=" text-right">R$<?php echo number_format($produto->valor,2); ?> <span class="x-small" style="font-size: 10px;"> cada</span></div>
+                        </div>
+
+                        <div>
+                            <table >
+                               @foreach ($atacado as $prod)
+                                <tr style="font-size: 8px;"> @if ($prod->id_produto == $produto->id)
+                                       <td class="font-italic text-right x-small">Acima de {{$prod->quantidade}} unidades R$ <?php echo number_format($prod->valor,2);?> cada</td>
+                                    @endif
+                                </tr>
+                               @endforeach
+                                
+                            </table>
+                           
                         </div>
                         
                     </td>

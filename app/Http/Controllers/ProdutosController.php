@@ -318,7 +318,10 @@ class ProdutosController extends Controller
         $categoria = Categoria::findOrFail($id); 
         
         $atacado = DB::table('preco_atacado')
-                ->orderby('quantidade')
+                ->join('produtos','produtos.id','=','preco_atacado.id_produto')
+                ->join('categorias','categorias.id','=','produtos.id_categoria')
+                ->orderby('preco_atacado.quantidade')
+                ->select('preco_atacado.valor as valor', 'preco_atacado.quantidade as quantidade', 'preco_atacado.id_produto as id_produto')
                 ->get();
                 
         $produtos = DB::table('produtos')
