@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Produto;
 use APP\Html\Controllers\ProdutosController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -47,3 +48,5 @@ Route::post('/produtos/editar', [App\Http\Controllers\ProdutosController::class,
 Route::get('/busca', [App\Http\Controllers\ProdutosController::class, 'busca']);
 Route::get('/gerar_pdf', [App\Http\Controllers\ProdutosController::class, 'gera_pdf']);
 Route::get('/gerar_pdf/{categoria}', [App\Http\Controllers\ProdutosController::class, 'gera_pdf_categoria','categoria']);
+Route::get('/carrinho', [App\Http\Controllers\CarrinhoController::class, 'CarrinhoLista'])->name('site.carrinho');
+Route::post('/carrinho', [App\Http\Controllers\CarrinhoController::class, 'adicionaCarrinho'])->name('site.addcarrinho');

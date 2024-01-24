@@ -92,17 +92,34 @@
                     </table>
                    
                 </div>                
-            </div>    
-            <div class="row" >
-            <div class="col col-lg-2"></div>
-                <div class="col col-lg-3">
-                    QT <input type="text" class="form-control" id="quantidade" name="quantidade" value="{{$produto->minimo}}">                    
-                </div>
-                <div class="col col-lg-6">
-                    <br>
-                   <button type="button" class="btn btn-secondary">ADD Carrinho</button>
-                </div>
-            </div>                     
+            </div>  
+            <form action="{{route('site.addcarrinho')}}" method="POST" enctype="multipart/form-data">
+            @csrf
+                <div class="row" >                
+                    <div class="col col-lg-2">
+                        QT <input type="text" class="form-control" id="quantidade" name="qt" value="{{$produto->minimo}}">      
+                        <input type="hidden" name="id" value="{{$produto->id}}">
+                        <input type="hidden" name="valor" value="{{$produto->valor}}">
+                        <input type="hidden" name="nome" value="{{$produto->nome}}">                        
+                        <input type="hidden" name="imagem" value="{{$produto->imagem}}">                        
+                    </div>
+                    <div class="col col-lg-4">
+                        Cor<select class="form-control" id="variacao" name="variacao">                            
+                            @foreach ($variacoes as $variacao)
+                                @if ($variacao->id_produto == $produto->id)   
+                                    <option value="{{$variacao->id}}">{{$variacao->descricao}}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+
+
+                    <div class="col col-lg-6">
+                        <br>
+                         <button type="submit" class="btn btn-secondary">Comprar</button>
+                    </div>
+                </div>                     
+            </form>
                                        
                 
         </div>  
