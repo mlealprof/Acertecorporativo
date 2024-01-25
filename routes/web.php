@@ -50,3 +50,7 @@ Route::get('/gerar_pdf', [App\Http\Controllers\ProdutosController::class, 'gera_
 Route::get('/gerar_pdf/{categoria}', [App\Http\Controllers\ProdutosController::class, 'gera_pdf_categoria','categoria']);
 Route::get('/carrinho', [App\Http\Controllers\CarrinhoController::class, 'CarrinhoLista'])->name('site.carrinho');
 Route::post('/carrinho', [App\Http\Controllers\CarrinhoController::class, 'adicionaCarrinho'])->name('site.addcarrinho');
+Route::get('/limpar_carrinho', [App\Http\Controllers\CarrinhoController::class, 'limpar'])->name('site.LimpaCarrinho');
+Route::post('/remove_item', [App\Http\Controllers\CarrinhoController::class, 'remove_item'])->name('site.remove_item');
+Route::post('/atualiza_item', [App\Http\Controllers\CarrinhoController::class, 'atualiza_item'])->name('site.atualiza_item');
+Route::get('/continuar_comprando', [App\Http\Controllers\CarrinhoController::class, 'continuar_comprando'])->name('site.continuar_comprando');

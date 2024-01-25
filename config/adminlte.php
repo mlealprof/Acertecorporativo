@@ -253,7 +253,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => '/',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -316,7 +316,7 @@ return [
             'text'        => 'Produtos',
             'url'         => '/produtos',
             'icon'        => 'far fa-fw fa-file',
-            'label'       => 0,
+            'label'       => '0',
             'label_color' => 'success',
         ],
         [

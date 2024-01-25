@@ -1,9 +1,16 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+
 
 
 @include ('web.header')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="{{url ('assets/css/style.css')}}">
+
+	
+    
 <br>
 <div class='container'>
 
@@ -14,8 +21,8 @@
         $aberto = 0;
     @endphp          
     @foreach ($produtos as $produto)
-        <div class="col-lg-4 col-md-12 mb-4 mb-lg-0 border" style="padding-bottom: 70px;">
-            <div class="bg-image hover-overlay ripple shadow-1-strong rounded" data-ripple-color="light"   >
+        <div class="cart" style="width:315px ; margin-bottom: 4%; margin-left: 1%;" >
+            <div class="card-body" >
                 <img src="{{ asset('storage/images/'.$produto->imagem)}}" class="w-100"/> 
 
                 
@@ -71,13 +78,13 @@
                         
 
 
-                <div class="text-justify" style="height: 135px;">
+                <div class="text-justify" style="height: 104px;">
                     <h3>{{$produto->codigo}}-{{$produto->nome}}</h3>                    
                 </div>
                 
 
                 <div class="row  text-sm-left p-3 mb-2 bg-dark text-white">              
-                <div class="col-lg-5 text-left ">Mínimo: {{$produto->minimo}} Unidades</div>
+                <div class="col-lg-5 text-left " style="font-size: 10px">Mínimo: {{$produto->minimo}} Unidades</div>
                     <div class="col-lg-7 text-right h2">R$<?php echo number_format($produto->valor,2); ?> <span class="h6" style="font-size: 10px;"> cada</span></div>
                 </div>
                 <div  class="row text-right">
@@ -96,25 +103,26 @@
             <form action="{{route('site.addcarrinho')}}" method="POST" enctype="multipart/form-data">
             @csrf
                 <div class="row" >                
-                    <div class="col col-lg-2">
-                        QT <input type="text" class="form-control" id="quantidade" name="qt" value="{{$produto->minimo}}">      
+                    <div class="col col-lg-3">
+                        QT <input type="number" style="width: 60px" class="form-control" id="quantidade" name="qt" min="{{$produto->minimo}}" value="{{$produto->minimo}}">      
                         <input type="hidden" name="id" value="{{$produto->id}}">
+                        <input type="hidden" name="id" value="{{$produto->id_categoria}}">
                         <input type="hidden" name="valor" value="{{$produto->valor}}">
                         <input type="hidden" name="nome" value="{{$produto->nome}}">                        
                         <input type="hidden" name="imagem" value="{{$produto->imagem}}">                        
                     </div>
-                    <div class="col col-lg-4">
+                    <div class="col col-lg-4 ">
                         Cor<select class="form-control" id="variacao" name="variacao">                            
                             @foreach ($variacoes as $variacao)
                                 @if ($variacao->id_produto == $produto->id)   
-                                    <option value="{{$variacao->id}}">{{$variacao->descricao}}</option>
+                                    <option value="{{$variacao->descricao}}">{{$variacao->descricao}}</option>
                                 @endif
                             @endforeach
                         </select>
                     </div>
 
 
-                    <div class="col col-lg-6">
+                    <div class="col col-lg-5 ">
                         <br>
                          <button type="submit" class="btn btn-secondary">Comprar</button>
                     </div>
