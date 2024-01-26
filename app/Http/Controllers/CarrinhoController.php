@@ -4,16 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Categoria;
+use App\Models\Produto;
+use App\Models\preco_atacado;
+use Illuminate\Support\Facades\DB;
+
 
 class CarrinhoController extends Controller
 {
     public function CarrinhoLista()
     {
        $itens = \Cart::getContent();
-       $categorias = Categoria::all();
+       $categorias = DB::table('categorias')->orderby('nome')->get();
        $total = \Cart::getTotal();
 
-       //dd($itens);
+  //     dd($itens);
        return view('web.carrinho',[
         
             'categorias'=>$categorias,
@@ -23,19 +27,45 @@ class CarrinhoController extends Controller
     }
     public function adicionaCarrinho(Request $request)
     {
+        $atacados = DB::table('preco_atacado')->orderBy('valor')->get();        
+        $preco = $request->valor;  
         
-        \Cart::add(array(
-            'id' => $request->id,
-            'name' => $request->nome,
-            'price' => $request->valor,
-            'quantity' => abs($request->qt),
-            'attributes' => array(
-                'images'=> $request->imagem,
-                'color'=>$request->variacao,
-            ),           
-        ));
+        $produtos = Produto::findOrFail($request->id_produto);
         
-        return redirect('/carrinho')->with('sucesso','Produto adicionado ao carrinho com Sucesso!');
+        $minimo = $produtos->minimo;
+        
+        foreach($atacados as $atacado){            
+            if ($atacado->id_produto == $request->id_produto) {
+                if ($request->qt >= $atacado->quantidade) {                    
+                    if ($preco > $atacado->valor) {
+                        $preco = $atacado->valor;
+                        $minimo = $atacado->quantidade;
+                    }                    
+                }
+            }
+        }
+    
+        if ($request->qt >= $minimo ) {
+            \Cart::add(array(
+                'id' => $request->id,
+                'name' => $request->nome,            
+                'price' => $preco,
+                'quantity' => abs($request->qt),
+                'attributes' => array(
+                    'images'=> $request->imagem,
+                    'color'=>$request->variacao,
+                    'size'=>$request->minimo,
+                    'more_data'=>$request->id_produto,
+                ),           
+            ));
+            $mensagem='Produto adicionado ao carrinho com Sucesso!';
+        }else {
+          $mensagem = 'Quantidade abaixo do Mínimo para esse Produto!';
+        }
+        
+
+        
+        return redirect('/carrinho')->with('sucesso',$mensagem);
     
     }
     public function limpar()
@@ -56,13 +86,44 @@ class CarrinhoController extends Controller
     }
     public function atualiza_item(Request $request)
     {
-       \Cart::update($request->id,[
-           'quantity'=>[
-               'relative'=>false,
-               'value'=> abs($request->qt),
-           ],
-       ]);
-       return redirect('/carrinho')->with('sucesso','Quantidade Alterada com Sucesso!');
+        $atacados = DB::table('preco_atacado')->orderBy('valor')->get();        
+        $itens = \Cart::get($request->id);
+        $produtos = Produto::findOrFail($itens->attributes->more_data);
+        $preco = $produtos->valor;  
+        $minimo = $produtos->minimo;       
+        foreach($atacados as $atacado){            
+            if ($atacado->id_produto == $produtos->id) {
+                if ($request->qt >= $atacado->quantidade) {                    
+                    if ($preco > $atacado->valor) {
+                        $preco = $atacado->valor;
+                        $minimo = $atacado->quantidade;
+                    }                    
+                }
+            }
+        }
+        
+        if ($request->qt >= $minimo ) {
+            \Cart::update($request->id,[
+                'quantity'=>[
+                    'relative'=>false,
+                    'value'=> abs($request->qt),
+                ],
+                'price'=> $preco,
+                
+            ]);
+            $mensagem='Quantidade Alterada com Sucesso!';
+        }else{
+            $mensagem='Quantidade abaixo do Mínimo para esse Produto!';
+        }
+       return redirect('/carrinho')->with('sucesso',$mensagem);
+    }
+    public function imprimir_orcamento(){
+        $itens = \Cart::getContent();
+        $total = \Cart::getTotal();
+        return view('web.pdf_orcamento',[
+            'itens'=>$itens,
+            'total'=>$total,
+        ]);
     }
 
 }

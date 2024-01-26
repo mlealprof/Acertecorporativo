@@ -50,7 +50,8 @@
                                 <td width="40%">
                                     <form action="/atualiza_item" method="post" enctype="multipart/form-data">
                                     @csrf
-                                        <input type="number" style="width: 50px" min="1" name="qt" value="{{$item->quantity}}">
+                                    
+                                        <input type="number" style="width: 50px" min="{{$item->attributes->size}}" name="qt" value="{{$item->quantity}}">
                                         <input type="hidden" name="id" value="{{$item->id}}">
                                         <button class="btn btn-lg"><span class="glyphicon glyphicon-refresh"></span></button>
                                    </form>
@@ -79,7 +80,7 @@
                 <a href="/continuar_comprando" class="btn btn-preto     text-white" role="button"><span class="glyphicon glyphicon-chevron-left"></span> Continuar Comprando</a>
             </div>
             <div class="col">
-                <a role="button" class="btn btn-preto text-white"> <span class="glyphicon glyphicon-print"></span> Imprimir Orçamento</a>
+                <a href="/imprimir_orcamento" role="button" class="btn btn-preto text-white"> <span class="glyphicon glyphicon-print"></span> Imprimir Orçamento</a>
             </div>
         
             <div class="col">

@@ -106,6 +106,8 @@
                     <div class="col col-lg-3">
                         QT <input type="number" style="width: 60px" class="form-control" id="quantidade" name="qt" min="{{$produto->minimo}}" value="{{$produto->minimo}}">      
                         <input type="hidden" name="id" value="{{$produto->id}}">
+                        <input type="hidden" name="id_produto" value="{{$produto->id}}">
+                        <input type="hidden" name="minimo" value="{{$produto->minimo}}">
                         <input type="hidden" name="id" value="{{$produto->id_categoria}}">
                         <input type="hidden" name="valor" value="{{$produto->valor}}">
                         <input type="hidden" name="nome" value="{{$produto->nome}}">                        

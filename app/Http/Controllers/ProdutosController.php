@@ -26,7 +26,7 @@ class ProdutosController extends Controller
         ->get();
 
 
-        $categorias = Categoria::all();
+        $categorias = DB::table('categorias')->orderby('nome')->get();
         $total_produtos = Produto::count();
         return view('produtos.index',[
             'produtos' => $produtos,
