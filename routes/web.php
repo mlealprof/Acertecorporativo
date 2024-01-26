@@ -53,5 +53,7 @@ Route::post('/carrinho', [App\Http\Controllers\CarrinhoController::class, 'adici
 Route::get('/limpar_carrinho', [App\Http\Controllers\CarrinhoController::class, 'limpar'])->name('site.LimpaCarrinho');
 Route::post('/remove_item', [App\Http\Controllers\CarrinhoController::class, 'remove_item'])->name('site.remove_item');
 Route::post('/atualiza_item', [App\Http\Controllers\CarrinhoController::class, 'atualiza_item'])->name('site.atualiza_item');
+Route::post('/atualiza_item_orcamento', [App\Http\Controllers\CarrinhoController::class, 'atualiza_item_orcamento'])->name('site.atualiza_item_orcamento');
 Route::get('/continuar_comprando', [App\Http\Controllers\CarrinhoController::class, 'continuar_comprando'])->name('site.continuar_comprando');
-Route::get('/imprimir_orcamento', [App\Http\Controllers\CarrinhoController::class, 'imprimir_orcamento'])->name('site.imprimir_orcamento');
+Route::get('/imprimir_orcamento', [App\Http\Controllers\CarrinhoController::class, 'imprimir_orcamento'])->name('site.imprimir_orcamento')->middleware('auth');
+Route::get('/orcamento', [App\Http\Controllers\CarrinhoController::class, 'orcamento'])->name('site.orcamento')->middleware('auth');

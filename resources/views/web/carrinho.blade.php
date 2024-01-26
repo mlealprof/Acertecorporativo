@@ -45,9 +45,9 @@
                     @foreach ($itens as $item)
                             <tr>
                                 <td class="imagem_carrinho"><img src="{{asset('storage/images/'.$item->attributes->images)}}"  width="100%" ></td>
-                                <td width="55%">{{$item->name}} - Cor: {{$item->attributes->color}}</td>                        
-                                <td width="20%">R$ <?php echo number_format($item->price,2); ?></td>
-                                <td width="40%">
+                                <td style="width: 50%; padding-top: 20px;">{{$item->name}} - Cor: {{$item->attributes->color}}</td>                        
+                                <td style="width: 20%;padding-top: 20px;">R$ <?php echo number_format($item->price,2); ?></td>
+                                <td style="width: 30%">
                                     <form action="/atualiza_item" method="post" enctype="multipart/form-data">
                                     @csrf
                                     
@@ -80,7 +80,7 @@
                 <a href="/continuar_comprando" class="btn btn-preto     text-white" role="button"><span class="glyphicon glyphicon-chevron-left"></span> Continuar Comprando</a>
             </div>
             <div class="col">
-                <a href="/imprimir_orcamento" role="button" class="btn btn-preto text-white"> <span class="glyphicon glyphicon-print"></span> Imprimir Orçamento</a>
+                <a href="/orcamento" role="button" class="btn btn-preto text-white"> <span class="glyphicon glyphicon-print"></span> Orçamento</a>
             </div>
         
             <div class="col">

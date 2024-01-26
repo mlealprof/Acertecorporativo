@@ -28,12 +28,10 @@ class CarrinhoController extends Controller
     public function adicionaCarrinho(Request $request)
     {
         $atacados = DB::table('preco_atacado')->orderBy('valor')->get();        
-        $preco = $request->valor;  
-        
-        $produtos = Produto::findOrFail($request->id_produto);
-        
+        $preco = $request->valor;          
+        $produtos = Produto::findOrFail($request->id_produto);        
         $minimo = $produtos->minimo;
-        
+       // dd($request->nome);
         foreach($atacados as $atacado){            
             if ($atacado->id_produto == $request->id_produto) {
                 if ($request->qt >= $atacado->quantidade) {                    
@@ -109,13 +107,44 @@ class CarrinhoController extends Controller
                     'value'=> abs($request->qt),
                 ],
                 'price'=> $preco,
-                
             ]);
             $mensagem='Quantidade Alterada com Sucesso!';
         }else{
             $mensagem='Quantidade abaixo do Mínimo para esse Produto!';
         }
        return redirect('/carrinho')->with('sucesso',$mensagem);
+    }
+    public function atualiza_item_orcamento(Request $request)
+    {
+        $itens = \Cart::getContent();
+        $total = \Cart::getTotal();
+        //dd($request->nome);
+        $categorias = DB::table('categorias')->orderby('nome')->get();
+            \Cart::update($request->id,[
+                'quantity'=>[
+                    'relative'=>false,
+                    'value'=> abs($request->qt),
+                ],
+                'price'=> $request->valor,
+                'name' => $request->nome,            
+                'attributes' => array(                
+                    'images'=> $request->imagem,
+                    'color'=>$request->variacao,
+                    'size'=>$request->minimo,
+                    'more_data'=>$request->id_produto,
+          
+                ),
+        
+                
+            ]);
+            $mensagem='Quantidade Alterada com Sucesso!';
+        
+       return view('web.orcamento',[
+         
+        'categorias'=>$categorias,
+        'itens'=>$itens,
+        'total'=>$total
+          ])->with('sucesso',$mensagem);
     }
     public function imprimir_orcamento(){
         $itens = \Cart::getContent();
@@ -125,5 +154,17 @@ class CarrinhoController extends Controller
             'total'=>$total,
         ]);
     }
+    public function orcamento(){
+        $itens = \Cart::getContent();
+        $categorias = DB::table('categorias')->orderby('nome')->get();
+        $total = \Cart::getTotal();
+ 
+   //     dd($itens);
+        return view('web.orcamento',[
+         
+             'categorias'=>$categorias,
+             'itens'=>$itens,
+             'total'=>$total
+         ]);    }
 
 }

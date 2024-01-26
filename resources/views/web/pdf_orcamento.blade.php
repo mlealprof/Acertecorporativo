@@ -48,15 +48,21 @@
 <hr>
 <div class="container">
     <div class="text-center" style="margin-top: 20px">
+        <div class="text-right">
+            @php
+                date_default_timezone_set ("America/Sao_Paulo");
+                $hoje = date('d/m/Y  -  h:i:s');            
+              @endphp
+              {{$hoje}}
+        </div>
         <h1>Orçamento</h1>
+        
+        <div class="text-left container" style="padding-bottom: 10px">
+           <b>Cliente:</b><input type="text" value="" style="width: 50%">
+           <b>CNPJ:</b><input type="text" value="" style="width: 30%">
+       </div>
     </div>
-    <div class="text-right">
-        @php
-            date_default_timezone_set ("America/Sao_Paulo");
-            $hoje = date('d/m/Y  -  h:i:s');            
-          @endphp
-          {{$hoje}}
-    </div>
+    
 </div>
 <div class="container">  
     <table class="table">
@@ -75,7 +81,7 @@
                         <td class="imagem_carrinho"><img src="{{asset('storage/images/'.$item->attributes->images)}}"  width="100%" ></td>
                         <td >{{$item->quantity}}</td>
                         <td >{{$item->name}} - Cor: {{$item->attributes->color}}</td>                        
-                        <td >R$ <input type="text" value="<?php echo number_format($item->price,2); ?>"></td>
+                        <td >R$ <?php echo number_format($item->price,2); ?></td>
                      
                     </tr>
             @endforeach
@@ -83,7 +89,7 @@
     </table>    
 </div>
 
-<div class="container">
+<div class="container text-right">
     <b>Frete:</b><input type="text" value="Retirada na Fábrica"> <BR>
     <b>Prazo de Entrega:</b><input type="text" value="15 Dias Úteis"> <BR>    
     <b>Forma de Pagamento:</b><input type="text" value="À Vista"> <BR>        
@@ -91,3 +97,4 @@
 
     
 </div>
+<hr>
