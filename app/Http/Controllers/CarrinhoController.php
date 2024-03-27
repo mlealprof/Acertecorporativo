@@ -29,7 +29,7 @@ class CarrinhoController extends Controller
     {
         $atacados = DB::table('preco_atacado')->orderBy('valor')->get();        
         $preco = $request->valor;          
-        $produtos = Produto::findOrFail($request->id_produto);        
+        $produtos = Produto::findOrFail($request->id);        
         $minimo = $produtos->minimo;
        // dd($request->nome);
         foreach($atacados as $atacado){            
@@ -53,7 +53,7 @@ class CarrinhoController extends Controller
                     'images'=> $request->imagem,
                     'color'=>$request->variacao,
                     'size'=>$request->minimo,
-                    'more_data'=>$request->id_produto,
+                    'more_data'=>$request->codigo,
                 ),           
             ));
             $mensagem='Produto adicionado ao carrinho com Sucesso!';
@@ -86,7 +86,7 @@ class CarrinhoController extends Controller
     {
         $atacados = DB::table('preco_atacado')->orderBy('valor')->get();        
         $itens = \Cart::get($request->id);
-        $produtos = Produto::findOrFail($itens->attributes->more_data);
+        $produtos = Produto::findOrFail($itens->id);
         $preco = $produtos->valor;  
         $minimo = $produtos->minimo;       
         foreach($atacados as $atacado){            
@@ -131,7 +131,7 @@ class CarrinhoController extends Controller
                     'images'=> $request->imagem,
                     'color'=>$request->variacao,
                     'size'=>$request->minimo,
-                    'more_data'=>$request->id_produto,
+                    'more_data'=>$request->codigo,
           
                 ),
         
@@ -165,6 +165,10 @@ class CarrinhoController extends Controller
              'categorias'=>$categorias,
              'itens'=>$itens,
              'total'=>$total
-         ]);    }
+         ]);   
+     }
+     public function checkout(){
+        return view('web.checkout');
+     }
 
 }

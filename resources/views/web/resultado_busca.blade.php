@@ -87,7 +87,11 @@
                  <table >
                     @foreach ($atacado as $prod)
                      <tr> @if ($prod->id_produto == $produto->id)
+                            @if ($prod->valor_extra=='')
                             <td class="font-italic text-right x-small">Acima de {{$prod->quantidade}} unidades R$ <?php echo number_format($prod->valor,2);?> cada</td>
+                            @else
+                            <td class="font-italic text-right x-small">{{$prod->descricao}} R$ <?php echo number_format($prod->valor_extra,2);?> cada</td>
+                            @endif
                          @endif
                      </tr>
                     @endforeach

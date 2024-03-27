@@ -46,6 +46,7 @@ Route::get('/produtos/{produto}/editar', [App\Http\Controllers\ProdutosControlle
 Route::post('/produtos/editar', [App\Http\Controllers\ProdutosController::class, 'update','produto'])->middleware('auth');
 
 Route::get('/busca', [App\Http\Controllers\ProdutosController::class, 'busca']);
+Route::get('/info_produto/{id}', [App\Http\Controllers\ProdutosController::class, 'info_produto','id']);
 Route::get('/gerar_pdf', [App\Http\Controllers\ProdutosController::class, 'gera_pdf']);
 Route::get('/gerar_pdf/{categoria}', [App\Http\Controllers\ProdutosController::class, 'gera_pdf_categoria','categoria']);
 Route::get('/carrinho', [App\Http\Controllers\CarrinhoController::class, 'CarrinhoLista'])->name('site.carrinho');
@@ -57,3 +58,11 @@ Route::post('/atualiza_item_orcamento', [App\Http\Controllers\CarrinhoController
 Route::get('/continuar_comprando', [App\Http\Controllers\CarrinhoController::class, 'continuar_comprando'])->name('site.continuar_comprando');
 Route::get('/imprimir_orcamento', [App\Http\Controllers\CarrinhoController::class, 'imprimir_orcamento'])->name('site.imprimir_orcamento')->middleware('auth');
 Route::get('/orcamento', [App\Http\Controllers\CarrinhoController::class, 'orcamento'])->name('site.orcamento')->middleware('auth');
+Route::get('/checkout', [App\Http\Controllers\CarrinhoController::class, 'checkout'])->name('site.checkout');
+Route::get('/funcionarios', [App\Http\Controllers\FuncionariosController::class, 'index'])->middleware('auth');
+Route::get('/funcionarios/novo', [App\Http\Controllers\FuncionariosController::class, 'novo'])->middleware('auth');
+Route::post('/funcionarios/salvar', [App\Http\Controllers\FuncionariosController::class, 'salvar'])->middleware('auth');
+Route::get('/funcionarios/{id}/editar', [App\Http\Controllers\FuncionariosController::class, 'editar','id'])->middleware('auth');
+Route::post('/funcionarios/editar', [App\Http\Controllers\FuncionariosController::class, 'update'])->middleware('auth');
+
+Route::get('/ponto', [App\Http\Controllers\FuncionariosController::class, 'ponto']);

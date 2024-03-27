@@ -311,7 +311,7 @@ return [
             'url'  => 'admin/blog',
             'can'  => 'manage-blog',
         ],
-        ['header' => 'Cadastros'],
+        ['header' => 'CADASTROS'],
         [
             'text'        => 'Produtos',
             'url'         => '/produtos',
@@ -337,6 +337,60 @@ return [
             'icon'        => 'far fa-fw fa-file'            
            
         ],
+        ['header' => '__________________'],
+        
+        
+        ['header' => 'BANNERS'],        
+        [
+            'text'        => 'Página Inicial',
+            'url'         => '/banner_inicial',
+            'icon'        => 'far fa-fw fa-file',
+            'label'       => '',
+            'label_color' => 'success',
+        ],
+        
+        ['header' => '__________________'],
+
+
+
+
+
+        
+        ['header' => 'RECURSOS HUMANOS'],
+        ['header' => '    Lançamentos'],
+        [
+            'text'        => 'Funcionários',
+            'url'         => '/funcionarios',
+            'icon'        => 'far fa-fw fa-file',
+            'label'       => '',
+            'label_color' => 'success',
+        ],
+        [
+            'text'        => 'Cartão Ponto',
+            'url'         => '/lancamentos_ponto',
+            'icon'        => 'far fa-fw fa-file',
+            'label'       => '',
+            'label_color' => 'success',
+        ],
+        ['header' => ' Relatórios'],
+        [
+            'text'        => 'Cartão Ponto',
+            'url'         => '/rel_cartao_ponto',
+            'icon'        => 'far fa-fw fa-file',
+            'label'       => '',
+            'label_color' => 'success',
+        ],
+        [
+            'text'        => 'Plano de Saúde',
+            'url'         => '/rel_plano_saude',
+            'icon'        => 'far fa-fw fa-file',
+            'label'       => '',
+            'label_color' => 'success',
+        ],
+        ['header' => '__________________'],
+
+
+
         ['header' => 'account_settings'],
         [
             'text' => 'profile',

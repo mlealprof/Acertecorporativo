@@ -244,6 +244,34 @@ class ProdutosController extends Controller
         ] );
     }
 
+
+    public function info_produto($id)
+    {
+       $produto = Produto::findOrFail($id); 
+       $categorias = Categoria::all();
+       $variacoes =DB::table('produtos')                                       
+                ->join('variacao','variacao.id_produto','=','produtos.id')     
+                ->select('variacao.imagem as imagem', 'produtos.id as id_produto','variacao.descricao as descricao')              
+                ->get();
+
+        $atacado = DB::table('preco_atacado')
+                ->orderby('quantidade')
+                ->get();
+       //dd($produto);
+        return view('web.info_produto',[
+              
+            'produto'=>$produto,
+            'categorias'=>$categorias,
+            'variacoes'=>$variacoes,
+            'atacado'=>$atacado,
+            
+        
+        ]);
+    }
+
+
+
+
     public function busca(Request $request)
     {
        $categorias = Categoria::all();

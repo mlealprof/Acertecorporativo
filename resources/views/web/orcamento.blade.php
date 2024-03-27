@@ -47,7 +47,7 @@
                                 <td class="imagem_carrinho"><img src="{{asset('storage/images/'.$item->attributes->images)}}"  width="100%" ></td>
                                 <form action="/atualiza_item_orcamento" method="post" enctype="multipart/form-data">
                                     @csrf
-                                    <td style="width: 50%; padding-top: 20px;"><input style="width: 300px; " type="text" value="{{$item->name}}" name="nome"> - Cor: <input type="text" value="{{$item->attributes->color}}" name="variacao"></td>                                                            
+                                    <td style="width: 50%; padding-top: 20px;"><input style="width: 250px; " type="text" value="{{$item->name}}" name="nome"> - Cor: <input type="text" value="{{$item->attributes->color}}" name="variacao"></td>                                                            
                                     <input type="hidden" name="imagem" value="{{$item->attributes->images}}"> 
                                     <input type="hidden" name="minimo" value="{{$item->attributes->size}}">
                                     <input type="hidden" name="id_produto" value="{{$item->attributes->more_data}}">

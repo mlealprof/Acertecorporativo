@@ -82,7 +82,7 @@
 										@endforeach
 									</ul>
 								</li>
-								<li><a href="category.html">DATAS COMEMORATIVAS</a></li>
+								<li><a href="https://acertenopresente.com/datas/diadasmulheres/copoecologico/">DATAS COMEMORATIVAS</a></li>
 								<li class="has-children">
 									<a href="#">ACESSOS</a>
 									<ul class="dropdown">

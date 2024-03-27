@@ -1,32 +1,20 @@
-
-
-
-
-
 @include ('web.header')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="{{url ('assets/css/style.css')}}">
 
-	
-    
+	   
 <br>
 <div class='container'>
-
-   <img width='100%' src="{{ asset('storage/images/categorias/'.$categoria->imagem)}}">
-   
-   <div class="row">    
-    @php
-        $aberto = 0;
-    @endphp          
-    @foreach ($produtos as $produto)
-        <div class="cart" style="width:315px ; margin-bottom: 4%; margin-left: 1%;" >
-            <div class="card-body" >
-                <a href="/info_produto/{{$produto->id}}">
-                   <img src="{{ asset('storage/images/'.$produto->imagem)}}" class="w-100"/> 
-                </a>
-                
+   <h1>{{$produto->codigo}}-{{$produto->nome}}</h1> 
+   <p>{{$produto->descricao}}</p> 
+   <table>
+     <tr>
+        <td>
+          <div class="cart" style="width:500px ; margin-bottom: 4%; margin-left: 1%;" >
+            <div class="card-body" >               
+                <img src="{{ asset('storage/images/'.$produto->imagem)}}" class="w-100"/> 
                 <div id="carrossel">
                     <div class="col-md-12 col-md">
                         <div class="carousel slide" id="myCarousel{{$produto->id}}">
@@ -75,34 +63,6 @@
                           <a class="right carousel-control" href="#myCarousel{{$produto->id}}" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
                         </div>
                     </div>
-                </div>
-                        
-
-
-                <div class="text-justify" style="height: 104px;">
-                    <h3>{{$produto->codigo}}-{{$produto->nome}}</h3>                    
-                </div>
-                
-
-                <div class="row  text-sm-left p-3 mb-2 bg-dark text-white">              
-                <div class="col-lg-5 text-left " style="font-size: 10px">Mínimo: {{$produto->minimo}} Unidades</div>
-                    <div class="col-lg-7 text-right h2">R$<?php echo number_format($produto->valor,2); ?> <span class="h6" style="font-size: 10px;"> cada</span></div>
-                </div>
-                <div  class="row text-right">
-                    <table >
-                       @foreach ($atacado as $prod)
-                        <tr> @if ($prod->id_produto == $produto->id)
-                                @if ($prod->valor_extra=='')
-                                <td class="font-italic text-right x-small">Acima de {{$prod->quantidade}} unidades R$ <?php echo number_format($prod->valor,2);?> cada</td>
-                                @else
-                                <td class="font-italic text-right x-small">{{$prod->descricao}} R$ <?php echo number_format($prod->valor_extra,2);?> cada</td>
-                                @endif
-                            @endif
-                        </tr>
-                       @endforeach
-                        
-                    </table>
-                   
                 </div>                
             </div>  
             <form action="{{route('site.addcarrinho')}}" method="POST" enctype="multipart/form-data">
@@ -132,15 +92,25 @@
                         <br>
                          <button type="submit" class="btn btn-secondary">Comprar</button>
                     </div>
-                </div>                     
-            </form>
-                                       
-                
-        </div>  
-    @endforeach
-    <a href="/gerar_pdf/{{$categoria->id}}">Catálogo PDF de {{$categoria->nome}}</a>
+           </form>
 
-   </div>
+          </div> 
+       </td>
+       <td>
+          <div class="row">
+             <b>Altura: {{$produto->altura}} cm<br>
+             <b>Largura: {{$produto->largura}} cm<br>
+             <b>Comprimento: {{$produto->comprimento}} cm<br>
+             <b>Peso: {{$produto->peso}} gr<br>
+             <b>Prazo Produção: {{$produto->prazo_producao}} dias<br>
+             <b>Mínimo: {{$produto->minimo}}<br>
+             <b>Valor: R$ {{$produto->valor}}<br>
+          </div>
+       </td>
+     </tr>
+    </table>   
+    
+</div>
 
 
 

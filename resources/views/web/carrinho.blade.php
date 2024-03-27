@@ -45,7 +45,7 @@
                     @foreach ($itens as $item)
                             <tr>
                                 <td class="imagem_carrinho"><img src="{{asset('storage/images/'.$item->attributes->images)}}"  width="100%" ></td>
-                                <td style="width: 50%; padding-top: 20px;">{{$item->name}} - Cor: {{$item->attributes->color}}</td>                        
+                                <td style="width: 50%; padding-top: 20px;">{{$item->name}} - Cor: {{$item->attributes->color}}<br>{{$item->attributes->more_data}}</td>                        
                                 <td style="width: 20%;padding-top: 20px;">R$ <?php echo number_format($item->price,2); ?></td>
                                 <td style="width: 30%">
                                     <form action="/atualiza_item" method="post" enctype="multipart/form-data">
@@ -87,7 +87,7 @@
                 <a role="button" href="/limpar_carrinho" class="btn  btn-preto text-white"> <span class="glyphicon glyphicon-remove-circle"></span> Limpar Carrinho</a>
             </div>
             <div class="col">
-            <a role="button" class="btn  btn-amarelo text-white "> <span class="glyphicon glyphicon-ok"></span> Finalizar Pedido</a>
+            <a role="button" href="/checkout" class="btn  btn-amarelo text-white "> <span class="glyphicon glyphicon-ok"></span> Finalizar Pedido</a>
             </div>
 
         </div>
