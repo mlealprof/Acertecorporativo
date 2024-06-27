@@ -66,3 +66,4 @@ Route::get('/funcionarios/{id}/editar', [App\Http\Controllers\FuncionariosContro
 Route::post('/funcionarios/editar', [App\Http\Controllers\FuncionariosController::class, 'update'])->middleware('auth');
 
 Route::get('/ponto', [App\Http\Controllers\FuncionariosController::class, 'ponto']);
+Route::post('/ponto_registro', [App\Http\Controllers\PontoController::class, 'ponto_registro']);

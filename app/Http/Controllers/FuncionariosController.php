@@ -60,6 +60,9 @@ class FuncionariosController extends Controller
                 ]); 
     }
 
+
+
+    
     public function ponto(){
         return view('web.ponto'); 
     }

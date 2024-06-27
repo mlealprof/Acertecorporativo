@@ -33,8 +33,9 @@
             document.write( webcam.get_html(320, 240) );
            // --></script>
         <form>
-            <input type="button" value="Configure..." onClick="webcam.configure()">
-            <input type="button" value="Take Snapshot" onClick="take_snapshot()">
+            <input type="button" value="Configuração..." onClick="webcam.configure()">
+            <input type="button" value="Foto" onClick="take_snapshot()">
+            <input type="button" value="Relatórios" onClick="relatorios()">
         </form>
     </div>
     <div class="col-md-6 col-md write" style="background: #8f8888;"><h2>Horas:</h3>
@@ -43,16 +44,26 @@
             <form action="/ponto_registro" method="post" class="form-group" enctype="multipart/form-data">
             @csrf
                 <input type="text" name="senha">
+              <!--
                 <canvas >
                     <input class="form-control" type="file" id="imagemFile" name="imagemFile">
                 </canvas>
+-->
+
+                <input type="hidden" name="data" value="<?php echo date('Y/m/d');?>">
+                <input type="hidden" name="hora" value="<?php echo date('H:i:s');?>">
                 
-                <button type="submit" class="btn btn-secondary">Registrar</button>
+
+                
+                <button type="submit" class="btn btn-secondary" >Registrar</button>
             </form>           
         </div>
         <hr>
         <div class="ultimas">
-            <div class="">Último Registro</div>            
+            <div class="">Último Registro</div>
+            <?php
+               echo ($funcionario->nome). ' - '.$obs;
+            ?>
         </div>
         
     </div>        
