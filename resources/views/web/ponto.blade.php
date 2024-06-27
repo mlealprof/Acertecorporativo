@@ -43,7 +43,7 @@
             <div class="display" style="font-size: 50px;">00:00:00</div> 
             <form action="/ponto_registro" method="post" class="form-group" enctype="multipart/form-data">
             @csrf
-                <input type="text" name="senha">
+                <input type="password" name="senha" >
               <!--
                 <canvas >
                     <input class="form-control" type="file" id="imagemFile" name="imagemFile">
@@ -62,7 +62,10 @@
         <div class="ultimas">
             <div class="">Último Registro</div>
             <?php
-               echo ($funcionario->nome). ' - '.$obs;
+              if ($funcionario->nome){
+                echo ($funcionario->nome). ' - '.$obs;
+              }
+             
             ?>
         </div>
         

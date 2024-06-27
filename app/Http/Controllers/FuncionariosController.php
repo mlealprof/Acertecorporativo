@@ -64,7 +64,11 @@ class FuncionariosController extends Controller
 
     
     public function ponto(){
-        return view('web.ponto'); 
+        $funcionario = new Funcionario;
+        $funcionario->nome='';
+        return view('web.ponto',[        
+            'funcionario'=>$funcionario
+        ]);  
     }
 
 
