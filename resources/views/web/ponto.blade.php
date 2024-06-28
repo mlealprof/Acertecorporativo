@@ -32,14 +32,7 @@
         <script type="text/javascript">
             document.write( webcam.get_html(320, 240) );           
         </script>
-        <form method="post" action="/pagina_relatorio">
-            <!--
-            <input type="button" value="Configuração..." onClick="webcam.configure()">
-            <input type="button" value="Foto" onClick="take_snapshot()">
-             -->
-
-            <input type="submit" value="Relatórios">
-        </form>
+        
     </div>
     <div class="col-md-6 col-md write" style="background: #8f8888;"><h2>Horas:</h3>
         <div class="relogio">
@@ -75,6 +68,10 @@
              
             ?>
         </div>
+
+        <div>
+            <a href="/pagina_relatorio"><button>Relatórios</button>
+       </div>
         
     </div>        
 </div>

@@ -129,8 +129,11 @@ class PontoController extends Controller
         $funcionarios = DB::table('funcionarios')
                         ->where('funcionarios.senha','=',$request->senha)
                         ->get();
-         if ($funcionarios->isEmpty()) {
-                $obs="FUNCIONÁRIO NÃO ENCONTRADO";
+        if ($funcionarios->isEmpty()) {
+            $funcionario = new Funcionario;
+            $relatorio =DB::table('ponto')
+                    ->where('ponto.id_funcionario','=','0')
+                    ->get();
         }else{                
             $funcionario = Funcionario::findOrFail($funcionarios[0]->id); 
             $relatorio = DB::table('ponto')

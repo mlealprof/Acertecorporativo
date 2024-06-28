@@ -70,3 +70,4 @@ Route::post('/ponto_registro', [App\Http\Controllers\PontoController::class, 'po
 Route::post('/relatorio_ponto', [App\Http\Controllers\PontoController::class, 'relatorio']);
 Route::get('/pagina_relatorio', [App\Http\Controllers\PontoController::class, 'pagina_relatorio']);
 
+
