@@ -55,10 +55,10 @@
               getfocus();
            </script>
         
-
+           <!--
                 <input type="hidden" name="data" value="<?php echo date('Y/m/d');?>">
                 <input type="hidden" name="hora" value="<?php echo date('H:i:s');?>">
-                
+            -->     
 
                 
                 <button type="submit" class="btn btn-secondary" >Registrar</button>

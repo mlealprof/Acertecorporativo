@@ -16,6 +16,8 @@ class PontoController extends Controller
     public function ponto_registro(Request $request){        
         $obs='';
         $funcionario= new Funcionario;
+        $request->hora = date('H:i:s');
+        $request->data =date('Y/m/d');
         
         $funcionarios = DB::table('funcionarios')
                         ->where('funcionarios.senha','=',$request->senha)
@@ -28,7 +30,7 @@ class PontoController extends Controller
   
             $periodo = Periodo::findOrFail($funcionario->periodo);        
             $data = DB::table('ponto')
-                ->where('ponto.data','=',$request->data)
+                ->where('ponto.data','=',$request->data)                
                 ->get();
                 if ($data->isEmpty()){
                     $funcionarios = DB::table('funcionarios')->get();
@@ -47,18 +49,21 @@ class PontoController extends Controller
                                 ->where('ponto.id_funcionario','=',$funcionario->id)
                                 ->get();
                     foreach ($registros as $reg) {
-                        $registro= Ponto::findOrFail($reg->id); 
-                        $registro->data = $request->data;
+                        $registro= Ponto::findOrFail($reg->id);                       
                         if ($registro->entrada==null){
                             $registro->entrada = $request->hora;
                             $hora1 = new DateTime($request->hora);
                             $hora2 = new DateTime($periodo->entrada);                        
                             $diferenca = $hora2->diff($hora1);                        
                             $diferenca = $diferenca->format('%H:%I:%S');                    
-                            if ($diferenca > $periodo->limite){
+                            if ($hora1 > $periodo->entrada){
                                 $registro->atrazo_entrada = $diferenca;
+                                $obs = "Entrada com ATRAZADO DE: ".$diferenca;
+                            }else{
+                                $registro->hora_extra_entrada = $diferenca;
+                                $obs = "Entrada com ANTECIPAÇÃO DE: ".$diferenca;
                             }
-                            $obs = "Entrada com ATRAZADO DE: ".$diferenca;
+                           
                         }else{
                             if ($registro->saida_almoco==null){
                                 $registro->saida_almoco = $request->hora;
