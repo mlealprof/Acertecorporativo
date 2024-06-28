@@ -32,11 +32,12 @@
         <script type="text/javascript">
             document.write( webcam.get_html(320, 240) );           
         </script>
-        <form method="post" action="/relatorio_ponto">
+        <form method="post" action="/pagina_relatorio">
             <!--
             <input type="button" value="Configuração..." onClick="webcam.configure()">
             <input type="button" value="Foto" onClick="take_snapshot()">
              -->
+
             <input type="submit" value="Relatórios">
         </form>
     </div>

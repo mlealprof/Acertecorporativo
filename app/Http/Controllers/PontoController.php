@@ -125,11 +125,7 @@ class PontoController extends Controller
     }
 
     public function relatorio(Request $request){
-        $funcionario = new Funcionario;
-        $relatorio =DB::table('ponto')
-                    ->where('ponto.id_funcionario','=','0')
-                    ->get();
-        //dd($funcionario);
+        
         $funcionarios = DB::table('funcionarios')
                         ->where('funcionarios.senha','=',$request->senha)
                         ->get();
@@ -148,6 +144,20 @@ class PontoController extends Controller
             'relatorio'=>$relatorio,
         ]);  
     }
+    public function pagina_relatorio(){
+           $funcionario = new Funcionario;
+           $relatorio =DB::table('ponto')
+                    ->where('ponto.id_funcionario','=','0')
+                    ->get();
+
+        return view('web.relatorio_ponto',[
+            'funcionario'=>$funcionario,
+            'relatorio'=>$relatorio,
+        ]);   
+    }
+
+
+
 
     //
 }
