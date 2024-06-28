@@ -119,5 +119,30 @@ class PontoController extends Controller
 
     }
 
+    public function relatorio(Request $request){
+        $funcionario = new Funcionario;
+        $relatorio =DB::table('ponto')
+                    ->where('ponto.id_funcionario','=','0')
+                    ->get();
+        //dd($funcionario);
+        $funcionarios = DB::table('funcionarios')
+                        ->where('funcionarios.senha','=',$request->senha)
+                        ->get();
+         if ($funcionarios->isEmpty()) {
+                $obs="FUNCIONÁRIO NÃO ENCONTRADO";
+        }else{                
+            $funcionario = Funcionario::findOrFail($funcionarios[0]->id); 
+            $relatorio = DB::table('ponto')
+                    ->where('ponto.id_funcionario','=',$funcionario->id)
+                ->orderby('data','desc')
+                    ->get();
+        }      
+        
+        return view('web.relatorio_ponto',[
+            'funcionario'=>$funcionario,
+            'relatorio'=>$relatorio,
+        ]);  
+    }
+
     //
 }

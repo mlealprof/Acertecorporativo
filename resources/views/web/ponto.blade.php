@@ -29,13 +29,15 @@
 <div class="row">
     <div class="col-md-6 col-md">
         <video autoplay></video>
-        <script type="text/javascript"><!--
-            document.write( webcam.get_html(320, 240) );
-           // --></script>
-        <form>
+        <script type="text/javascript">
+            document.write( webcam.get_html(320, 240) );           
+        </script>
+        <form method="post" action="/relatorio_ponto">
+            <!--
             <input type="button" value="Configuração..." onClick="webcam.configure()">
             <input type="button" value="Foto" onClick="take_snapshot()">
-            <input type="button" value="Relatórios" onClick="relatorios()">
+             -->
+            <input type="submit" value="Relatórios">
         </form>
     </div>
     <div class="col-md-6 col-md write" style="background: #8f8888;"><h2>Horas:</h3>
@@ -43,12 +45,16 @@
             <div class="display" style="font-size: 50px;">00:00:00</div> 
             <form action="/ponto_registro" method="post" class="form-group" enctype="multipart/form-data">
             @csrf
-                <input type="password" name="senha" >
+                <input type="password" name="senha" id="senha">
               <!--
                 <canvas >
                     <input class="form-control" type="file" id="imagemFile" name="imagemFile">
                 </canvas>
 -->
+           <script type="text/javascript">                       	
+              getfocus();
+           </script>
+        
 
                 <input type="hidden" name="data" value="<?php echo date('Y/m/d');?>">
                 <input type="hidden" name="hora" value="<?php echo date('H:i:s');?>">
@@ -121,7 +127,10 @@ setInterval(atualizarTempo, 1000);
 
 console.log(horario);
 
-
+function getfocus()
+{
+    document.getElementById('senha').focus();
+}
 </script>
 
 
