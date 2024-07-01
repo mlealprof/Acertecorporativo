@@ -131,14 +131,15 @@
             </tbody>
         </table>
         <div style="font-size:20px;">
-          <b>Total de Faltas:</b> <br> <br>
-          <b>Total Atrasos:</b><br>
-          Entrada:  Chegada Almoço:<br><br>
-
-          <b>Total Antecipação:</b><br>
-          Almoço:    Saída:<br><br>
-
-          <b>Total Horas Extras:</b><br>
+        <b>PONTOS NEGATIVOS</b><BR>
+          <b>Total de Faltas:</b> {{$total_Falta}}<br>
+          <b>Total Atrasos Entrada:</b>{{$total_Atraso_Entrada}}<br>  
+          <b>Total Atrasos Almoço:</b>{{$total_Atraso_Almoco}}<br>
+          <b>Total Antecipação Saída:</b>{{$total_Antecipacao_Saida}}<br><br>
+          <b>PONTOS POSITIVOS</b><BR>
+          <b>Total Antecipação Entrada:</b>{{$total_Antecipacao_Entrada}} <br>
+          <b>Total Antecipação Almoço:</b>{{$total_Antecipacao_Almoco}}<br>
+          <b>Total Horas Extras:</b>{{$total_hora_extra}} <br>
          
 
           </div>

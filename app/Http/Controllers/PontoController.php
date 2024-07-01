@@ -10,10 +10,12 @@ use App\Models\Periodo;
 use DateTime;
 
 
+
 class PontoController extends Controller
 {
 
-    public function ponto_registro(Request $request){        
+    public function ponto_registro(Request $request){  
+         
         $obs='';
         $funcionario= new Funcionario;
         $request->hora = date('H:i:s');
@@ -24,7 +26,9 @@ class PontoController extends Controller
                         ->get();
          if ($funcionarios->isEmpty()) {
                 $obs="FUNCIONÁRIO NÃO ENCONTRADO";
-        }else{                
+        }else{ 
+  
+            
             $funcionario = Funcionario::findOrFail($funcionarios[0]->id); 
            
   
@@ -125,6 +129,13 @@ class PontoController extends Controller
     }
 
     public function relatorio(Request $request){
+        $total_Falta=0;
+        $total_Atraso_Entrada=0;
+        $total_Atraso_Almoco=0;
+        $total_Antecipacao_Entrada=0;
+        $total_Antecipacao_Almoco=0;
+        $total_Antecipacao_Saida=0;
+        $total_hora_extra=0;     
         
         $funcionarios = DB::table('funcionarios')
                         ->where('funcionarios.senha','=',$request->senha)
@@ -138,13 +149,104 @@ class PontoController extends Controller
             $funcionario = Funcionario::findOrFail($funcionarios[0]->id); 
             $relatorio = DB::table('ponto')
                     ->where('ponto.id_funcionario','=',$funcionario->id)
-                ->orderby('data','desc')
+                    ->orderby('data','desc')
                     ->get();
+
+            $total_hora_extra = DB::table('ponto')
+                                ->select('id', DB::raw("SUM(TIME_TO_SEC(hora_extra_saida)) as total_seconds"))
+                                ->where('id_funcionario','=',$funcionario->id)
+                                ->groupBy('id')
+                                ->get();
+            $total_hora_extra = $total_hora_extra->sum('total_seconds');
+            
+            $horas = floor( $total_hora_extra / 3600);
+            $minutos = floor(( $total_hora_extra - ($horas * 3600)) / 60);
+            $segundos = floor( $total_hora_extra % 60);
+            $total_hora_extra= sprintf('%02d:%02d:%02d', $horas,$minutos,$segundos);
+            
+
+            $total_Atraso_Entrada = DB::table('ponto')
+                                ->select('id', DB::raw("SUM(TIME_TO_SEC(atrazo_entrada)) as total_seconds"))
+                                ->where('id_funcionario','=',$funcionario->id)
+                                ->groupBy('id')
+                                ->get();
+            $total_Atraso_Entrada = $total_Atraso_Entrada->sum('total_seconds');
+            $horas = floor( $total_Atraso_Entrada / 3600);
+            $minutos = floor(( $total_Atraso_Entrada - ($horas * 3600)) / 60);
+            $segundos = floor( $total_Atraso_Entrada % 60);
+            $total_Atraso_Entrada= sprintf('%02d:%02d:%02d', $horas,$minutos,$segundos);
+           
+
+
+
+            $total_Atraso_Almoco = DB::table('ponto')
+                                ->select('id', DB::raw("SUM(TIME_TO_SEC(atrazo_almoco)) as total_seconds"))
+                                ->where('id_funcionario','=',$funcionario->id)
+                                ->groupBy('id')
+                                ->get();
+            $total_Atraso_Almoco = $total_Atraso_Almoco->sum('total_seconds');
+            $horas = floor( $total_Atraso_Almoco / 3600);
+            $minutos = floor(( $total_Atraso_Almoco - ($horas * 3600)) / 60);
+            $segundos = floor( $total_Atraso_Almoco % 60);
+            $total_Atraso_Almoco= sprintf('%02d:%02d:%02d', $horas,$minutos,$segundos);
+         
+
+
+            $total_Antecipacao_Entrada = DB::table('ponto')
+                                ->select('id', DB::raw("SUM(TIME_TO_SEC(hora_extra_entrada)) as total_seconds"))
+                                ->where('id_funcionario','=',$funcionario->id)
+                                ->groupBy('id')
+                                ->get();
+            $total_Antecipacao_Entrada = $total_Antecipacao_Entrada->sum('total_seconds');
+            $horas = floor( $total_Antecipacao_Entrada / 3600);
+            $minutos = floor(( $total_Antecipacao_Entrada - ($horas * 3600)) / 60);
+            $segundos = floor( $total_Antecipacao_Entrada % 60);
+            $total_Antecipacao_Entrada= sprintf('%02d:%02d:%02d', $horas,$minutos,$segundos);
+            
+
+
+
+            $total_Antecipacao_Almoco = DB::table('ponto')
+                                ->select('id', DB::raw("SUM(TIME_TO_SEC(hora_extra_almoco)) as total_seconds"))
+                                ->where('id_funcionario','=',$funcionario->id)
+                                ->groupBy('id')
+                                ->get();
+            $total_Antecipacao_Almoco = $total_Antecipacao_Almoco->sum('total_seconds');
+            $horas = floor( $total_Antecipacao_Almoco / 3600);
+            $minutos = floor(( $total_Antecipacao_Almoco - ($horas * 3600)) / 60);
+            $segundos = floor( $total_Antecipacao_Almoco % 60);
+            $total_Antecipacao_Almoco= sprintf('%02d:%02d:%02d', $horas,$minutos,$segundos);
+
+            $total_Antecipacao_Saida = DB::table('ponto')
+                                ->select('id', DB::raw("SUM(TIME_TO_SEC(hora_extra_almoco)) as total_seconds"))
+                                ->where('id_funcionario','=',$funcionario->id)
+                                ->groupBy('id')
+                                ->get();
+            $total_Antecipacao_Saida = $total_Antecipacao_Saida->sum('total_seconds');
+            $horas = floor( $total_Antecipacao_Saida / 3600);
+            $minutos = floor(( $total_Antecipacao_Saida - ($horas * 3600)) / 60);
+            $segundos = floor( $total_Antecipacao_Saida % 60);
+            $total_Antecipacao_Saida= sprintf('%02d:%02d:%02d', $horas,$minutos,$segundos);
+           
+
+            $total_Falta = DB::table('ponto')                                
+                                ->where('id_funcionario','=',$funcionario->id)
+                                ->where('entrada','=',null)                                
+                                ->get()->count();
+           
+
         }      
-        
+        //dd($total_Falta);
         return view('web.relatorio_ponto',[
             'funcionario'=>$funcionario,
             'relatorio'=>$relatorio,
+            'total_Falta'=>$total_Falta,
+            'total_Atraso_Entrada'=>$total_Atraso_Entrada,
+            'total_Atraso_Almoco'=>$total_Atraso_Almoco,
+            'total_Antecipacao_Entrada'=>$total_Antecipacao_Entrada,
+            'total_Antecipacao_Almoco'=> $total_Antecipacao_Almoco,
+            'total_Antecipacao_Saida'=> $total_Antecipacao_Saida,
+            'total_hora_extra'=>$total_hora_extra
         ]);  
     }
     public function pagina_relatorio(){
@@ -152,10 +254,24 @@ class PontoController extends Controller
            $relatorio =DB::table('ponto')
                     ->where('ponto.id_funcionario','=','0')
                     ->get();
+            $total_Falta=0;
+            $total_Atraso_Entrada=0;
+            $total_Atraso_Almoco=0;
+            $total_Antecipacao_Entrada=0;
+            $total_Antecipacao_Almoco=0;
+            $total_Antecipacao_Saida=0;
+            $total_hora_extra=0;  
 
         return view('web.relatorio_ponto',[
             'funcionario'=>$funcionario,
             'relatorio'=>$relatorio,
+            'total_Falta'=>$total_Falta,
+            'total_Atraso_Entrada'=>$total_Atraso_Entrada,
+            'total_Atraso_Almoco'=>$total_Atraso_Almoco,
+            'total_Antecipacao_Entrada'=>$total_Antecipacao_Entrada,
+            'total_Antecipacao_Almoco'=> $total_Antecipacao_Almoco,
+            'total_Antecipacao_Saida'=> $total_Antecipacao_Saida,
+            'total_hora_extra'=>$total_hora_extra
         ]);   
     }
 
