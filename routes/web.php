@@ -69,5 +69,9 @@ Route::get('/ponto', [App\Http\Controllers\FuncionariosController::class, 'ponto
 Route::post('/ponto_registro', [App\Http\Controllers\PontoController::class, 'ponto_registro']);
 Route::post('/relatorio_ponto', [App\Http\Controllers\PontoController::class, 'relatorio']);
 Route::get('/pagina_relatorio', [App\Http\Controllers\PontoController::class, 'pagina_relatorio']);
+Route::get('/lancamentos_ponto', [App\Http\Controllers\PontoController::class, 'lancamentos']);
+Route::get('/rel_cartao_ponto', [App\Http\Controllers\PontoController::class, 'relatorio_ponto']);
+Route::post('/rel_cartao_ponto', [App\Http\Controllers\PontoController::class, 'relatorio_ponto']);
+
 
 

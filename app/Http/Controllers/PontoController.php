@@ -59,8 +59,11 @@ class PontoController extends Controller
                             $hora1 = new DateTime($request->hora);
                             $hora2 = new DateTime($periodo->entrada);                        
                             $diferenca = $hora2->diff($hora1);                        
-                            $diferenca = $diferenca->format('%H:%I:%S');                    
+                            $diferenca = $diferenca->format('%H:%I:%S'); 
+                            $hora1 = $hora1->format('H:i:s');   
+                                        
                             if ($hora1 > $periodo->entrada){
+                                dd ($hora1)   ; 
                                 $registro->atrazo_entrada = $diferenca;
                                 $obs = "Entrada com ATRAZADO DE: ".$diferenca;
                             }else{
@@ -149,7 +152,7 @@ class PontoController extends Controller
             $funcionario = Funcionario::findOrFail($funcionarios[0]->id); 
             $relatorio = DB::table('ponto')
                     ->where('ponto.id_funcionario','=',$funcionario->id)
-                    ->orderby('data','desc')
+                    ->orderBy('ponto.data', 'desc') 
                     ->get();
 
             $total_hora_extra = DB::table('ponto')
@@ -274,6 +277,72 @@ class PontoController extends Controller
             'total_hora_extra'=>$total_hora_extra
         ]);   
     }
+
+    public function relatorio_ponto(Request $request){
+        $mes = $request->mes;
+        if($mes == 0){
+            $mes = date('m');           
+        }
+        
+        $meses = array('', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro');
+        $mes = $meses[intval($mes)];
+        
+        $funcionario = new Funcionario;
+        if ($request->id_funcionario <> ''){
+            $func = Funcionario::findOrFail($request->id_funcionario); 
+            $id_funcionario = $request->id_funcionario;
+            
+        }else {
+            $func = new Funcionario;
+            $id_funcionario = 0;
+        }
+        
+        $funcionarios = DB::table('funcionarios')        
+        ->get(); 
+        $relatorio =DB::table('ponto')
+                 ->where('ponto.id_funcionario','=',$id_funcionario)
+                 ->get();
+         $total_Falta=0;
+         $total_Atraso_Entrada=0;
+         $total_Atraso_Almoco=0;
+         $total_Antecipacao_Entrada=0;
+         $total_Antecipacao_Almoco=0;
+         $total_Antecipacao_Saida=0;
+         $total_hora_extra=0;  
+       
+     return view('funcionarios.relatorio_ponto',[
+         'funcionario'=>$funcionario,
+         'func'=>$func,         
+         'funcionarios'=>$funcionarios,
+         'mes'=>$mes,
+         'relatorio'=>$relatorio,
+         'total_Falta'=>$total_Falta,
+         'total_Atraso_Entrada'=>$total_Atraso_Entrada,
+         'total_Atraso_Almoco'=>$total_Atraso_Almoco,
+         'total_Antecipacao_Entrada'=>$total_Antecipacao_Entrada,
+         'total_Antecipacao_Almoco'=> $total_Antecipacao_Almoco,
+         'total_Antecipacao_Saida'=> $total_Antecipacao_Saida,
+         'total_hora_extra'=>$total_hora_extra
+     ]);   
+ }
+
+
+
+    public function lancamentos(){
+        $funcionarios = DB::table('funcionarios')        
+        ->get(); 
+        $relatorio =DB::table('ponto')   
+                 ->join('funcionarios','funcionarios.id','=','ponto.id_funcionario')
+                 ->select('ponto.*','funcionarios.nome')
+                 ->orderBy('ponto.data', 'desc')              
+                 ->get();
+
+     return view('funcionarios.ponto',[
+         'funcionarios'=>$funcionarios,
+         'relatorio'=>$relatorio,
+         
+     ]);   
+ }
 
 
 
