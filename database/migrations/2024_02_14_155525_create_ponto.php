@@ -28,7 +28,8 @@ return new class extends Migration
             $table->time('antes_saida');
             $table->time('hora_extra_saida');
             $table->string('imagem')->nullable();
-            $table->string('Atestado');
+            $table->string('status');
+
 
             $table->timestamps();
         });

@@ -30,10 +30,10 @@
 </nav><br><br>
 <form class="needs-validation mb-3" action="/relatorio_ponto" method="post">
         @csrf
-        <div class="row g-3 border rounded-3 pb-3 user-select-none">
+        <div class="row">
           
             <div class="col-sm-3">
-                <label class="form-label">Senha:</label>
+                <label class="form-label">Senha:</label><br>
                 <input type="password" name="senha">                
             </div>
             <div class="col-sm-3">
@@ -55,8 +55,16 @@
 
                 </select>              
             </div>
+            <div class="col-sm-3">
+                <label class="form-label">Ano:</label>
+                <select class="form-select" id="mes" name="ano">
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>          
+
+                </select>              
+            </div>
   
-            <div class="col-sm-2 align-self-end text-end ">
+            <div class="col-sm-3 align-self-end text-end ">
                 <button class="btn btn-outline-primary" type="submit" id="btnNovo">Gerar</button>
             </div>
         </div>
@@ -65,8 +73,8 @@
 
      <div style="font-size:30px;">
 
-       <b>Funcionário:</b> {{$funcionario->nome}}
-       <b>Banco de Horas:</b>
+       <b>Funcionário:</b> {{$funcionario->nome}}<br>
+       <b>Banco de Horas:</b>{{$banco_horas}}
     </div>
     <hr>  
      <div class="container">

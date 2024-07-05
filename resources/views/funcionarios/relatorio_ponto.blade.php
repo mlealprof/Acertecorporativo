@@ -9,7 +9,7 @@
 
 <form method="post" action="/rel_cartao_ponto">
   @csrf
-  <div class="row g-3 border rounded-3 pb-3 user-select-none"> 
+  <div class="row "> 
     <div class="col-sm-3">
         Funcionário
       <select  class="form-select" id="id_funcionario" name="id_funcionario" >
@@ -37,10 +37,17 @@
                     <option value="11">Novembro</option>
                     <option value="12">Dezembro</option>
 
-                </select>         
-                      
-      
-    </div>   
+                </select> 
+    </div>  
+
+    <div class="col-sm-3">
+                Ano:<br>
+                <select class="form-select" id="mes" name="ano">
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>          
+
+                </select>              
+      </div> 
     <button class="btn btn-outline-primary" type="submit" id="btnNovo">Gerar</button>
 </div>
   
@@ -117,6 +124,21 @@
        
     
     </table>
+    <div style="font-size:20px;">
+        <b>PONTOS NEGATIVOS</b><BR>
+          <b>Total de Faltas:</b> {{$total_Falta}}<br>
+          <b>Total Atrasos Entrada:</b>{{$total_Atraso_Entrada}}<br>  
+          <b>Total Atrasos Almoço:</b>{{$total_Atraso_Almoco}}<br>
+          <b>Total Antecipação Saída:</b>{{$total_Antecipacao_Saida}}<br><br>
+          <b>PONTOS POSITIVOS</b><BR>
+          <b>Total Antecipação Entrada:</b>{{$total_Antecipacao_Entrada}} <br>
+          <b>Total Antecipação Almoço:</b>{{$total_Antecipacao_Almoco}}<br>
+          <b>Total Horas Extras:</b>{{$total_hora_extra}} <br>
+   </div>
+
+   <div style="font-size:30px;">
+      Banco de Horas: {{$banco_horas}}
+   </div>
    
 @stop
 
