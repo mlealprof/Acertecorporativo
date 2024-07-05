@@ -42,7 +42,7 @@ class PontoController extends Controller
                     foreach ($funcionarios as $func) {
                         $registro = new Ponto;
                         $registro->data = $request->data;                
-                        $registro->id_funcionario = $func->id;
+                        $registro->id_funcionario = $func->id_funcionario;
                         $registro->save();
                     }
 
@@ -50,12 +50,13 @@ class PontoController extends Controller
                 
                     $registros = DB::table('ponto')
                                 ->where('ponto.data','=',$request->data) 
-                                ->where('ponto.id_funcionario','=',$funcionario->id)
+                                ->where('ponto.id_funcionario','=',$id_funcionario)
                                 ->get();
                     foreach ($registros as $reg) {
                         $registro= Ponto::findOrFail($reg->id);                       
                         if ($registro->entrada==null){
                             $registro->entrada = $request->hora;
+                            $registri->status = 'Normal';
                             $hora1 = new DateTime($request->hora);
                             $hora2 = new DateTime($periodo->entrada);                        
                             $diferenca = $hora2->diff($hora1);                        
@@ -119,7 +120,7 @@ class PontoController extends Controller
                             }   
                         }
                         
-                        $registro->id_funcionario = $funcionario->id;            
+                        $registro->id_funcionario = $id_funcionario;            
                         $registro->save();
                     }
                 }
@@ -171,6 +172,8 @@ class PontoController extends Controller
             $total_hora_extra = DB::table('ponto')
                                 ->select('id', DB::raw("SUM(TIME_TO_SEC(hora_extra_saida)) as total_seconds"))
                                 ->where('id_funcionario','=',$funcionario->id)
+                                ->whereYear('data', '=', $ano)
+                                ->whereMonth('data', '=', $mes)
                                 ->groupBy('id')
                                 ->get();
             $total_hora_extra = $total_hora_extra->sum('total_seconds');
@@ -184,6 +187,8 @@ class PontoController extends Controller
             $total_Atraso_Entrada = DB::table('ponto')
                                 ->select('id', DB::raw("SUM(TIME_TO_SEC(atrazo_entrada)) as total_seconds"))
                                 ->where('id_funcionario','=',$funcionario->id)
+                                ->whereYear('data', '=', $ano)
+                                ->whereMonth('data', '=', $mes)
                                 ->groupBy('id')
                                 ->get();
             $total_Atraso_Entrada = $total_Atraso_Entrada->sum('total_seconds');
@@ -198,6 +203,8 @@ class PontoController extends Controller
             $total_Atraso_Almoco = DB::table('ponto')
                                 ->select('id', DB::raw("SUM(TIME_TO_SEC(atrazo_almoco)) as total_seconds"))
                                 ->where('id_funcionario','=',$funcionario->id)
+                                ->whereYear('data', '=', $ano)
+                                ->whereMonth('data', '=', $mes)
                                 ->groupBy('id')
                                 ->get();
             $total_Atraso_Almoco = $total_Atraso_Almoco->sum('total_seconds');
@@ -211,6 +218,8 @@ class PontoController extends Controller
             $total_Antecipacao_Entrada = DB::table('ponto')
                                 ->select('id', DB::raw("SUM(TIME_TO_SEC(hora_extra_entrada)) as total_seconds"))
                                 ->where('id_funcionario','=',$funcionario->id)
+                                ->whereYear('data', '=', $ano)
+                                ->whereMonth('data', '=', $mes)
                                 ->groupBy('id')
                                 ->get();
             $total_Antecipacao_Entrada = $total_Antecipacao_Entrada->sum('total_seconds');
@@ -225,6 +234,8 @@ class PontoController extends Controller
             $total_Antecipacao_Almoco = DB::table('ponto')
                                 ->select('id', DB::raw("SUM(TIME_TO_SEC(hora_extra_almoco)) as total_seconds"))
                                 ->where('id_funcionario','=',$funcionario->id)
+                                ->whereYear('data', '=', $ano)
+                                ->whereMonth('data', '=', $mes)
                                 ->groupBy('id')
                                 ->get();
             $total_Antecipacao_Almoco = $total_Antecipacao_Almoco->sum('total_seconds');
@@ -236,6 +247,8 @@ class PontoController extends Controller
             $total_Antecipacao_Saida = DB::table('ponto')
                                 ->select('id', DB::raw("SUM(TIME_TO_SEC(antes_saida)) as total_seconds"))
                                 ->where('id_funcionario','=',$funcionario->id)
+                                ->whereYear('data', '=', $ano)
+                                ->whereMonth('data', '=', $mes)
                                 ->groupBy('id')
                                 ->get();
             $total_Antecipacao_Saida = $total_Antecipacao_Saida->sum('total_seconds');
@@ -329,7 +342,7 @@ class PontoController extends Controller
                  ->whereMonth('data', '=', $mes)
                  ->get();
 
-
+       
          $total_Falta=0;
          $total_Atraso_Entrada=0;
          $total_Atraso_Almoco=0;
@@ -341,7 +354,9 @@ class PontoController extends Controller
          
          $total_hora_extra = DB::table('ponto')
                                 ->select('id', DB::raw("SUM(TIME_TO_SEC(hora_extra_saida)) as total_seconds"))
-                                ->where('id_funcionario','=',$func->id)
+                                ->where('id_funcionario','=',$id_funcionario)
+                                ->whereYear('data', '=', $ano)
+                                ->whereMonth('data', '=', $mes)
                                 ->groupBy('id')
                                 ->get();
             $total_hora_extra = $total_hora_extra->sum('total_seconds');
@@ -354,7 +369,9 @@ class PontoController extends Controller
 
             $total_Atraso_Entrada = DB::table('ponto')
                                 ->select('id', DB::raw("SUM(TIME_TO_SEC(atrazo_entrada)) as total_seconds"))
-                                ->where('id_funcionario','=',$func->id)
+                                ->where('id_funcionario','=',$id_funcionario)
+                                ->whereYear('data', '=', $ano)
+                                ->whereMonth('data', '=', $mes)
                                 ->groupBy('id')
                                 ->get();
             $total_Atraso_Entrada = $total_Atraso_Entrada->sum('total_seconds');
@@ -368,7 +385,9 @@ class PontoController extends Controller
 
             $total_Atraso_Almoco = DB::table('ponto')
                                 ->select('id', DB::raw("SUM(TIME_TO_SEC(atrazo_almoco)) as total_seconds"))
-                                ->where('id_funcionario','=',$func->id)
+                                ->where('id_funcionario','=',$id_funcionario)
+                                ->whereYear('data', '=', $ano)
+                                ->whereMonth('data', '=', $mes)
                                 ->groupBy('id')
                                 ->get();
             $total_Atraso_Almoco = $total_Atraso_Almoco->sum('total_seconds');
@@ -381,7 +400,9 @@ class PontoController extends Controller
 
             $total_Antecipacao_Entrada = DB::table('ponto')
                                 ->select('id', DB::raw("SUM(TIME_TO_SEC(hora_extra_entrada)) as total_seconds"))
-                                ->where('id_funcionario','=',$func->id)
+                                ->where('id_funcionario','=',$id_funcionario)
+                                ->whereYear('data', '=', $ano)
+                                ->whereMonth('data', '=', $mes)
                                 ->groupBy('id')
                                 ->get();
             $total_Antecipacao_Entrada = $total_Antecipacao_Entrada->sum('total_seconds');
@@ -395,7 +416,9 @@ class PontoController extends Controller
 
             $total_Antecipacao_Almoco = DB::table('ponto')
                                 ->select('id', DB::raw("SUM(TIME_TO_SEC(hora_extra_almoco)) as total_seconds"))
-                                ->where('id_funcionario','=',$func->id)
+                                ->where('id_funcionario','=',$id_funcionario)
+                                ->whereYear('data', '=', $ano)
+                                ->whereMonth('data', '=', $mes)
                                 ->groupBy('id')
                                 ->get();
             $total_Antecipacao_Almoco = $total_Antecipacao_Almoco->sum('total_seconds');
@@ -406,7 +429,9 @@ class PontoController extends Controller
 
             $total_Antecipacao_Saida = DB::table('ponto')
                                 ->select('id', DB::raw("SUM(TIME_TO_SEC(antes_saida)) as total_seconds"))
-                                ->where('id_funcionario','=',$func->id)
+                                ->where('id_funcionario','=',$id_funcionario)
+                                ->whereYear('data', '=', $ano)
+                                ->whereMonth('data', '=', $mes)
                                 ->groupBy('id')
                                 ->get();
             $total_Antecipacao_Saida = $total_Antecipacao_Saida->sum('total_seconds');
@@ -417,7 +442,7 @@ class PontoController extends Controller
            
 
             $total_Falta = DB::table('ponto')                                
-                                ->where('id_funcionario','=',$func->id)
+                                ->where('id_funcionario','=',$id_funcionario)
                                 ->whereYear('data', '=', $ano)
                                 ->whereMonth('data', '=', $mes)
                                 ->where('entrada','=',null)
@@ -426,10 +451,10 @@ class PontoController extends Controller
            
 
         
-
-        $banco_horas = $this->banco_horas($func->id);
         
-       //  dd($banco_horas);
+        $banco_horas = $this->banco_horas($id_funcionario);
+        
+        
          
        
      return view('funcionarios.relatorio_ponto',[
@@ -488,8 +513,9 @@ class PontoController extends Controller
     
     
     $funcionarios = DB::table('funcionarios')
-                    ->where('funcionarios.senha','=',$id_funcionario)
+                    ->where('funcionarios.id','=',$id_funcionario)
                     ->get();
+     
     if ($funcionarios->isEmpty()) {
         $funcionario = new Funcionario;
         $relatorio =DB::table('ponto')
@@ -500,7 +526,7 @@ class PontoController extends Controller
         $relatorio = DB::table('ponto')
                 ->where('ponto.id_funcionario','=',$id_funcionario)   
                 ->get();
-      
+        //dd($funcionario);
 
         $total_hora_extra = DB::table('ponto')
                             ->select('id', DB::raw("SUM(TIME_TO_SEC(hora_extra_saida)) as total_seconds"))
