@@ -31,7 +31,7 @@ class PontoController extends Controller
             
             $funcionario = Funcionario::findOrFail($funcionarios[0]->id); 
            
-  
+            $id_funcionario = $funcionario->id;
             $periodo = Periodo::findOrFail($funcionario->periodo);        
             $data = DB::table('ponto')
                 ->where('ponto.data','=',$request->data)                
@@ -42,7 +42,8 @@ class PontoController extends Controller
                     foreach ($funcionarios as $func) {
                         $registro = new Ponto;
                         $registro->data = $request->data;                
-                        $registro->id_funcionario = $func->id_funcionario;
+                        $registro->id_funcionario= $func->id;
+                        $registro->status="Falta";
                         $registro->save();
                     }
 
@@ -56,7 +57,7 @@ class PontoController extends Controller
                         $registro= Ponto::findOrFail($reg->id);                       
                         if ($registro->entrada==null){
                             $registro->entrada = $request->hora;
-                            $registri->status = 'Normal';
+                            $registro->status = 'Normal';
                             $hora1 = new DateTime($request->hora);
                             $hora2 = new DateTime($periodo->entrada);                        
                             $diferenca = $hora2->diff($hora1);                        
@@ -297,8 +298,9 @@ class PontoController extends Controller
             $total_Antecipacao_Almoco=0;
             $total_Antecipacao_Saida=0;
             $total_hora_extra=0;  
+            $banco_horas='0';
            
-           
+        
 
         return view('web.relatorio_ponto',[
             'funcionario'=>$funcionario,
@@ -309,7 +311,8 @@ class PontoController extends Controller
             'total_Antecipacao_Entrada'=>$total_Antecipacao_Entrada,
             'total_Antecipacao_Almoco'=> $total_Antecipacao_Almoco,
             'total_Antecipacao_Saida'=> $total_Antecipacao_Saida,
-            'total_hora_extra'=>$total_hora_extra
+            'total_hora_extra'=>$total_hora_extra,
+            'banco_horas'=>$banco_horas
         ]);   
     }
 
@@ -492,6 +495,71 @@ class PontoController extends Controller
      ]); 
  
  }
+ public function lancamentos_filtro(Request $request){
+    $ano = $request->ano;
+    if ($request->mes==0){
+        $mes = date('m');   
+    }else{
+        $mes=$request->mes;
+    }
+    if($request->status=='Todos'){
+       $status='todos';
+    }else{
+       $status=$request->status;
+    }
+    if ($request->id_funcionario == '0'){
+        if($status=='todos'){
+            $relatorio =DB::table('ponto')   
+            ->join('funcionarios','funcionarios.id','=','ponto.id_funcionario')
+            ->select('ponto.*','funcionarios.nome')            
+            ->whereYear('data', '=', $ano)                                
+            ->whereMonth('data', '=', $mes)
+            ->orderBy('ponto.data', 'desc')              
+            ->get();      
+        }else {
+            $relatorio =DB::table('ponto')   
+            ->join('funcionarios','funcionarios.id','=','ponto.id_funcionario')
+            ->select('ponto.*','funcionarios.nome')
+            ->where('ponto.status','=',$status)
+            ->whereYear('data', '=', $ano)                                
+            ->whereMonth('data', '=', $mes)
+            ->orderBy('ponto.data', 'desc')              
+            ->get();
+        }    
+    }else{
+        if($status=='todos'){
+            $relatorio =DB::table('ponto')   
+            ->join('funcionarios','funcionarios.id','=','ponto.id_funcionario')
+            ->select('ponto.*','funcionarios.nome')         
+            ->where('ponto.id_funcionario','=',$request->id_funcionario)
+            ->whereYear('data', '=', $ano)                                
+            ->whereMonth('data', '=', $mes)
+            ->orderBy('ponto.data', 'desc')              
+            ->get();  
+        }else{
+            $relatorio =DB::table('ponto')   
+            ->join('funcionarios','funcionarios.id','=','ponto.id_funcionario')
+            ->select('ponto.*','funcionarios.nome')
+            ->where('ponto.status','=',$status)
+            ->where('ponto.id_funcionario','=',$request->id_funcionario)
+            ->whereYear('data', '=', $ano)                                
+            ->whereMonth('data', '=', $mes)
+            ->orderBy('ponto.data', 'desc')              
+            ->get();
+        }
+    }
+    $funcionarios = DB::table('funcionarios')        
+    ->get(); 
+    
+
+ return view('funcionarios.ponto',[
+     'funcionarios'=>$funcionarios,
+     'relatorio'=>$relatorio,
+     
+ ]); 
+
+}
+
  public function positivo($banco_horas){
     if($banco_horas>0){
         return true;
@@ -602,6 +670,38 @@ class PontoController extends Controller
        
 
  }
+}
+public function editar_ponto($id){
+    $registro = DB::table('ponto')   
+            ->join('funcionarios','funcionarios.id','=','ponto.id_funcionario')
+            ->select('ponto.*','funcionarios.nome')
+            ->where('ponto.id','=',$id)
+            ->get();
+   //dd($registro);
+    return view('funcionarios.edit_ponto',[
+        'registro'=>$registro                
+    ]); 
+
+}
+public function salvar_ponto(Request $request){
+   $registro= Ponto::findOrFail($request->id); 
+   $registro->data = $request->data;
+   
+   $registro->status = $request->status;
+   $registro->entrada = $request->entrada;
+   $registro->saida_almoco = $request->saida_almoco;
+   $registro->entrada_almoco = $request->chegada_almoco;
+   $registro->atrazo_entrada = $request->atraso_entrada;
+   $registro->hora_extra_entrada = $request->antes_entrada;
+   $registro->atrazo_almoco = $request->atraso_almoco;
+   $registro->hora_extra_almoco = $request->antes_almoco;
+   $registro->hora_extra_saida=$request->hora_extra;
+   $registro->antes_saida= $request->antes_saida;
+   $registro->save();
+
+
+    return redirect('/lancamentos_ponto') ;
+
 }
 
     //

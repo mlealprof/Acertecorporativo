@@ -74,7 +74,8 @@
      <div style="font-size:30px;">
 
        <b>Funcionário:</b> {{$funcionario->nome}}<br>
-       <b>Banco de Horas:</b>{{$banco_horas}}
+       <b>Banco de Horas:</b> {{$banco_horas}}
+
     </div>
     <hr>  
      <div class="container">

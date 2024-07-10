@@ -27,20 +27,21 @@ class CarrinhoController extends Controller
     }
     public function adicionaCarrinho(Request $request)
     {
-        $atacados = DB::table('preco_atacado')->orderBy('valor')->get();        
+        $atacados = DB::table('preco_atacado')->orderBy('valor')
+                    ->where('preco_atacado.id_produto','=',$request->id)
+                    ->get();        
         $preco = $request->valor;          
         $produtos = Produto::findOrFail($request->id);        
         $minimo = $produtos->minimo;
        // dd($request->nome);
-        foreach($atacados as $atacado){            
-            if ($atacado->id_produto == $request->id_produto) {
+        foreach($atacados as $atacado){ 
                 if ($request->qt >= $atacado->quantidade) {                    
                     if ($preco > $atacado->valor) {
                         $preco = $atacado->valor;
                         $minimo = $atacado->quantidade;
                     }                    
                 }
-            }
+            
         }
     
         if ($request->qt >= $minimo ) {

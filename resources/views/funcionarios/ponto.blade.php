@@ -7,6 +7,66 @@
 @stop
 
 @section('content')
+<form method="post" action="/lancamentos_ponto_filtro">
+  @csrf
+  <div class="row "> 
+    <div class="col">
+        Funcionário
+      <select  class="form-select" id="id_funcionario" name="id_funcionario" >
+        <option value="0">Todos</option>
+        @foreach ($funcionarios as $funcionario)    
+            <option value="{{$funcionario->id}}">{{$funcionario->nome}}</option>
+        @endforeach
+      </select>
+    </div>  
+
+      <div class="col">
+            Mês <br>
+            <select class="form-select" id="mes" name="mes">
+                    <option value="0">Atual</option>
+                    <option value="1">Janeiro</option>
+                    <option value="2">Fevereiro</option>
+                    <option value="3">Março</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Maio</option>
+                    <option value="6">Junho</option>
+                    <option value="7">Julho</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Setembro</option>
+                    <option value="10">Outubro</option>
+                    <option value="11">Novembro</option>
+                    <option value="12">Dezembro</option>
+
+                </select> 
+    </div>  
+
+    <div class="col">
+                Ano:<br>
+                <select class="form-select" id="ano" name="ano">
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>          
+
+                </select>              
+     </div>
+     <div class="col">
+                Status:<br>
+                <select class="form-select" id="status" name="status">
+                    <option value="Todos">Todos</option>
+                    <option value="Normal">Normal</option>
+                    <option value="Falta">Falta</option>  
+                    <option value="Normal">Férias</option>  
+                    <option value="Normal">Folga</option>      
+
+                </select>              
+     </div> 
+     <div class="col">
+       <button class="btn btn-outline-primary" type="submit" id="btnNovo">Gerar</button>
+     </div>
+</div>
+  
+</form>
+<br>
+<hr>
 
    
    
@@ -20,13 +80,8 @@
             <th>Entrada</th>
             <th>Saída Almoço</th>
             <th>Chegada Almoço</th>                    
-            <th>Saída</th>
-            <th>Atraso Entrada</th>
-            <th>Atraso Almoço</th>
-            <th>Antecipação Almoço</th>
-            <th>Antecipação Saída</th>
-            <th>Hora Extra</th>
-            <th>Atestado</th>
+            <th>Saída</th>            
+            <th>Status</th>
             <th>Ação</th>
         </tr>
     </thead>
@@ -40,39 +95,11 @@
                     <td style="border: 1px solid black; border-radius: 1px;">{{$rel->saida_almoco}} </td>
                     <td style="border: 1px solid black; border-radius: 1px;">{{$rel->entrada_almoco }}</td>
                     <td style="border: 1px solid black; border-radius: 1px;">{{$rel->saida}} </td>
-                    @if($rel->atrazo_entrada<>null)
-                       <td style="border: 1px solid black; border-radius: 1px;" bgcolor="red">{{$rel->atrazo_entrada}} </td>
-                      
-                    @else
-                       <td style="border: 1px solid black; border-radius: 1px;"></td>
-                    @endif
-                    @if($rel->atrazo_almoco<>null)
-                       <td style="border: 1px solid black; border-radius: 1px;" bgcolor="red">{{$rel->atrazo_almoco}} </td>
-                    @else
-                       <td style="border: 1px solid black; border-radius: 1px;"> </td>
-                    @endif
-                    @if($rel->hora_extra_almoco<>null)
-                       <td style="border: 1px solid black; border-radius: 1px;" bgcolor="green">{{$rel->hora_extra_almoco}} </td>
-                    @else
-                       <td style="border: 1px solid black; border-radius: 1px;"> </td>
-                    @endif
-                    @if($rel->antes_saida<>null)
-                       <td style="border: 1px solid black; border-radius: 1px;" bgcolor="red">{{$rel->antes_saida}} </td>
-                    @else
-                       <td style="border: 1px solid black; border-radius: 1px;"> </td>
-                    @endif
-                    @if($rel->hora_extra_saida<>null)
-                       <td style="border: 1px solid black; border-radius: 1px;" bgcolor="green">{{$rel->hora_extra_saida}} </td>
-                    @else
-                       <td style="border: 1px solid black; border-radius: 1px;"> </td>
-                    @endif
-                    <td style="border: 1px solid black; border-radius: 1px;">{{$rel->Atestado}} </td>
+                    <td style="border: 1px solid black; border-radius: 1px;">{{$rel->status}} </td>
                     <td>
-                        <a href="{{ url('funcionarios\/') .$rel->id .'/editar'}}" class="btn btn-outline-secondary btn-sm">Editar<i class="fa fa-pencil" aria-hidden="true"></i></a>                        
-                        <a href="{{ url('funcionarios\/') .$rel->id .'/delete'}}" class="btn btn-outline-danger btn-sm btn-excluir">
-                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        <a href="{{ url('funcionarios\/') .$rel->id .'/editar_ponto'}}" class="btn btn-outline-secondary btn-sm">Editar<i class="fa fa-pencil" aria-hidden="true"></i></a>                        
                         </a>
-                </td>
+                    </td>
             
                     
                  </tr>
