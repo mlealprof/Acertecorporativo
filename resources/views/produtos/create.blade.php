@@ -9,14 +9,20 @@
     <form method="post" action="/produtos/salvar" enctype="multipart/form-data">
     @csrf
         <div class="row">
-           <div class="form-group mb-2 col-lg-3">
+           <div class="form-group mb-2 col-lg-2">
                 <input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Código</label>
                     <input type="text" class="form-control" id="codigo" name="codigo">
                 </div>
             </div>
-            <div class="form-group mb-2 col-lg-9">               
+            <div class="form-group mb-2 col-lg-2">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">Código Fornecedor</label>
+                    <input type="text" class="form-control" id="cod_fornecedor" name="cod_fornecedor">
+                </div>
+            </div>
+            <div class="form-group mb-2 col-lg-8">               
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Nome</label>
                     <input type="text" class="form-control" id="nome" name="nome">

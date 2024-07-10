@@ -5,10 +5,12 @@ use App\Models\Produto;
 use App\Models\Categoria;
 use App\Models\Tipo;
 use App\Models\preco_atacado;
+use App\Models\Produtos_fornecedor;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 Use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Http;
 
 
 class ProdutosController extends Controller
@@ -90,6 +92,7 @@ class ProdutosController extends Controller
         
         $produto->nome = $request->nome;
         $produto->codigo= $request->codigo;
+        $produto->cod_fornecedor= $request->cod_fornecedor;
         $produto->altura = $request->altura;
         $produto->largura = $request->largura;
         $produto->comprimento = $request->comprimento;
@@ -361,11 +364,38 @@ class ProdutosController extends Controller
         $pdf=PDF::loadView('produtos.pdf_produtos', compact('atacado','produtos','variacoes','categoria'))
         ->setPaper('A4');
         return $pdf->download('Acerte no Presente - '.$categoria->nome.'.pdf');
-    
-
-
 
     }
+
+public function get_fornecedor(){
+    $produtos_fornecedor = Http::get("https://api.minhaxbz.com.br:5001/api/clientes/GetListaDeProdutos?cnpj=15603172000127&token=1519778332")->json();
+    $produtos = DB::table('Produtos_fornecedor')
+                ->get();
+    foreach ($produtos as $produto) {
+        $produto->delete();
+    } 
+   // dd($produtos_fornecedor);
+    foreach ($produtos_fornecedor as $produto) {
+    
+       $registro = new produtos_fornecedor();
+       $registro->nome = $produto['Nome'];
+       $registro->cod_fornecedor = $produto['CodigoAmigavel'];
+       $registro->cod_cor = $produto['CodigoComposto'];
+       $registro->imagem_link = $produto['ImageLink'];
+       $registro->cod_fornecedor = $produto['CodigoAmigavel'];
+       $registro->cor = $produto['CorWebPrincipal'];
+       $registro->preco = $produto['PrecoVendaFormatado'];
+       $registro->ponta_estoque = $produto['PontaDeEstoque'];
+       $registro->estoque = $produto['QuantidadeDisponivel'];
+       $registro->StatusConfiabilidade = $produto['StatusConfiabilidade'];
+       $registro->reposicao = $produto['ReposicaoDataPrevista'];
+       $registro->save();
+        
+    }
+    return redirect('/');
+
+    
+}
 
 
 

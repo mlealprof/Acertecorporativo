@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('descricao')->nullable();
             $table->integer('id_produto');
+            $table->integer('estoque');
             $table->string('imagem');
             $table->timestamps();
         });

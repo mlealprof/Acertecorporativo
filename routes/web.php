@@ -46,6 +46,7 @@ Route::get('/produtos/{produto}/editar', [App\Http\Controllers\ProdutosControlle
 Route::post('/produtos/editar', [App\Http\Controllers\ProdutosController::class, 'update','produto'])->middleware('auth');
 
 Route::get('/busca', [App\Http\Controllers\ProdutosController::class, 'busca']);
+Route::get('/atualiza_produtos', [App\Http\Controllers\ProdutosController::class, 'get_fornecedor']);
 Route::get('/info_produto/{id}', [App\Http\Controllers\ProdutosController::class, 'info_produto','id']);
 Route::get('/gerar_pdf', [App\Http\Controllers\ProdutosController::class, 'gera_pdf']);
 Route::get('/gerar_pdf/{categoria}', [App\Http\Controllers\ProdutosController::class, 'gera_pdf_categoria','categoria']);

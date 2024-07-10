@@ -28,6 +28,7 @@ return new class extends Migration
             $table->float('valor', 8, 2)->nullable();;
             $table->integer('id_categoria');
             $table->integer('id_tipo');
+            $table->integer('cod_fornecedor');
             $table->integer('quantidade')->nullable();;
             $table->timestamps();
         });

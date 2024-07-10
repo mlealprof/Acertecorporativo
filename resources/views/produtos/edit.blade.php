@@ -9,14 +9,20 @@
     <form method="post" action="/produtos/editar" enctype="multipart/form-data">
     @csrf
         <div class="row">
-           <div class="form-group mb-2 col-lg-3">
+           <div class="form-group mb-2 col-lg-2">
                 <input type="hidden" name="id_produto" value="{{$produtos->id}}" />
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Código</label>
                     <input type="text" class="form-control" id="codigo" name="codigo" value="{{$produtos->codigo}}">
                 </div>
+            </div>      
+            <div class="form-group mb-2 col-lg-2">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">Código Fornecedor</label>
+                    <input type="text" class="form-control" id="cod_fornecedor" name="cod_fornecedor" value="{{$produtos->cod_fornecedor}}">
+                </div>
             </div>
-            <div class="form-group mb-2 col-lg-9">               
+            <div class="form-group mb-2 col-lg-8">               
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Nome</label>
                     <input type="text" class="form-control" id="nome" name="nome" value="{{$produtos->nome}}">
