@@ -107,6 +107,24 @@
              <b>Valor: R$ {{$produto->valor}}<br>
           </div>
        </td>
+       <tr>     
+               <th style="border: 1px solid black; border-radius: 1px;"> Ref.</th>     
+               <th style="border: 1px solid black; border-radius: 1px;"> Cor</th>
+               <th style="border: 1px solid black; border-radius: 1px;"> Estoque</th>
+               <th style="border: 1px solid black; border-radius: 1px;"> Reposição Prevista</th>    
+               <th style="border: 1px solid black; border-radius: 1px;"> Data Atualização</th>       
+       </tr>
+         @foreach ($produtos_fornecedor as $produto)
+       <tr>
+      
+            <td style="border: 1px solid black; border-radius: 1px;">CH<?php echo str_replace(',', 'X', $produto->preco); ?>BR </td>
+            <td style="border: 1px solid black; border-radius: 1px;">{{$produto->cor}} </td>
+            <td style="border: 1px solid black; border-radius: 1px;">{{$produto->estoque}} </td>
+            <td style="border: 1px solid black; border-radius: 1px;"> {{$produto->reposicao}} </td>
+            <td style="border: 1px solid black; border-radius: 1px;"> {{$produto->updated_at}} </td>
+       
+       </tr>
+       @endforeach
      </tr>
     </table>   
     

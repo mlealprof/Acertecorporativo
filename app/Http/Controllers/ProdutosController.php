@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 Use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\ConnectionException;
+
 
 
 class ProdutosController extends Controller
@@ -260,13 +262,19 @@ class ProdutosController extends Controller
         $atacado = DB::table('preco_atacado')
                 ->orderby('quantidade')
                 ->get();
-       //dd($produto);
+        
+        $produtos_fornecedor =  DB::table('produtos_fornecedor')
+                                ->where('produtos_fornecedor.cod_fornecedor','=',$produto->cod_fornecedor)
+                                ->get(); 
+       
+       
         return view('web.info_produto',[
               
             'produto'=>$produto,
             'categorias'=>$categorias,
             'variacoes'=>$variacoes,
             'atacado'=>$atacado,
+            'produtos_fornecedor' =>$produtos_fornecedor
             
         
         ]);
@@ -369,12 +377,12 @@ class ProdutosController extends Controller
 
 public function get_fornecedor(){
     $produtos_fornecedor = Http::get("https://api.minhaxbz.com.br:5001/api/clientes/GetListaDeProdutos?cnpj=15603172000127&token=1519778332")->json();
-    $produtos = DB::table('Produtos_fornecedor')
-                ->get();
-    foreach ($produtos as $produto) {
-        $produto->delete();
-    } 
-   // dd($produtos_fornecedor);
+    $produtos = DB::table('produtos_fornecedor')
+                ->delete();
+                
+         
+     
+
     foreach ($produtos_fornecedor as $produto) {
     
        $registro = new produtos_fornecedor();
