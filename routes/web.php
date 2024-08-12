@@ -42,8 +42,10 @@ Route::get('/categorias/{categoria}/delete', [App\Http\Controllers\CategoriasCon
 Route::get('/tipo', [App\Http\Controllers\TipoController::class, 'index'])->middleware('auth');
 Route::post('/tipos/add', [App\Http\Controllers\TipoController::class, 'adicionar'])->middleware('auth');
 Route::get('/tipos/{tipo}/delete', [App\Http\Controllers\TipoController::class, 'delete','tipo'])->middleware('auth');
-Route::get('/produtos/{produto}/editar', [App\Http\Controllers\ProdutosController::class, 'editar','produto'])->middleware('auth');
+Route::get('/produtos/{produto}/editar_atacado', [App\Http\Controllers\ProdutosController::class, 'editar_atacado','produto'])->middleware('auth');
 Route::post('/produtos/editar', [App\Http\Controllers\ProdutosController::class, 'update','produto'])->middleware('auth');
+Route::get('/produtos/{produto}/editar', [App\Http\Controllers\ProdutosController::class, 'editar','produto'])->middleware('auth');
+Route::post('/produtos/salvando_atacado', [App\Http\Controllers\ProdutosController::class, 'salvando_atacado'])->middleware('auth');
 
 Route::get('/busca', [App\Http\Controllers\ProdutosController::class, 'busca']);
 Route::get('/atualiza_produtos', [App\Http\Controllers\ProdutosController::class, 'get_fornecedor']);

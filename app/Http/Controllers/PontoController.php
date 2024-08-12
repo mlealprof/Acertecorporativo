@@ -691,6 +691,7 @@ public function salvar_ponto(Request $request){
    $registro->entrada = $request->entrada;
    $registro->saida_almoco = $request->saida_almoco;
    $registro->entrada_almoco = $request->chegada_almoco;
+   $registro->saida = $request->saida;
    $registro->atrazo_entrada = $request->atraso_entrada;
    $registro->hora_extra_entrada = $request->antes_entrada;
    $registro->atrazo_almoco = $request->atraso_almoco;

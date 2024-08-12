@@ -26,8 +26,8 @@
                       <option value="{{$registro[0]->status}}">{{$registro[0]->status}}</option>
                       <option value="Normal">Normal</option>
                       <option value="Falta">Falta</option>  
-                      <option value="Normal">Férias</option>  
-                      <option value="Normal">Folga</option> 
+                      <option value="Férias">Férias</option>  
+                      <option value="Folga">Folga</option> 
                 </select>
                 
              </div>

@@ -147,6 +147,7 @@ class ProdutosController extends Controller
         $produto->id_tipo= $request->id_tipo;
         $produto->altura = $request->altura;
         $produto->largura = $request->largura;
+        $produto->cod_fornecedor = $request->cod_fornecedor;
         $produto->comprimento = $request->comprimento;
         $produto->peso = $request->peso;
         $produto->minimo = $request->minimo;
@@ -189,6 +190,28 @@ class ProdutosController extends Controller
             'produto' => $produto,
             'atacado' => $atacado
         ]);
+        
+    }
+    public function editar_atacado ($id)
+    {
+        $atacado = preco_atacado::findOrFail($id);                    
+        
+        return view('produtos.edit_atacado',[
+
+            'atacado' => $atacado
+        ]);
+        
+    }
+    public function salvando_atacado (Request $request)
+    {
+        $atacado = preco_atacado::findOrFail($request->id_produto);    
+        $atacado->descricao = $request->descricao;
+        $atacado->valor = $request->valor;
+        $atacado->valor_extra = $request->valor_extra;
+        $atacado->quantidade=$request->quantidade;
+        $atacado->save();                
+        
+        return redirect ('/produtos/'.$atacado->id_produto.'/atacado');
         
     }
     public function variacao($id)
@@ -376,11 +399,13 @@ class ProdutosController extends Controller
     }
 
 public function get_fornecedor(){
-    $produtos_fornecedor = Http::get("https://api.minhaxbz.com.br:5001/api/clientes/GetListaDeProdutos?cnpj=15603172000127&token=1519778332")->json();
+    $produtos_fornecedor = Http::get("https://api.minhaxbz.com.br:5001/api/clientes/GetListaDeProdutos?cnpj=15603172000127&token=1519778332");
+   // $produtos_fornecedor = Http::withToken('token')->post('https://api.minhaxbz.com.br:5001/api/clientes/GetListaDeProdutos?cnpj=15603172000127&token=1519778332')->json();
     $produtos = DB::table('produtos_fornecedor')
                 ->delete();
+    $produtos_fornecedor = $produtos_fornecedor->json();
                 
-         
+     //dd($produtos_fornecedor);    
      
 
     foreach ($produtos_fornecedor as $produto) {

@@ -35,7 +35,7 @@
                 <td>R$<?php echo number_format($preco->valor,2); ?></td>
                 <td>R$<?php echo number_format($preco->valor_extra,2); ?></td>
                 <td>
-                        <a href="{{ url('produtos\/') .$preco->id .'/editar_atacado'}}" class="btn btn-outline-danger btn-sm btn">
+                        <a href="{{ url('produtos\/') .$preco->id .'/editar_atacado'}}" class="btn btn-outline-danger btn-sm btn">Editar
                             <i class="fa fa-pencil fa-fw"></i>
                         </a>
                         <a href="{{ url('produtos\/') .$preco->id .'/delete_atacado'}}" class="btn btn-outline-danger btn-sm btn-excluir">
