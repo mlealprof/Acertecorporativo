@@ -74,9 +74,17 @@ class ProdutosController extends Controller
         $busca=1;
         $categorias = Categoria::all();
         $cod_fornecedor = $request->cod_fornecedor;
+        $descricao='';
+        $descricao = $request->descricao;
         $produtos_fornecedor = DB::table('produtos_fornecedor')                            
-                            ->where('cod_fornecedor','=',$cod_fornecedor)                            
+                            ->where('cod_fornecedor','like','%'.$cod_fornecedor.'%')                            
                             ->get(); 
+        if ($descricao<>''){
+            $produtos_fornecedor = DB::table('produtos_fornecedor')                            
+            ->where('nome','like','%'.$descricao.'%')                            
+            ->get();     
+        }
+
        // dd($produtos_fornecedor);
         return view('produtos.produtos_fornecedor',[
             'produtos_fornecedor' =>$produtos_fornecedor,

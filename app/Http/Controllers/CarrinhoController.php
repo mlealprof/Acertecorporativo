@@ -62,8 +62,7 @@ class CarrinhoController extends Controller
           $mensagem = 'Quantidade abaixo do Mínimo para esse Produto!';
         }
         
-
-        
+       
         return redirect('/carrinho')->with('sucesso',$mensagem);
     
     }
