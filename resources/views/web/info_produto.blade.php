@@ -21,8 +21,10 @@
                           <div class="carousel-inner">
                                @php
                                   $active = 0;
-                                  $cont = 1;                                  
+                                  $cont = 1;  
+                                  $aberto=2;                                
                                @endphp
+                               
                                @foreach ($variacoes as $variacao)
                                   @if ($variacao->id_produto == $produto->id)
                                         @if ($active == 0)

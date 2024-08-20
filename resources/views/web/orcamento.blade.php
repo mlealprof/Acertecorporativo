@@ -78,10 +78,16 @@
         
         <div class="row container text-right">
             <div class="col">
-                <a href="/continuar_comprando" class="btn btn-preto     text-white" role="button"><span class="glyphicon glyphicon-chevron-left"></span> Continuar Comprando</a>
+                <a href="/continuar_comprando" class="btn btn-preto     text-white" role="button"><span class="glyphicon glyphicon-chevron-left"></span> Continuar</a>
             </div>
             <div class="col">
-                <a href="/imprimir_orcamento" role="button" class="btn btn-preto text-white"> <span class="glyphicon glyphicon-print"></span> Imprimir Orçamento</a>
+                <a href="/imprimir_orcamento" role="button" class="btn btn-preto text-white"> <span class="glyphicon glyphicon-print"></span> Imprimir</a>
+            </div>
+            <div class="col">
+                <a href="/add_orcamento" role="button" class="btn btn-preto text-white"> <span class="glyphicon glyphicon-print"></span> Adicionar Produto</a>
+            </div>
+            <div class="col">
+                <a href="/lista_compras" role="button" class="btn btn-preto text-white"> <span class="glyphicon glyphicon-print"></span> Lista Compras</a>
             </div>
         
             <div class="col">

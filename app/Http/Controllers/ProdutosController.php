@@ -58,17 +58,68 @@ class ProdutosController extends Controller
         ]);
     }
 
+    public function produtos_fornecedor(){
+        $produtos_fornecedor = produtos_fornecedor::all();
+        $categorias = Categoria::all();
+        $busca=0;
+        return view('produtos.produtos_fornecedor',[
+            'produtos_fornecedor' =>$produtos_fornecedor,
+            'busca'=>$busca,
+            'categorias'=>$categorias
+        ]);
+
+    }
+
+    public function produtos_fornecedor_busca(Request $request){        
+        $busca=1;
+        $categorias = Categoria::all();
+        $cod_fornecedor = $request->cod_fornecedor;
+        $produtos_fornecedor = DB::table('produtos_fornecedor')                            
+                            ->where('cod_fornecedor','=',$cod_fornecedor)                            
+                            ->get(); 
+       // dd($produtos_fornecedor);
+        return view('produtos.produtos_fornecedor',[
+            'produtos_fornecedor' =>$produtos_fornecedor,
+            'busca'=>$busca,
+            'categorias'=>$categorias
+        ]);
+
+    }
+
+
     public function novo()
     {
         $produtos = Produto::all();
         $categorias = Categoria::all();
         $tipos = Tipo::all();
         $total_produtos = Produto::count();
+        
         return view('produtos.create',[
             'produtos' => $produtos,
             'categorias'=> $categorias,
-            'tipos'=> $tipos
+            'tipos'=> $tipos,
+      
         ]);
+    }
+
+    public function produto_novo(Request $request){
+        $cod_fornecedor = $request->cod_fornecedor;
+     
+        $produtos_fornecedor = DB::table('produtos_fornecedor')                            
+                            ->where('cod_fornecedor','=',$cod_fornecedor)                            
+                            ->get(); 
+        $produtos = Produto::all();
+        $categorias = Categoria::all();
+        $tipos = Tipo::all();
+        $total_produtos = Produto::count();
+        //dd($produtos_fornecedor);
+        return view('produtos.create',[
+            'produtos' => $produtos,
+            'categorias'=> $categorias,
+            'tipos'=> $tipos,
+            'produtos_fornecedor' =>$produtos_fornecedor
+        ]);
+
     }
 
     public function inserir(Request $request): RedirectResponse
@@ -397,6 +448,9 @@ class ProdutosController extends Controller
         return $pdf->download('Acerte no Presente - '.$categoria->nome.'.pdf');
 
     }
+
+
+
 
 public function get_fornecedor(){
     $produtos_fornecedor = Http::get("https://api.minhaxbz.com.br:5001/api/clientes/GetListaDeProdutos?cnpj=15603172000127&token=1519778332");

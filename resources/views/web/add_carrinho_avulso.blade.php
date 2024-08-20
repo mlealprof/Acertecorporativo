@@ -1,14 +1,25 @@
-@extends('adminlte::page')
 
-@section('content_header')
-    <h1>Cadastro de Produtos</h1>
-    <hr>
-@stop
 
-@section('content')
-    <form method="post" action="/produtos/salvar" enctype="multipart/form-data">
-    @csrf
-        <div class="row">
+
+
+
+@include ('web.header')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="{{url ('assets/css/style.css')}}">
+
+	
+    
+<br>
+<div class='container'>
+
+   <img width='100%' src="{{ asset('storage/images/categorias/'.$categoria->imagem)}}">
+   <h1>Adicionar Produto Avulto</h1>
+   <div class="row">    
+     <form action="/add_carrinho_avulso" method='post'>
+     @csrf
+     <div class="row">
            <div class="form-group mb-2 col-lg-2">
                 <input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
                 <div class="form-group">
@@ -19,13 +30,7 @@
             <div class="form-group mb-2 col-lg-2">
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Código Fornecedor</label>
-                    @if (isset($produtos_fornecedor))
-                       <input type="text" class="form-control" id="cod_fornecedor" name="cod_fornecedor" value="{{$produtos_fornecedor[0]->cod_fornecedor}}">
-                    @endif
-                    @if (!isset($produtos_fornecedor))
-                       <input type="text" class="form-control" id="cod_fornecedor" name="cod_fornecedor" >
-                    @endif
-
+                    <input type="text" class="form-control" id="cod_fornecedor" name="cod_fornecedor">
                 </div>
             </div>
             <div class="form-group mb-2 col-lg-8">               
@@ -117,12 +122,15 @@
         <div class="col-lg-12" style="text-align: right;">
            <button type="submit" class="btn btn-primary">Salvar</button>
         </div>
-       
+     </form> 
+   </div>
 
 
-    </form>
 
 
+@section('js')
     
 @stop
 
+
+@include ('web.footer')

@@ -86,9 +86,9 @@
 								<li class="has-children">
 									<a href="#">ACESSOS</a>
 									<ul class="dropdown">
-											<li><a href="/home">Afiliados</a></li>
-											<li><a href="/home">Colaborador</a></li>
-											<li><a href="/home">Cliente</a></li>
+											
+											<li><a href="/home">Admin</a></li>
+											<li><a href="/produtos_fornecedor">Produtos</a></li>
 											<li><a href="/registrar">Cadastrar / Registrar</a></li>
 									</ul>
 								</li>
