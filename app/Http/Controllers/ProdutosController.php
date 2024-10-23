@@ -81,7 +81,8 @@ class ProdutosController extends Controller
                             ->get(); 
         if ($descricao<>''){
             $produtos_fornecedor = DB::table('produtos_fornecedor')                            
-            ->where('nome','like','%'.$descricao.'%')                            
+            ->where('nome','like','%'.$descricao.'%')    
+            ->orderBy('preco','asc')                        
             ->get();     
         }
 
@@ -304,6 +305,18 @@ class ProdutosController extends Controller
                     ->select('produtos.*','tipo.descricao as tipo')
                     ->orderby('valor')
                     ->get();
+       
+        $produtos_consulte = DB::table('produtos_fornecedor')                    
+                    ->where('produtos_fornecedor.cadastrado','=',0)   
+                    ->where('produtos_fornecedor.nome','like','%'.$categoria->descricao.'%')  
+                    ->distinct()
+                    ->get(['produtos_fornecedor.cod_fornecedor']);  
+         $produtos_fornecedor = DB::table('produtos_fornecedor')                    
+                    ->where('produtos_fornecedor.cadastrado','=',0)   
+                    ->where('produtos_fornecedor.nome','like','%'.$categoria->descricao.'%')
+                    ->get();     
+                              
+  
         
         $variacoes =DB::table('produtos')    
                     ->where('produtos.id_categoria','=',$id)               
@@ -318,8 +331,9 @@ class ProdutosController extends Controller
             'categorias'=>$categorias,
             'produtos'=>$produtos,
             'atacado'=>$atacado,
-            'variacoes'=>$variacoes
-        
+            'variacoes'=>$variacoes,
+            'produtos_consulte'=>$produtos_consulte,
+            'produtos_fornecedor'=>$produtos_fornecedor       
         ]);
     }
 
@@ -346,7 +360,7 @@ class ProdutosController extends Controller
                 ->get();
         
         $produtos_fornecedor =  DB::table('produtos_fornecedor')
-                                ->where('produtos_fornecedor.cod_fornecedor','=',$produto->cod_fornecedor)
+                                ->where('produtos_fornecedor.cod_fornecedor','like','%'.$produto->cod_fornecedor.'%')
                                 ->get(); 
        
        
@@ -484,6 +498,16 @@ public function get_fornecedor(){
        $registro->estoque = $produto['QuantidadeDisponivel'];
        $registro->StatusConfiabilidade = $produto['StatusConfiabilidade'];
        $registro->reposicao = $produto['ReposicaoDataPrevista'];
+       $produto = DB::table('produtos')
+                ->where('produtos.cod_fornecedor','like','%'.$produto['CodigoAmigavel'].'%')       
+                ->get();
+            
+       if (!empty($produto[0])){
+           $registro->cadastrado = 1;
+       }else{
+           $registro->cadastrado = 0;
+       }
+
        $registro->save();
         
     }

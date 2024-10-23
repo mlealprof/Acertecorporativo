@@ -110,7 +110,8 @@
           </div>
        </td>
        <tr>     
-               <th style="border: 1px solid black; border-radius: 1px;"> Ref.</th>     
+               <th style="border: 1px solid black; border-radius: 1px;"> Ref.</th>  
+               <th style="border: 1px solid black; border-radius: 1px;"> Cod.</th>    
                <th style="border: 1px solid black; border-radius: 1px;"> Cor</th>
                <th style="border: 1px solid black; border-radius: 1px;"> Estoque</th>
                <th style="border: 1px solid black; border-radius: 1px;"> Reposição Prevista</th>    
@@ -120,6 +121,7 @@
        <tr>
       
             <td style="border: 1px solid black; border-radius: 1px;">CH<?php echo str_replace(',', 'X', $produto->preco); ?>BR </td>
+            <td style="border: 1px solid black; border-radius: 1px;">{{$produto->cod_cor}} </td>
             <td style="border: 1px solid black; border-radius: 1px;">{{$produto->cor}} </td>
             <td style="border: 1px solid black; border-radius: 1px;">{{$produto->estoque}} </td>
             <td style="border: 1px solid black; border-radius: 1px;"> {{$produto->reposicao}} </td>

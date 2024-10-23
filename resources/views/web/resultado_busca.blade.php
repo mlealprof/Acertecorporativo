@@ -19,7 +19,9 @@
      @foreach ($produtos as $produto)
      <div class="cart" style="width:315px ; margin-bottom: 4%; margin-left: 1%;" >
          <div class="card-body" >
-             <img src="{{ asset('storage/images/'.$produto->imagem)}}" class="w-100"/> 
+              <a href="/info_produto/{{$produto->id}}">
+                   <img src="{{ asset('storage/images/'.$produto->imagem)}}" class="w-100"/> 
+                </a>
 
              
              <div id="carrossel">

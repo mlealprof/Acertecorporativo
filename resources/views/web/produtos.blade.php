@@ -138,6 +138,43 @@
                 
         </div>  
     @endforeach
+
+
+
+    @foreach ($produtos_consulte as $produto)
+        <?php $achou=false;?>
+        @foreach ($produtos_fornecedor as $fornecedor)
+            @if (($produto->cod_fornecedor == $fornecedor->cod_fornecedor)&&($achou==false))
+            <?php $achou=true;?> 
+                <div class="cart" style="width:315px ; margin-bottom: 4%; margin-left: 1%;" >
+                  <div class="col" >
+                            <img src="{{$fornecedor->imagem_link}}" class="img-responsive">
+                   </div> 
+                   <div class="card-body" >                    
+                        <div class="text-justify" style="height: 104px;">
+                            <h3>AC{{$fornecedor->cod_fornecedor}}-{{$fornecedor->nome}}</h3>                    
+                        </div>
+                          
+                        <div class="row  text-sm-left p-3 mb-2 bg-dark text-white">              
+                        <div class="col-lg-5 text-left " style="font-size: 10px">Consulte Disponibilidade!</div>
+                        </div>
+                                    
+                    </div>  
+                </div>  
+            @endif
+            
+        @endforeach
+
+                                       
+                
+    @endforeach
+    
+
+
+
+
+
+
     <a href="/gerar_pdf/{{$categoria->id}}">Catálogo PDF de {{$categoria->nome}}</a>
 
    </div>

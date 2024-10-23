@@ -29,15 +29,21 @@
     <a href="/atualiza_produtos"><input type="botton" class="btn btn-primary" value="Atualizar Produtos"></a>     
     @if ($busca==1&& !empty($produtos_fornecedor))
        <br><hr>
-       <h3>{{$produtos_fornecedor[0]->nome}}</h3>
+       
        <table>
        @foreach ($produtos_fornecedor as $produto)
-          <tr>
+          @if ($produto->estoque ==0)
+             <tr bgcolor="red">
+            @else
+               <tr>
+            @endif
+          
             <td style="border: 1px solid black; border-radius: 1px;"><a href="">Add</a></td>
             <td style="border: 1px solid black; border-radius: 1px;"><img src="{{$produto->imagem_link}}" width='150px' alt=""><br>CH<?php echo str_replace(',', 'X', $produto->preco); ?>BR</td>
-            <td style="border: 1px solid black; border-radius: 1px;">{{$produto->cor}} - {{$produto->cod_cor}}<br>{{$produto->updated_at}}  </td>
+            <td style="border: 1px solid black; border-radius: 1px;"><b>{{$produto->nome}}</b><br><br>{{$produto->cor}} - {{$produto->cod_cor}}<br><br><b>Atualização:</b>{{$produto->updated_at}}<br><b>Reposição:</b>{{$produto->reposicao}}  </td>
             <td style="border: 1px solid black; border-radius: 1px;">Estoque:{{$produto->estoque}}</td>
-            
+          
+             
           </tr>
            
 
