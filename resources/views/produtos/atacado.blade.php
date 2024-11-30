@@ -4,13 +4,16 @@
     <h1>Cadastro Preços Atacado</h1>
     <div class="col-lg-12" style="text-align: right;">
       <a href="/produtos/{{$produto->id}}/variacao">  <button type="button" class="btn btn-primary">Variações</button></a>
+      
     </div>
     
     <table class="table">
-       <tr>
+       <tr> <?php $preco = str_replace(',', '.', $preco);
+                  $venda = $preco+($preco * 1.2);?>
+          <td><b>Ref:</b>CH<?php echo str_replace('.', 'X', $preco); ?>BR<?php echo str_replace('.', 'X', $venda); ?></td>
           <td><b>Produto:</b> {{$produto->nome}}</td>
           <td> <b>Mínimo:</b>{{$produto->minimo}}</td>
-          <td> <b>Valor:</b> R$<?php echo number_format($produto->valor,2); ?>
+          <td> <b>Valor:</b> R$<?php echo number_format($produto->valor,2); ?><a href="/produtos/{{$produto->id}}/editar"><button type="button" class="btn btn-primary"> Editar</button></a></td>
     </table>
     <hr>
 

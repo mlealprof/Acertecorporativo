@@ -30,9 +30,10 @@ class PontoController extends Controller
   
             
             $funcionario = Funcionario::findOrFail($funcionarios[0]->id); 
+            $periodo = Periodo::findOrFail($funcionario->periodo);
            
             $id_funcionario = $funcionario->id;
-            $periodo = Periodo::findOrFail($funcionario->periodo);        
+                
             $data = DB::table('ponto')
                 ->where('ponto.data','=',$request->data)                
                 ->get();
@@ -40,11 +41,13 @@ class PontoController extends Controller
                     $funcionarios = DB::table('funcionarios')->get();
                     
                     foreach ($funcionarios as $func) {
-                        $registro = new Ponto;
-                        $registro->data = $request->data;                
-                        $registro->id_funcionario= $func->id;
-                        $registro->status="Falta";
-                        $registro->save();
+                        if ($func->Ativo == 1){
+                            $registro = new Ponto;
+                            $registro->data = $request->data;                
+                            $registro->id_funcionario= $func->id;
+                            $registro->status="Falta";
+                            $registro->save();
+                        }
                     }
 
                 }
@@ -73,11 +76,12 @@ class PontoController extends Controller
                             }
                            
                         }else{
-                            if ($registro->saida_almoco==null){
+                           
+                            if (($registro->saida_almoco==null)and ($periodo->intervalo <> null)){
                                 $registro->saida_almoco = $request->hora;
                                 $obs = "Saída para Almoço ";
                             }else{
-                                if ($registro->entrada_almoco==null){
+                                if (($registro->entrada_almoco==null)and ($periodo->intervalo <> null)){
                                     $registro->entrada_almoco = $request->hora;
                                     $hora1 = new DateTime($request->hora);
                                     $hora2 = new DateTime($registro->saida_almoco);

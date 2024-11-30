@@ -35,7 +35,8 @@ class FuncionariosController extends Controller
     public function salvar(Request $request){        
         
         $funcionario = new Funcionario;
-        $funcionario->nome =  $request->nome;      
+        $funcionario->nome =  $request->nome;   
+        $funcionario->Ativo =  $request->Ativo;     
         $funcionario->cpf =  $request->cpf;
         $funcionario->senha =  $request->senha;
         $funcionario->Dt_admissao =  $request->data;
@@ -76,7 +77,8 @@ class FuncionariosController extends Controller
     {
         $funcionario = Funcionario::findOrFail($request->id_funcionario);        
         
-        $funcionario->nome =  $request->nome;      
+        $funcionario->nome =  $request->nome;   
+        $funcionario->Ativo =  $request->Ativo;     
         $funcionario->cpf =  $request->cpf;
         $funcionario->senha =  $request->senha;
         $funcionario->Dt_admissao =  $request->data;

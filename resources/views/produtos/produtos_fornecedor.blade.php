@@ -39,7 +39,9 @@
             @endif
           
             <td style="border: 1px solid black; border-radius: 1px;"><a href="">Add</a></td>
-            <td style="border: 1px solid black; border-radius: 1px;"><img src="{{$produto->imagem_link}}" width='150px' alt=""><br>CH<?php echo str_replace(',', 'X', $produto->preco); ?>BR</td>
+            <?php $preco = str_replace(',', '.', $produto->preco);
+                  $venda = $preco+($preco * 1.2);?>
+            <td style="border: 1px solid black; border-radius: 1px;"><img src="{{$produto->imagem_link}}" width='150px' alt=""><br>CH<?php echo str_replace(',', 'X', $produto->preco); ?>BR<?php echo str_replace('.', '-', $venda);?></td>
             <td style="border: 1px solid black; border-radius: 1px;"><b>{{$produto->nome}}</b><br><br>{{$produto->cor}} - {{$produto->cod_cor}}<br><br><b>Atualização:</b>{{$produto->updated_at}}<br><b>Reposição:</b>{{$produto->reposicao}}  </td>
             <td style="border: 1px solid black; border-radius: 1px;">Estoque:{{$produto->estoque}}</td>
           

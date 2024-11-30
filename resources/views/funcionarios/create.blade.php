@@ -9,7 +9,19 @@
     <form method="post" action="/funcionarios/salvar" enctype="multipart/form-data">
     @csrf
         <div class="row">
-            <div class="form-group mb-2 col-lg-6">               
+        <div class="form-group mb-2 col-lg-2">
+                <label for="exampleFormControlInput1">Ativo</label>
+                <select class="form-control" id="ativo" name="ativo">
+                      @if ($funcionario->Ativo == 1)
+                         <option value="{{$funcionario->Ativo}}">Sim</option>
+                      @else
+                         <option value="{{$funcionario->Ativo}}">Não</option>
+                    @endif
+                      <option value="1">Sim</option>
+                      <option value="2">Não</option> 
+                </select>           
+             </div>
+            <div class="form-group mb-2 col-lg-4">               
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Nome</label>
                     <input type="text" class="form-control" id="nome" name="nome">

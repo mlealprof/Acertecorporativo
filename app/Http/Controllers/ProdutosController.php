@@ -86,11 +86,14 @@ class ProdutosController extends Controller
             ->get();     
         }
 
+
+
        // dd($produtos_fornecedor);
         return view('produtos.produtos_fornecedor',[
             'produtos_fornecedor' =>$produtos_fornecedor,
             'busca'=>$busca,
-            'categorias'=>$categorias
+            'categorias'=>$categorias,
+     
         ]);
 
     }
@@ -244,11 +247,20 @@ class ProdutosController extends Controller
                     ->select('preco_atacado.descricao as descricao','preco_atacado.quantidade as quantidade','preco_atacado.valor as valor','preco_atacado.valor_extra as valor_extra','preco_atacado.id as id')
                     ->orderBy('preco_atacado.quantidade','asc')                      
                     ->get();
-                    
+        $preco_fornecedor= DB::table('produtos_fornecedor')                    
+        ->where('produtos_fornecedor.cod_fornecedor','like',$produto->cod_fornecedor."%")   
+        ->get(); 
+        $preco=0;
+        if(!empty($preco_fornecedor[0]->preco)){
+            $preco = $preco_fornecedor[0]->preco;
+        }
+        
+
         
         return view('produtos.atacado',[
             'produto' => $produto,
-            'atacado' => $atacado
+            'atacado' => $atacado,
+            'preco' => $preco
         ]);
         
     }
@@ -308,12 +320,12 @@ class ProdutosController extends Controller
        
         $produtos_consulte = DB::table('produtos_fornecedor')                    
                     ->where('produtos_fornecedor.cadastrado','=',0)   
-                    ->where('produtos_fornecedor.nome','like','%'.$categoria->descricao.'%')  
+                    ->where('produtos_fornecedor.nome','like',$categoria->descricao)  
                     ->distinct()
                     ->get(['produtos_fornecedor.cod_fornecedor']);  
          $produtos_fornecedor = DB::table('produtos_fornecedor')                    
                     ->where('produtos_fornecedor.cadastrado','=',0)   
-                    ->where('produtos_fornecedor.nome','like','%'.$categoria->descricao.'%')
+                    ->where('produtos_fornecedor.nome','like',$categoria->descricao)
                     ->get();     
                               
   

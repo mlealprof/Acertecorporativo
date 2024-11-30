@@ -16,7 +16,8 @@
                     <input type="hidden" name="id" value="{{$registro[0]->id}}">
                 </div>
             </div>
-            <div class="form-group mb-2 col-lg-6">
+            
+            <div class="form-group mb-2 col-lg-4">
                 <label for="exampleFormControlInput1">Nome</label>
                 <input type="text" class="form-control" id="nome" name="nome" value="{{$registro[0]->nome}}" >           
              </div>
