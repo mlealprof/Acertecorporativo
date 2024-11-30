@@ -481,6 +481,18 @@ class PontoController extends Controller
      ]);   
  }
 
+public function relatorio_plano(){
+   
+    $funcionarios = DB::table('funcionarios')
+                        ->where('funcionarios.Ativo','=',1)
+                        ->where('funcionarios.plano_saude','=',1)
+                        ->get();
+                    
+
+    return view('funcionarios.relat_plano',[
+        'funcionarios'=>$funcionarios
+    ]);  
+}
 
 
     public function lancamentos(){

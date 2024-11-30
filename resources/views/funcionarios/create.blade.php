@@ -11,7 +11,7 @@
         <div class="row">
         <div class="form-group mb-2 col-lg-2">
                 <label for="exampleFormControlInput1">Ativo</label>
-                <select class="form-control" id="ativo" name="ativo">
+                <select class="form-control" id="Ativo" name="Ativo">
                       @if ($funcionario->Ativo == 1)
                          <option value="{{$funcionario->Ativo}}">Sim</option>
                       @else
