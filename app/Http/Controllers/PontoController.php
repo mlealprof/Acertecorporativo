@@ -501,6 +501,7 @@ public function relatorio_plano(){
         ->get(); 
         $relatorio =DB::table('ponto')   
                  ->join('funcionarios','funcionarios.id','=','ponto.id_funcionario')
+                 ->where('ponto.data','=',date('Y/m/d'))
                  ->select('ponto.*','funcionarios.nome')
                  ->orderBy('ponto.data', 'desc')              
                  ->get();

@@ -366,7 +366,7 @@ return [
             'label_color' => 'success',
         ],
         [
-            'text'        => 'Cartão Ponto',
+            'text'        => 'Registros de Ponto',
             'url'         => '/lancamentos_ponto',
             'icon'        => 'far fa-fw fa-file',
             'label'       => '',
@@ -383,6 +383,13 @@ return [
         [
             'text'        => 'Plano de Saúde',
             'url'         => '/rel_plano_saude',
+            'icon'        => 'far fa-fw fa-file',
+            'label'       => '',
+            'label_color' => 'success',
+        ],
+        [
+            'text'        => 'Banco de Horas',
+            'url'         => '/banco_de_horas',
             'icon'        => 'far fa-fw fa-file',
             'label'       => '',
             'label_color' => 'success',

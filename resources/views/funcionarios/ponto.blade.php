@@ -55,7 +55,9 @@
                     <option value="Normal">Normal</option>
                     <option value="Falta">Falta</option>  
                     <option value="Normal">Férias</option>  
-                    <option value="Normal">Folga</option>      
+                    <option value="Normal">Folga</option>   
+                    <option value="Normal">Feriado</option>   
+                    <option value="Normal">Acerto de Horas</option>  
 
                 </select>              
      </div> 
