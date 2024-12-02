@@ -77,11 +77,12 @@ class PontoController extends Controller
                            
                         }else{
                            
-                            if (($registro->saida_almoco==null)and ($periodo->intervalo <> null)){
+                            if (($registro->saida_almoco==null)and ($periodo->tempo_intervalo <> null)){
                                 $registro->saida_almoco = $request->hora;
                                 $obs = "Saída para Almoço ";
                             }else{
-                                if (($registro->entrada_almoco==null)and ($periodo->intervalo <> null)){
+                                
+                                if (($registro->entrada_almoco==null)and ($periodo->tempo_intervalo <> null)){
                                     $registro->entrada_almoco = $request->hora;
                                     $hora1 = new DateTime($request->hora);
                                     $hora2 = new DateTime($registro->saida_almoco);
