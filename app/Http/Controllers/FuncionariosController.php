@@ -10,9 +10,11 @@ class FuncionariosController extends Controller
 {
     public function index(){
         $funcionarios = DB::table('funcionarios')->orderBy('nome')->get();
+        $funcionario = Funcionario::findOrFail(1); 
 //dd($funcionarios);
         return view('funcionarios.index',[        
-            'funcionarios'=>$funcionarios
+            'funcionarios'=>$funcionarios,
+            'funcionario'=>$funcionario
         ]);
     }
 
