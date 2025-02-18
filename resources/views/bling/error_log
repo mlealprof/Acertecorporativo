@@ -1,0 +1,11 @@
+[10-Feb-2025 12:32:26 America/Fortaleza] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'thequ927_teste'@'localhost' (using password: YES) in /home1/thequ927/acertenopresente.com/bling/conecta.php:11
+Stack trace:
+#0 /home1/thequ927/acertenopresente.com/bling/conecta.php(11): mysqli_connect('127.0.0.1', 'thequ927_teste', Object(SensitiveParameterValue), 'thequ927_teste')
+#1 /home1/thequ927/acertenopresente.com/bling/index.php(2): include('/home1/thequ927...')
+#2 {main}
+  thrown in /home1/thequ927/acertenopresente.com/bling/conecta.php on line 11
+[10-Feb-2025 12:34:21 America/Fortaleza] PHP Warning:  Undefined property: stdClass::$refresh_token in /home1/thequ927/acertenopresente.com/bling/auth.php on line 24
+[10-Feb-2025 12:35:16 America/Fortaleza] PHP Warning:  Undefined property: stdClass::$refresh_token in /home1/thequ927/acertenopresente.com/bling/auth.php on line 24
+[10-Feb-2025 13:43:55 America/Fortaleza] PHP Warning:  Undefined array key "code" in /home1/thequ927/acertenopresente.com/bling/index.php on line 3
+[10-Feb-2025 13:43:55 America/Fortaleza] PHP Warning:  Undefined property: stdClass::$refresh_token in /home1/thequ927/acertenopresente.com/bling/refresh.php on line 23
+[10-Feb-2025 18:45:31 America/Fortaleza] PHP Warning:  Undefined array key "code" in /home1/thequ927/acertenopresente.com/bling/index.php on line 3

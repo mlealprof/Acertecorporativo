@@ -29,6 +29,13 @@ class HomeController extends Controller
         return view('home');
     }
 
+    public function producao (Request $request)
+    {
+
+        return redirect("https://bling.com.br/Api/v3/oauth/authorize?response_type=code&client_id=b8067100823265ed261424ced482412f0d023717&state=fdsfgdsgfdgfdgvcxvbegtgfdgfdgfdg");
+
+    }
+
 
 
 }

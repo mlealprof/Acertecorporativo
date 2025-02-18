@@ -22,6 +22,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/bling', [App\Http\Controllers\ProducaoController::class, 'index']);
+Route::get('/bling/pedidos', [App\Http\Controllers\ProducaoController::class, 'listarPedidos']);
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/', [App\Http\Controllers\web\HomerController::class, 'home']);
 Route::get('/categorias/{id}', [App\Http\Controllers\ProdutosController::class, 'produtos','id']);
