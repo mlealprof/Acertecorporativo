@@ -1,4 +1,5 @@
 <?php
+echo "Entrou";
 $code   = $_GET['code'];
 $basic  = $client_id.':'.$client_secret;
 
@@ -19,7 +20,7 @@ $curl = curl_init();
     $response = curl_exec($curl);
     $resultado = json_decode($response);
     echo 'auth:<br>';
-   dd($resultado);
+    dd($response);
 curl_close($curl);
 if($resultado->refresh_token <> ''){
     $query = "UPDATE token SET

@@ -23,7 +23,16 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/bling', [App\Http\Controllers\ProducaoController::class, 'index']);
-Route::get('/bling/pedidos', [App\Http\Controllers\ProducaoController::class, 'listarPedidos']);
+Route::get('/bling/cpanel', [App\Http\Controllers\ProducaoController::class, 'cpanel']);
+Route::get('/bling/pedidos', [App\Http\Controllers\ProducaoController::class, 'listarPedidos'])->middleware('auth');
+Route::get('/bling/pedidos/abertos', [App\Http\Controllers\ProducaoController::class, 'emAbertos'])->middleware('auth');
+Route::get('/bling/pedidos/liberados', [App\Http\Controllers\ProducaoController::class, 'liberados'])->middleware('auth');
+Route::post('/bling/pedidos/liberados', [App\Http\Controllers\ProducaoController::class, 'liberadosFiltro'])->middleware('auth');
+Route::get('/bling/pedido/{id}', [App\Http\Controllers\ProducaoController::class, 'detalhesPedidoAberto','id'])->middleware('auth');
+Route::get('/bling/pedido/liberados/{id}', [App\Http\Controllers\ProducaoController::class, 'detalhesPedidoLiberado','id'])->middleware('auth');
+Route::post('/bling/pedidos/busca', [App\Http\Controllers\ProducaoController::class, 'pesquisa'])->middleware('auth');
+Route::post('/bling/pedidos/salvar', [App\Http\Controllers\ProducaoController::class, 'salvar'])->middleware('auth');
+Route::get('/bling/ordem', [App\Http\Controllers\ProducaoController::class, 'ordem']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/', [App\Http\Controllers\web\HomerController::class, 'home']);

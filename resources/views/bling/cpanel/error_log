@@ -9,3 +9,5 @@ Stack trace:
 [10-Feb-2025 13:43:55 America/Fortaleza] PHP Warning:  Undefined array key "code" in /home1/thequ927/acertenopresente.com/bling/index.php on line 3
 [10-Feb-2025 13:43:55 America/Fortaleza] PHP Warning:  Undefined property: stdClass::$refresh_token in /home1/thequ927/acertenopresente.com/bling/refresh.php on line 23
 [10-Feb-2025 18:45:31 America/Fortaleza] PHP Warning:  Undefined array key "code" in /home1/thequ927/acertenopresente.com/bling/index.php on line 3
+[21-Feb-2025 15:18:07 America/Fortaleza] PHP Warning:  Undefined array key "code" in /home1/thequ927/acertenopresente.com/bling/index.php on line 3
+[21-Feb-2025 15:18:08 America/Fortaleza] PHP Warning:  Undefined property: stdClass::$refresh_token in /home1/thequ927/acertenopresente.com/bling/refresh.php on line 23
