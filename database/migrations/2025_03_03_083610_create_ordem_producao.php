@@ -17,9 +17,10 @@ return new class extends Migration
             $table->id();
             $table->date('data_inicio');
             $table->date('data_fim');
-            $table->string('obs');
+            $table->string('obs')->nullable();;
             $table->string('status');
             $table->string('descricao');
+            $table->integer('Qt');
             $table->timestamps();
         });
     }

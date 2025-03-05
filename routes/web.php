@@ -31,8 +31,16 @@ Route::post('/bling/pedidos/liberados', [App\Http\Controllers\ProducaoController
 Route::get('/bling/pedido/{id}', [App\Http\Controllers\ProducaoController::class, 'detalhesPedidoAberto','id'])->middleware('auth');
 Route::get('/bling/pedido/liberados/{id}', [App\Http\Controllers\ProducaoController::class, 'detalhesPedidoLiberado','id'])->middleware('auth');
 Route::post('/bling/pedidos/busca', [App\Http\Controllers\ProducaoController::class, 'pesquisa'])->middleware('auth');
-Route::post('/bling/pedidos/salvar', [App\Http\Controllers\ProducaoController::class, 'salvar'])->middleware('auth');
+Route::post('/bling/pedidos/salvar', [App\Http\Controllers\ProducaoController::class, 'salvar_pedido'])->middleware('auth');
 Route::get('/bling/ordem', [App\Http\Controllers\ProducaoController::class, 'ordem']);
+Route::get('/bling/ordem/add', [App\Http\Controllers\ProducaoController::class, 'ordem_add']);
+Route::post('/bling/ordem/salvar', [App\Http\Controllers\ProducaoController::class, 'salvar_ordem']);
+Route::post('/bling/ordem/edit', [App\Http\Controllers\ProducaoController::class, 'alterando_ordem']);
+Route::get('/bling/ordem/naoiniciadas', [App\Http\Controllers\ProducaoController::class, 'nao_iniciadas']);
+Route::get('/bling/ordem/producao', [App\Http\Controllers\ProducaoController::class, 'em_producao']);
+Route::get('/bling/ordem/pausadas', [App\Http\Controllers\ProducaoController::class, 'pausadas']);
+Route::get('/bling/ordem/imprimir/{id}', [App\Http\Controllers\ProducaoController::class, 'imprimir','id']);
+Route::get('/bling/ordem/{id}', [App\Http\Controllers\ProducaoController::class, 'detalhe_ordem','id']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/', [App\Http\Controllers\web\HomerController::class, 'home']);

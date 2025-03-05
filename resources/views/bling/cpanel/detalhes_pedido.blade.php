@@ -138,16 +138,13 @@
 
             <div class="col-lg-12" style="text-align: right;">
                <button type="submit" class="btn btn-primary">Salvar</button>
+               <a href="/bling/pedidos"><input type="button"  class="btn btn-primary" value='Voltar'></a>
             </div>
        </div>
          
     </form>
     
-            
-           <div class="col-lg-2" style="text-align: right;">
-               <a href="/bling/pedidos"><button  class="btn btn-primary">Voltar</button></a>
-            </div>    
-        
+
 
     <!-- Principal JavaScript do Bootstrap
     ================================================== -->

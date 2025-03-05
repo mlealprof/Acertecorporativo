@@ -15,14 +15,14 @@ return new class extends Migration
     {
         Schema::create('historico_producao', function (Blueprint $table) {
             $table->id();
-            $table->int('id_ordem');
+            $table->string('id_ordem');
             $table->string('descricao');
-            $table->int('id_funcionario');
+            $table->integer('id_funcionario');
             $table->string('situacao');
             $table->date('data');
             $table->time('hora');
-            $table->int('qt_feita');
-            $table->string('obs');
+            $table->integer('qt_feita')->nullable();;
+            $table->string('obs')->nullable();;
             $table->timestamps();
         });
     }
