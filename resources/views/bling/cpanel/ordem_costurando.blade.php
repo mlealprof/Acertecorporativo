@@ -30,71 +30,35 @@
         </div>
     </div>
 </nav>
-<br>
-    <CENter><h1>Liberados para Produção - <?php echo "(".count($liberados)." Produtos )"; ?></h1></center>
-    <div>
-            <form method="post" action="/bling/pedidos/liberados">
-            @csrf
-            <div class="row g-3 border rounded-3 pb-3 user-select-none"> 
-                <div class="col-sm-3">
-                    Data Envio: 
-                    <input  type="date" class="form-control" id="data" name="data" >
-                </div>  
-                <div class="col-sm-3">
-                    Produto:
-                    <input  type="text" class="form-control" id="produto" name="produto" >
-                </div>  
 
-                <div class="col-sm-3">
-                    Técnica:
-                <select class="form-control" id="tecnica" name="tecnica" >
-                        <option value="0"></option>
-                        <option value="giro">Giro</option>
-                        <option value="dtf">DTF</option>
-                        <option value="laser">Laser</option>
-                        <option value="sublimacao">Sublimação</option>
-                        <option value="Outra">Outra</option>
-                                
-                </select>
-</div>
-            <div class="col-sm-2" style="text-align: right;">
-                <br>    
-               <button type="submit" class="btn btn-primary">Filtrar</button>
-            </div>
-
-        </form>
-</div>
-<hr>
-
-
-        <br>
-              <table class="display table table-success table-striped" id='myTable'>
-              <thead>
+  <body>
+    <br><br>
+    <CENter><h1>ORDEM DE PRODUCAO COSTURANDO</h1></CENter><br><HR>
+    <br>
+<table class="display table table-success table-striped" id='myTable'>
+    <thead>
               <tr>
               <th scope="col">N.º</th>        
-              <th scope="col">Data Compra</th>
-              <th scope="col">Data Envio</th>
-              <th scope="col">Id Loja</th>
-              <th scope="col">Cliente</th>
-              <th scope="col">Produto</th>
-              <th scope="col">Técnica</th>
+              <th scope="col">Data Início</th>
+              <th scope="col">Data Fim</th>
+              <th scope="col">Status</th>              
+              <th scope="col">Responsável</th>              
               <th scope="col">Ação</th>
 
               </tr>
           </thead>
           <tbody>
-              @foreach ($liberados as $pedido)
+              @foreach ($costurando as $ordem)
                 <tr>
                      
-                      <td>{{$pedido->numero}}</td>
-                      <td><?php echo date('d/m/Y', strtotime($pedido->data_compra)); ?></td>
-                      <td><?php echo date('d/m/Y', strtotime($pedido->data_envio)); ?></td>
-                      <td>{{$pedido->id_loja}}</td>
-                      <td>{{$pedido->cliente}}</td>
-                      <td>{{$pedido->produto}}</td>
-                      <td>{{$pedido->tecnica}}</td>
+                      <td>{{$ordem->id_ordem}}</td>
+                      <td><?php echo date('d/m/Y', strtotime($ordem->data_inicio)); ?></td>
+                      <td><?php echo date('d/m/Y', strtotime($ordem->data_fim)); ?></td>
+                      <td>{{$ordem->status}}</td>
+                      <td>{{$ordem->nome}}</td>
+                                          
                       <td>
-                            <a href="/bling/pedido/liberados/{{$pedido->id}}">Ver</a>
+                            <a href="/bling/ordem/{{$ordem->id_ordem}}">Ver</a>
                       </td>
                 </tr>
 
@@ -102,7 +66,7 @@
           </table>
 
           <div class="col-lg-2" style="text-align: right;">
-               <a href="/bling/pedidos"><button  class="btn btn-primary">Voltar</button></a>
+               <a href="/bling/ordem"><button  class="btn btn-primary">Voltar</button></a>
             </div>  
         
 

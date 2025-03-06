@@ -39,8 +39,14 @@ Route::post('/bling/ordem/edit', [App\Http\Controllers\ProducaoController::class
 Route::get('/bling/ordem/naoiniciadas', [App\Http\Controllers\ProducaoController::class, 'nao_iniciadas']);
 Route::get('/bling/ordem/producao', [App\Http\Controllers\ProducaoController::class, 'em_producao']);
 Route::get('/bling/ordem/pausadas', [App\Http\Controllers\ProducaoController::class, 'pausadas']);
+Route::get('/bling/ordem/finalizadas', [App\Http\Controllers\ProducaoController::class, 'finalizadas']);
+Route::get('/bling/ordem/costurando', [App\Http\Controllers\ProducaoController::class, 'costurando']);
+Route::post('/bling/ordem/selecionados', [App\Http\Controllers\ProducaoController::class, 'selecionados']);
+Route::post('/bling/ordem/salvar_selecionados', [App\Http\Controllers\ProducaoController::class, 'salvar_selecionados']);
 Route::get('/bling/ordem/imprimir/{id}', [App\Http\Controllers\ProducaoController::class, 'imprimir','id']);
 Route::get('/bling/ordem/{id}', [App\Http\Controllers\ProducaoController::class, 'detalhe_ordem','id']);
+Route::get('/bling/expedicao  ', [App\Http\Controllers\ProducaoController::class, 'index_expedicao']);
+Route::get('/bling/ordem/imprimir_pedidos/{id}', [App\Http\Controllers\ProducaoController::class, 'pedidos_imprimir_ordem','id']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/', [App\Http\Controllers\web\HomerController::class, 'home']);
@@ -67,6 +73,7 @@ Route::post('/produtos/editar', [App\Http\Controllers\ProdutosController::class,
 Route::get('/produtos/{produto}/editar', [App\Http\Controllers\ProdutosController::class, 'editar','produto'])->middleware('auth');
 Route::post('/produtos/salvando_atacado', [App\Http\Controllers\ProdutosController::class, 'salvando_atacado'])->middleware('auth');
 Route::post('/produto_novo', [App\Http\Controllers\ProdutosController::class, 'produto_novo']);
+
 
 Route::get('/busca', [App\Http\Controllers\ProdutosController::class, 'busca']);
 Route::get('/produtos_fornecedor', [App\Http\Controllers\ProdutosController::class, 'produtos_fornecedor']);

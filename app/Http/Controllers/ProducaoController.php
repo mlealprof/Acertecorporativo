@@ -114,20 +114,31 @@ class ProducaoController extends Controller
    {
       $resultado= $this->buscar('https://api.bling.com.br/Api/v3/pedidos/vendas?idsSituacoes%5B%5D=6');
       //dd($resultado);
-      $liberados = DB::table('pedidos')
-                  ->where('pedidos.status','=','Liberado para Produção')
+      $pedidos = DB::table('pedidos')                  
+                  ->get();
+      $liberados = DB::table('pedidos')  
+                  ->where('pedidos.status','=','Liberado para Produção')                
+                  ->get();
+      $emitir_nota = DB::table('pedidos')  
+                  ->where('pedidos.status','=','Emitir Nota Fiscal')                
+                  ->get();
+      $em_producao = DB::table('pedidos')  
+                  ->where('pedidos.status','=','Em Produção')                
                   ->get();
      // dd($liberados);            
-      return view("bling.cpanel.pedidos",[
+      return view("bling.cpanel.pedidos_index",[
          'resultado' => $resultado,
-         'liberados'=>$liberados           
+         'pedidos'=>$pedidos,
+         'liberados'=>$liberados,
+         'emitir_nota'=>$emitir_nota,
+         'em_producao'=>$em_producao        
      ]);
    }
    public function emAbertos ()
    {
       $resultado= $this->buscar('https://api.bling.com.br/Api/v3/pedidos/vendas?idsSituacoes%5B%5D=6');      
       //dd($resultado); 
-      return view("bling.cpanel.emabertos",[
+      return view("bling.cpanel.pedidos_emabertos",[
          'resultado' => $resultado            
      ]);
    }
@@ -136,74 +147,25 @@ class ProducaoController extends Controller
    {
       $resultado= $this->buscar('https://api.bling.com.br/Api/v3/pedidos/vendas/'.$id);
       //dd($resultado);         
-      return view("bling.cpanel.detalhes_pedido",[
+      return view("bling.cpanel.pedido_detalhes",[
          'resultado' => $resultado->data           
      ]);
    }
 
-   public function pesquisa (Request $request)
-   {
-      $texto = $request->busca;
-      $liberados = DB::table('pedidos')
-                  ->where('pedidos.numero','=',$texto)
-                  ->orwhere('pedidos.id_loja','=',$texto)
-                  ->get();
-                
-        if (!empty($liberado)){
-         
-         $itens = DB::table('produtos_pedido')
-         ->where('produtos_pedido.id_pedido','=',$liberados[0]->id)     
-         ->get();
-         
-          return view("bling.cpanel.editar_pedido",[
-             'itens'=>$itens,
-             'liberados' =>$liberados[0] ]);
-        
-      }else{ 
-    
-
-            $resultado= $this->buscar('https://api.bling.com.br/Api/v3/pedidos/vendas?idsSituacoes%5B%5D=6');
-            $id='';
-            foreach ($resultado->data as $result){
-               
-               if (($result->numero==$texto)or($result->numeroLoja==$texto) ){
-                  $id = $result->id;
-               }
-            } 
-            $mensagem="";
-            if ($id=='') {  
-               $mensagem ="Nenhum Pedido Encontrado";
-               $resultado= $this->buscar('https://api.bling.com.br/Api/v3/pedidos/vendas?idsSituacoes%5B%5D=6');
-               return view("bling.cpanel.pedidos",[
-                  'resultado' => $resultado,
-                  'mensagem' => $mensagem,            
-            ]);   
-            }
-            
-            $resultado= $this->buscar('https://api.bling.com.br/Api/v3/pedidos/vendas/'.$id);   
-            $liberados = DB::table('pedidos')
-                        ->where('pedidos.status','=','Liberado para Produção')
-                        ->get();
-            
-            return view("bling.cpanel.detalhes_pedido",[
-               'resultado' => $resultado->data,
-               'liberados' =>$liberados     
-         ]);
-      }
-   }
+   
 
    public function liberados(Request $request){
     //  DD($request);
-      $liberados = DB::table('pedidos')
-                     ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id')
+      $liberados = DB::table('produtos_pedido')
+                     ->join('pedidos','produtos_pedido.id_pedido','=','pedidos.id')
                      ->where('pedidos.status','=','Liberado para Produção')
-                     ->select('produtos_pedido.*','pedidos.*')    
+                     ->select('produtos_pedido.*','produtos_pedido.id as id_produto','pedidos.*')    
                      ->distinct()
                      ->get();
 
       
-     // dd($liberados);
-      return view("bling.cpanel.liberados_producao",[
+      //dd($liberados);
+      return view("bling.cpanel.pedidos_liberados",[
          'liberados' =>$liberados     
      ]);
 
@@ -227,7 +189,7 @@ class ProducaoController extends Controller
       
       }  
       // dd($liberados);
-      return view("bling.cpanel.liberados_producao",[
+      return view("bling.cpanel.pedidos_liberados",[
          'liberados' =>$liberados     
      ]);
    }
@@ -240,7 +202,7 @@ class ProducaoController extends Controller
       ->get();
 
      //   dd($resultado);         
-      return view("bling.cpanel.editar_pedido",[
+      return view("bling.cpanel.pedido_edit",[
          'resultado' => $resultado,
          'itens'=>$itens         
      ]); 
@@ -251,7 +213,7 @@ class ProducaoController extends Controller
    public function salvar_pedido (Request $request)
    {
       $mensagem='';
-      
+      $resultado= $this->buscar('https://api.bling.com.br/Api/v3/pedidos/vendas?idsSituacoes%5B%5D=6');
       
       if(($request->personalizacao0==null)
           or($request->data_envio==null)
@@ -263,7 +225,7 @@ class ProducaoController extends Controller
                            ->get();
 
          $resultado= $this->buscar('https://api.bling.com.br/Api/v3/pedidos/vendas/'.$request->id);
-               return view("bling.cpanel.detalhes_pedido",[
+               return view("bling.cpanel.pedido_detalhes",[
                   'resultado' => $resultado->data,
                    'liberados' =>$liberados,
                    'mensagem' => $mensagem
@@ -432,13 +394,24 @@ class ProducaoController extends Controller
                $liberados = DB::table('pedidos')
                            ->where('pedidos.status','=','Liberado para Produção')
                            ->get();
-
-               $resultado= $this->buscar('https://api.bling.com.br/Api/v3/pedidos/vendas?idsSituacoes%5B%5D=6');
-               return view("bling.cpanel.pedidos",[
+               $pedidos = DB::table('pedidos')                  
+                           ->get();
+              
+               $emitir_nota = DB::table('pedidos')  
+                           ->where('pedidos.status','=','Emitir Nota Fiscal')                
+                           ->get();
+               $em_producao = DB::table('pedidos')  
+                           ->where('pedidos.status','=','Em Produção')                
+                           ->get();
+               
+                       
+               return view("bling.cpanel.pedidos_index",[
                   'resultado' => $resultado,
-                  'liberados' => $liberados
-                      
-            ]);
+                  'pedidos'=>$pedidos,
+                  'liberados'=>$liberados,
+                  'emitir_nota'=>$emitir_nota,
+                  'em_producao'=>$em_producao        
+              ]);
 
                
          }
@@ -447,6 +420,13 @@ class ProducaoController extends Controller
      }
         
  public function ordem(){
+     $ordens = DB::table('historico_producao') 
+               ->join('ordem_producao','historico_producao.id_ordem','=','ordem_producao.id')             
+               ->join('funcionarios','funcionarios.id','=','historico_producao.id_funcionario')
+               //->where('ordem_producao.status','=','historico_producao.situacao') 
+               ->select('historico_producao.*','ordem_producao.*','funcionarios.nome as nome')    
+               ->get();
+     // dd($ordens);         
      $producao = DB::table('ordem_producao')               
                 ->where('ordem_producao.status','=','Em Producao')               
                 ->get()->count();
@@ -460,15 +440,16 @@ class ProducaoController extends Controller
             ->where('ordem_producao.status','=','Costurando')               
             ->get()->count();
      $finalizadas = DB::table('ordem_producao')               
-            ->where('ordem_producao.status','=','Finalizadas')               
+            ->where('ordem_producao.status','=','Produçao Finalizada')               
             ->get()->count();
        //dd($naoiniciada);
-      return view("bling.cpanel.ordem",[
+      return view("bling.cpanel.ordem_index",[
          'producao' => $producao,
          'naoiniciada' => $naoiniciada,
          'pausadas'=>$pausadas,
          'costurando'=>$costurando,
-         'finalizadas'=>$finalizadas               
+         'finalizadas'=>$finalizadas,
+         'ordens'=>$ordens               
    ]);
 
 
@@ -476,8 +457,104 @@ class ProducaoController extends Controller
    
  public function ordem_add(){
    
-      return view("bling.cpanel.add_ordem" );
+      return view("bling.cpanel.ordem_add" );
  }
+
+public function salvar_selecionados(Request $request){
+  // dd($request);
+
+      $funcionario = DB::table('funcionarios')
+         ->where('funcionarios.senha','=',$request->senha)
+         ->first();
+
+      if(!empty($funcionario)){
+         $nome_funcionario = $funcionario->nome;
+         $id_funcionario = $funcionario->id;
+         $ordem = new ordem_producao;
+         $ordem->status = $request->status;
+         $ordem->descricao = $request->descricao;
+         $ordem->data_inicio = $request->data_inicio;
+         $ordem->data_fim = $request->data_fim;
+         $ordem->obs = $request->obs;
+         $ordem->Qt = $request->qt;
+         $ordem->save();
+         $id_ordem = DB::table('ordem_producao')->orderBy('ordem_producao.id','desc')->first()->id;
+
+
+            
+         $historico_ordem = new historico_producao;
+         $historico_ordem->id_ordem = $id_ordem;
+         $historico_ordem->descricao = 'Ordem Criada';
+         $historico_ordem->id_funcionario = $id_funcionario;
+         $historico_ordem->situacao = $request->status;
+         date_default_timezone_set('America/Sao_Paulo');
+         $historico_ordem->data = date('Y/m/d');
+         $historico_ordem->hora = date('H:i:s' );
+         $historico_ordem->qt_feita = 0;
+         $historico_ordem->obs = "";
+         $historico_ordem->save();
+
+         foreach ($request->selecionados as $marcados){
+            //dd($marcados);
+            $pedido = produtos_pedidos::findOrFail($marcados); 
+            $pedido->id_ordem = $id_ordem;
+            $pedido->status = "Emitir Nota Fiscal";
+            $pedido->save();
+            $pedido = pedidos::findOrFail($pedido->id_pedido);
+            $pedido->status ="Emitir Nota Fiscal";
+            $pedido->save();
+         }
+
+         $ordem = ordem_producao::findOrFail($id_ordem); 
+         $historico= DB::table('historico_producao')
+            ->join('funcionarios','funcionarios.id','=','historico_producao.id_funcionario')
+            ->where('id_ordem','=',$id_ordem)
+            ->select('historico_producao.*','funcionarios.nome as nome')
+            ->get();
+
+         return view("bling.cpanel.ordem_detalhes",[
+            'ordem' => $ordem,   
+            'historico' =>$historico                
+         ]);
+
+      }else{
+      $mensagem = "Funcionário Não encontrado";
+      return view("bling.cpanel.ordem_add",[
+      'mensagem' => $mensagem
+      ] );
+      }
+
+
+}
+
+ public function selecionados(Request $request){
+   
+     $obs='';
+     $quant=0;
+     $tecnica='';
+  // dd($request); 
+   foreach ($request->id_pedido as $pedido){
+     // dd($pedido);
+      if(isset($request->marcado[$pedido])){
+         //dd($marcado[$pedido]);
+         $p = produtos_pedidos::findOrFail($pedido);  
+        
+        // dd($tecnica);     
+         $quant=$quant+ $p->quantidade ; 
+         $obs = $obs."\r\n Pedido: ".pedidos::findOrFail($p->id_pedido)->numero;
+      }     
+   }
+   $tecnica = $p->tecnica; 
+  // dd($request->id_pedido); 
+   return view("bling.cpanel.ordem_add_selecionados",[
+      'marcados'=>$request->marcado,
+      'pedidos' =>$request->id_pedido,
+      'quant'=>$quant,
+      'obs'=>$obs,
+      'tecnica'=>$tecnica
+    ] );
+ }
+
 
  public function salvar_ordem(Request $request){
 
@@ -519,14 +596,14 @@ class ProducaoController extends Controller
            ->select('historico_producao.*','funcionarios.nome as nome')
            ->get();
       
-      return view("bling.cpanel.detalhes_ordem",[
+      return view("bling.cpanel.ordem_detalhes",[
         'ordem' => $ordem,   
         'historico' =>$historico                
       ]);
   
     }else{
       $mensagem = "Funcionário Não encontrado";
-      return view("bling.cpanel.add_ordem",[
+      return view("bling.cpanel.ordem_add",[
          'mensagem' => $mensagem
       ] );
     }
@@ -543,7 +620,7 @@ class ProducaoController extends Controller
         ->select('historico_producao.*','funcionarios.nome as nome')
         ->get();
    
-   return view("bling.cpanel.detalhes_ordem",[
+   return view("bling.cpanel.ordem_detalhes",[
      'ordem' => $ordem,   
      'historico' =>$historico                
    ]);
@@ -565,12 +642,12 @@ class ProducaoController extends Controller
       $obs = $ordem->obs;
       $permissao=0;
       if($ordem->data_inicio <> $request->data_inicio){
-         $obs = $obs .  "Data Inicial alterada de:$ordem->data_inicio para $request->data_inicio por: $nome_funcionario ";
+         $obs = $obs .  "/r/nData Inicial alterada de:$ordem->data_inicio para $request->data_inicio por: $nome_funcionario ";
          $permissao=1;
       }
       $ordem->data_inicio = $request->data_inicio;
       if($ordem->data_fim <> $request->data_fim){
-         $obs =$obs . " Data Fim alterada de:$ordem->data_fim para $request->data_fim  por: $nome_funcionario ";
+         $obs =$obs . "/r/nData Fim alterada de:$ordem->data_fim para $request->data_fim  por: $nome_funcionario ";
          $permissao=1;
       }
       $ordem->data_fim = $request->data_fim;
@@ -627,7 +704,7 @@ class ProducaoController extends Controller
         ->get();
   // dd($id);
   
-   return view("bling.cpanel.edit_ordem",[
+   return view("bling.cpanel.ordem_edit",[
      'ordem' => $ordem,   
      'historico' =>$historico                
    ]);
@@ -644,6 +721,34 @@ class ProducaoController extends Controller
    
    return view("bling.cpanel.ordem_nao_iniciadas",[
       'naoiniciadas' => $naoiniciadas
+   ] );
+ }
+
+ public function costurando(){
+   $costurando= DB::table('ordem_producao')  
+                  ->join('historico_producao','historico_producao.id_ordem','=','ordem_producao.id')             
+                  ->join('funcionarios','funcionarios.id','=','historico_producao.id_funcionario')
+                  ->where('ordem_producao.status','=','Costurando')  
+                  ->where('historico_producao.situacao','=','Costurando')              
+                  ->get();
+  // dd($naoiniciadas); 
+   
+   return view("bling.cpanel.ordem_costurando",[
+      'costurando' => $costurando
+   ] );
+ }
+
+ public function finalizadas(){
+   $finalizadas= DB::table('ordem_producao')  
+                  ->join('historico_producao','historico_producao.id_ordem','=','ordem_producao.id')             
+                  ->join('funcionarios','funcionarios.id','=','historico_producao.id_funcionario')
+                  ->where('ordem_producao.status','=','Produção Finalizada')  
+                  ->where('historico_producao.situacao','=','Produção Finalizada')              
+                  ->get();
+   //dd($finalizadas); 
+   
+   return view("bling.cpanel.ordem_finalizadas",[
+      'finalizadas' => $finalizadas
    ] );
  }
   
@@ -675,6 +780,29 @@ class ProducaoController extends Controller
       'pausadas' => $pausadas
    ] );
  }
+
+ public function index_expedicao(){
+   $pedidos = DB::table('pedidos')
+             ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id') 
+             ->join('ordem_producao','produtos_pedido.id_ordem','=','ordem_producao.id')   
+             ->orderBy('pedidos.data_envio') 
+             ->get();  
+   //dd($pedidos);
+   return view("bling.cpanel.expedicao_index",[
+      'pedidos' => $pedidos
+   ] );
+ }
+
+public function pedidos_imprimir_ordem($id_ordem){
+   $pedidos = DB::table('pedidos')
+         ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id') 
+         ->where('produtos_pedido.id_ordem','=',$id_ordem)  
+         ->get(); 
+ //  dd($pedidos);
+    return view("bling.cpanel.pedido_imprimir",[
+            'pedidos' => $pedidos
+         ] );
+}
 
 }
 

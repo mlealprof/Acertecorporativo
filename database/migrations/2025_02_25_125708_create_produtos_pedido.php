@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('produtos_pedido', function (Blueprint $table) {
             $table->id();
-            $table->int('id_pedido');
-            $table->int('id_ordem');
-            $table->int('quantidade');
+            $table->integer('id_pedido');
+            $table->integer('id_ordem');
+            $table->integer('concluido')->nullable();
+            $table->integer('quantidade');
             $table->string('produto');
             $table->string('cor');
             $table->string('personalizacao');

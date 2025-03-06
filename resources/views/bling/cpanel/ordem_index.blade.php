@@ -34,14 +34,7 @@
   <body>
     <br><br>
     <CENter><h1>ORDEM DE PRODUCAO</h1></CENter><br><HR>
-    <div>
-        <form action="/bling/ordem/busca" method='post'>
-        @csrf
-            Pesquisa:
-            <input type="text" id="busca" name="busca" placeholder="Número Ordem">
-            <button type="submit">Buscar</button></a>
-        </form>
-    </div>
+
     <div style="text-align: right;">
         <a href="/bling/ordem/add"><button   class="btn btn-primary">Adicionar Ordem</button></a>
     </div>
@@ -60,7 +53,7 @@
     <hr>
 
   <div class="row">
-    <center>
+    
   <div class="col-sm-2">
     <div class="card">
       <a href="/bling/ordem/naoiniciadas">
@@ -72,6 +65,7 @@
       </a>
     </div>
   </div>
+
   <div class="col-sm-3">
     <div class="card" style="background:#836FFF; color:white;">
     <a href="/bling/ordem/producao">
@@ -108,8 +102,39 @@
    </a>
     </div>
 
-
+<br>
   </div>
+  <table class="display table table-success table-striped" id='myTable'>
+    <thead>
+              <tr>
+              <th scope="col">N.º</th>        
+              <th scope="col">Data Início</th>
+              <th scope="col">Data Fim</th>
+              <th scope="col">Status</th>              
+              <th scope="col">Responsável</th>              
+              <th scope="col">Ação</th>
+
+              </tr>
+          </thead>
+          <tbody>
+              @foreach ($ordens as $ordem)
+                 @if ($ordem->status == $ordem->situacao)
+                    <tr>
+                        
+                          <td>{{$ordem->id}}</td>
+                          <td><?php echo date('d/m/Y', strtotime($ordem->data_inicio)); ?></td>
+                          <td><?php echo date('d/m/Y', strtotime($ordem->data_fim)); ?></td>
+                          <td>{{$ordem->status}}</td>
+                          <td>{{$ordem->nome}}</td>
+                                              
+                          <td>
+                                <a href="/bling/ordem/{{$ordem->id_ordem}}">Ver</a>
+                          </td>
+                    </tr>
+                  @endif
+
+              @endforeach     
+          </table>
  
 
 
@@ -119,7 +144,7 @@
     <br><hr>
         <a href="/bling"><input type="button"  class="btn btn-primary" value='Voltar'></a>
     </div>
-</center>
+
     <!-- Principal JavaScript do Bootstrap
     ================================================== -->
     <!-- Foi colocado no final para a página carregar mais rápido -->
@@ -128,5 +153,30 @@
     <script src="../../assets/js/vendor/popper.min.js"></script>
     <script src="../../dist/js/bootstrap.min.js"></script>
     <script src="../../assets/js/vendor/holder.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+<script>
+    $("h3.symple-toggle-trigger").click(function(){
+        $(this).toggleClass("active").next().slideToggle("fast");
+        return false;
+    });
+
+    new DataTable('#myTable', {
+    language: {
+        info: 'Mostrando _PAGE_ de _PAGES_',
+        infoEmpty: 'Sem registros',
+        infoFiltered: '(Filtrado de _MAX_ Total de Registros)',
+        lengthMenu: 'Monstrar _MENU_ registros por pagina',
+        search:         "Procurar:",
+        paginate: {
+            first:      "Primeiro",
+            last:       "Último",
+            next:       "Próximo",
+            previous:   "Anterior"
+        },
+        zeroRecords: 'Não existe registro...'
+    }
+});
+</script>
+
   </body>
 </html>

@@ -45,7 +45,7 @@
         
         <div class="form-group">
             <label for="exampleFormControlTextarea1">OBS.:</label><br>
-            {{$ordem->obs}}
+            <textarea class="form-control" id="obs" name="obs" rows="10">{{$ordem->obs}}</textarea>
             
         </div>
        
@@ -89,7 +89,7 @@
       
        <div class="row"> 
             <div class="col-lg-12" style="text-align: right;">
-                             
+            <a href="/bling/ordem/imprimir_pedidos/{{$ordem->id}}"><input type="button"  class="btn btn-primary" value='Imprimir Pedidos'></a>              
                <a href="/bling/ordem"><input type="button"  class="btn btn-primary" value='Voltar'></a>
             </div>
        </div>
@@ -105,5 +105,29 @@
     <script src="../../assets/js/vendor/popper.min.js"></script>
     <script src="../../dist/js/bootstrap.min.js"></script>
     <script src="../../assets/js/vendor/holder.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+<script>
+    $("h3.symple-toggle-trigger").click(function(){
+        $(this).toggleClass("active").next().slideToggle("fast");
+        return false;
+    });
+
+    new DataTable('#myTable', {
+    language: {
+        info: 'Mostrando _PAGE_ de _PAGES_',
+        infoEmpty: 'Sem registros',
+        infoFiltered: '(Filtrado de _MAX_ Total de Registros)',
+        lengthMenu: 'Monstrar _MENU_ registros por pagina',
+        search:         "Procurar:",
+        paginate: {
+            first:      "Primeiro",
+            last:       "Último",
+            next:       "Próximo",
+            previous:   "Anterior"
+        },
+        zeroRecords: 'Não existe registro...'
+    }
+});
+</script>
   </body>
 </html>

@@ -42,21 +42,13 @@
           </div>
         @endif
     @endif
-
-    <form action="/bling/pedidos/busca" method='post'>
-    @csrf
-         Pesquisa:
-         <input type="text" id="busca" name="busca" placeholder="Número Pedido">
-         <button type="submit">Buscar</button></a>
-    </form>
-    <hr>
-
   <div class="row">
     <center>
   <div class="col-sm-2">
     <div class="card">
       <a href="/bling/pedidos/abertos">
       <div class="card-body" style="background:green; color:white;">
+        
         <h2 class="card-title"><b>Em Aberto</b> <br><br> <?php echo "(".count($resultado->data)." Pedidos )"; ?></h2>
               
         
@@ -67,16 +59,19 @@
   <div class="col-sm-3">
     <div class="card" style="background:#836FFF; color:white;">
     <a href="/bling/pedidos/liberados">
-      <div class="card-body"><h2><b>Liberados para Produção</b><br><br> <?php echo "(".count($liberados)." Pedidos )"; ?></h2>
+    
+      <div class="card-body">
+        <h2><b>Liberados para Produção</b><br><br> <?php echo "(".count($liberados)." Pedidos )"; ?></h2>
      
       </div>
      </a>
     </div>
   </div>
   <div class="col-sm-2">
-    <div class="card">
+    <div class="card"style="background:#836F00; color:white;">
       <div class="card-body">
-        <h2 class="card-title">Emitir Nota Fiscal</h2>
+     
+        <h2><b>Emitir Nota</b><br><br> <?php echo "(".count($emitir_nota)." Pedidos )"; ?></h2>
         
       </div>
     </div>
@@ -90,6 +85,39 @@
     </div>
   </div>
 </div>
+<br><hr>
+<div>
+<table class="display table table-success table-striped" id='myTable'>
+              <thead>
+              <tr>
+              <th scope="col">N.º</th>        
+              <th scope="col">Data Compra</th>
+              <th scope="col">Data Envio</th>
+              <th scope="col">Id Loja</th>
+              <th scope="col">Cliente</th>
+              <th scope="col">Status</th>            
+              <th scope="col">Ação</th>
+
+              </tr>
+          </thead>
+          <tbody>
+              @foreach ($pedidos as $pedido)
+                <tr>                     
+                      <td>{{$pedido->numero}}</td>
+                      <td><?php echo date('d/m/Y', strtotime($pedido->data_compra)); ?></td>
+                      <td><?php echo date('d/m/Y', strtotime($pedido->data_envio)); ?></td>
+                      <td>{{$pedido->id_loja}}</td>
+                      <td>{{$pedido->cliente}}</td>
+                      <td>{{$pedido->status }}</td>
+                      
+                      <td>
+                            <a href="/bling/pedido/liberados/{{$pedido->id}}">Ver</a>
+                      </td>
+                </tr>
+         
+              @endforeach     
+          </table>
+</div>
 </div>
 </center>
     <!-- Principal JavaScript do Bootstrap
@@ -100,5 +128,30 @@
     <script src="../../assets/js/vendor/popper.min.js"></script>
     <script src="../../dist/js/bootstrap.min.js"></script>
     <script src="../../assets/js/vendor/holder.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+<script>
+    $("h3.symple-toggle-trigger").click(function(){
+        $(this).toggleClass("active").next().slideToggle("fast");
+        return false;
+    });
+
+    new DataTable('#myTable', {
+    language: {
+        info: 'Mostrando _PAGE_ de _PAGES_',
+        infoEmpty: 'Sem registros',
+        infoFiltered: '(Filtrado de _MAX_ Total de Registros)',
+        lengthMenu: 'Monstrar _MENU_ registros por pagina',
+        search:         "Procurar:",
+        paginate: {
+            first:      "Primeiro",
+            last:       "Último",
+            next:       "Próximo",
+            previous:   "Anterior"
+        },
+        zeroRecords: 'Não existe registro...'
+    }
+});
+</script>
+
   </body>
 </html>

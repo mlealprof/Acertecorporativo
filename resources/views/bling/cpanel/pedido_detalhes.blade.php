@@ -109,7 +109,7 @@
                                       <option value="GIRO">Giro</option>
                                       <option value="DTF">DTF</option>
                                       <option value="LASER">Laser</option>
-                                      <option value="SUBLIMAAÇÃO">Sublimação</option>
+                                      <option value="SUBLIMAÇÃO">Sublimação</option>
                                       <option value="OUTRA">Outra</option>
                                 </select>
                             </td>

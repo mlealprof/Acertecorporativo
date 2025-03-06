@@ -28,3 +28,19 @@ php artisan vendor:publish --provider="Darryldecode\Cart\CartServiceProvider" --
 
 <hr>
 
+
+INSTALAR GERADOR CÓDIGO DE BARRAS
+REFERENCIA: https://github.com/milon/barcode
+
+composer require milon/barcode
+
+insira essas linhas no arquivo config/app.php
+
+'aliases' => [
+     ....
+     ....
+     ....            
+     'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+     'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
+           ]
+
