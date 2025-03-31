@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->date('data_inicio');
             $table->date('data_fim');
-            $table->string('obs')->nullable();;
+            $table->string('obs')->nullable();
+            $table->string('nome_funcionario')->nullable();
             $table->string('status');
             $table->string('descricao');
             $table->integer('Qt');

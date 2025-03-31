@@ -26,57 +26,50 @@
 
 
        
-    <form class="needs-validation mb-3" action="/bling/pedidos/salvar" method="post">
+    <form class="needs-validation mb-3" action="/bling/pedidos/atualizar_pedido_ordem" method="post">
     @csrf
         <div class="row">
            <div class="form-group mb-2 col-lg-2">
                 <label for="exampleFormControlInput1">Status</label>
                 <select class="form-control" id="status" name="status">                                     
-                      <option value="Em Aberto">Em Aberto</option>
+                <option value="{{$liberados->status}}">{{$liberados->status}}</option>
+                      <option value="Liberado para Produção">Liberado para Produção</option>
+                      <option value="Pendente">Pendente</option>
                       <option value="Em Produção">Em Produção</option> 
+                      <option value="Emitir Nota Fiscal">Emitir Nota Fiscal</option>
+                      <option value="Produção Finalizada">Produção Finalizada</option>
+                      <option value="Etiqueta Impressa">Etiqueta Impressa</option>
+                      <option value="Cancelado">Cancelado</option> 
+                      <option value="Cancelado Devolução">Cancelado Devolução</option>
                 </select>           
              </div>
             <div class="form-group mb-2 col-lg-2">               
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Número</label>
-                    <input type="text" class="form-control" id="numero" name="numero" value="{{$resultado->numero}}">
-                    <input type="hidden" id='id' name="id" value={{$resultado->id}}>
+                    <input type="hidden" name="id_pedido" value="{{$liberados->id}}">
+                    <input type="text" class="form-control" id="numero" name="numero" value={{$liberados->numero}}>
+                 
                 </div>
             </div>
             <div class="form-group mb-2 col-lg-3">
                 <label for="exampleFormControlInput1">ID Loja</label>
-                <input type="text" class="form-control" id="id_loja" name="id_loja" value="{{$resultado->numeroLoja}}" >           
+                <input type="text" class="form-control" id="id_loja" name="id_loja" value={{$liberados->id_loja}} >           
              </div>
              <div class="form-group mb-2 col-lg-4">
                 <label for="exampleFormControlInput1">Cliente</label>
                 
-                <input type="text" class="form-control" id="cliente" name="cliente" value="{{$resultado->contato->nome}}" >           
+                <input type="text" class="form-control" id="cliente" name="cliente" value={{$liberados->cliente}} >           
              </div>
         </div>
         
         <div class="row">
-        <div class="form-group mb-2 col-lg-3">
-              <label for="exampleFormControlInput1">Loja</label>
-         
-              @foreach ($lojas as $loja)
-                  @if ($loja->id_loja == $resultado->loja->id)
-                  
-                    <?php $nome_loja = $loja->nome; ?>
-                  @endif
-              @endforeach
-              <input type="text" class="form-control" id="loja" name="loja"   value="{{$nome_loja}}">           
-           </div>
            <div class="form-group mb-2 col-lg-3">
               <label for="exampleFormControlInput1">Data Compra</label>
-              <input type="date" class="form-control" id="data" name="data"   value={{$resultado->dataSaida}}>           
+              <input type="date" class="form-control" id="data" name="data"   value={{$liberados->data_compra}}>           
            </div>
            <div class="form-group mb-2 col-lg-3">
               <label for="exampleFormControlInput1">Data Envio</label>
-              @if ($resultado->loja->id <> 0)
-                 <input type="date" class="form-control" id="data_envio" name="data_envio" >
-              @else
-                <input type="date" class="form-control" id="data_envio" name="data_envio" value={{$resultado->dataPrevista}} >           
-              @endif  
+              <input type="date" class="form-control" id="data_envio" name="data_envio"  value={{$liberados->data_envio}} >           
            </div>
 
 
@@ -85,10 +78,10 @@
         
         <div class="form-group">
             <label for="exampleFormControlTextarea1">OBS.:</label>
-            <textarea class="form-control" id="obs" name="obs" rows="5"></textarea>
+            <textarea class="form-control" id="obs" name="obs" rows="3">{{$liberados->obs}}</textarea>
         </div>
        
-       <h1> Produtos do Pedido ( <?php $qt_produtos=count($resultado->itens); echo $qt_produtos." Produto(s)"; ?>)</h1>
+       <h1> Produtos do Pedido ( <?php $qt_produtos=count($itens); echo $qt_produtos." Produto(s)"; ?>)</h1>
        <hr>
         <div class="row">
            <div class="form-group mb-3 col-lg-12">
@@ -105,19 +98,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                   <?php $cont=0; ?>
-                    @foreach ($resultado->itens as $item)
+                     <?php $cont = 0;?>
+                    @foreach ($itens as $item)
+                       
                        <tr>                        
                             <td>{{$item->quantidade}}</td>
-                            <input type="hidden" name='qt[]' value='{{$item->quantidade}}'>
-                            <input type="hidden" name= 'id_pedido' value='{{$item->id}}'>
-                            <td width="500px">{{$item->descricao}}</td>
-                            <input type="hidden" name= 'descricao[]' value='{{$item->descricao}}'>
-                            <input type="hidden" name= 'controle[]' value='{{$cont}}'>
-                            <td>{{$item->codigo}}</td>
-                            <input type="hidden" name='codigo[]' value='{{$item->codigo}}'>
-                            <td><select class="form-control" name='tecnica[]'id="tecnica">
-                                      <option value=""></option>
+                            <td width="500px">{{$item->produto}}</td>                            
+                            <td>{{$item->sku}}</td>                        
+                            <td><select class="form-control" name=<?php echo 'tecnica'.$cont;?> id="tecnica">
+                                      <option value="{{$item->tecnica}}">{{$item->tecnica}}</option>
                                       <option value="GIRO">Giro</option>
                                       <option value="DTF">DTF</option>
                                       <option value="LASER">Laser</option>
@@ -128,12 +117,15 @@
                                 </select>
                             </td>
                             <td>
-                                <input type="text" name= 'cor[]' size='5px'>
+                                <input type="text" name= <?php echo 'cor'.$cont;?> size='5px' value={{$item->cor}}>
                             </td>
-                            <td><textarea class="form-control" id="personalizacao" name='personalizacao[]'rows="3"></textarea> </td>
+                            <td><textarea class="form-control" id="personalizacao" name=<?php echo 'personalizacao'.$cont;?> rows="2" >{{$item->personalizacao}}</textarea> </td>
                             
                        </tr>
-                       <?php $cont++; ?>                 
+                     
+                       
+                       <?php $cont = $cont+1;?>
+                       
 
                     @endforeach
                     
@@ -148,6 +140,8 @@
                 
 
             <div class="col-lg-12" style="text-align: right;">
+            <a href="/bling/pedidos/imprimir_pedido/{{$liberados->id}}"><input type="button"  class="btn btn-primary" value='Imprimir Pedido'></a>
+               <a href="/bling/pedidos/imprimir_dp/{{$liberados->id}}"><input type="button"  class="btn btn-primary" value='Imprimir DP'></a>
                <button type="submit" class="btn btn-primary">Salvar</button>
                <a href="/bling/pedidos"><input type="button"  class="btn btn-primary" value='Voltar'></a>
             </div>
@@ -156,6 +150,7 @@
     </form>
     
 
+        
 
     <!-- Principal JavaScript do Bootstrap
     ================================================== -->
@@ -165,17 +160,5 @@
     <script src="../../assets/js/vendor/popper.min.js"></script>
     <script src="../../dist/js/bootstrap.min.js"></script>
     <script src="../../assets/js/vendor/holder.min.js"></script>
-    <script>
-        document.querySelectorAll("textarea").forEach(function(textarea) {
-            textarea.style.height = textarea.scrollHeight + "px";
-            textarea.style.overflowY = "hidden";
-
-            textarea.addEventListener("input", function() {
-               this.style.height = "auto";
-               this.style.height = this.scrollHeight + "px";
-                  });
-                  });
-    </script>
-
   </body>
 </html>

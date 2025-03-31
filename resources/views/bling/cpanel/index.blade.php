@@ -32,10 +32,11 @@
     </div>
 </nav>
 <?php
+
 $servername = "localhost";
-$username   = "root";
-$password   = "";
-$db_name    = "token_bling";
+$username   = "thequ927_teste";
+$password   = "thequ927_teste";
+$db_name    = "thequ927_teste";
 
 $conexao = mysqli_connect($servername, $username, $password, $db_name);
 
@@ -102,7 +103,7 @@ if($_GET['code'] <> ''){
         ));
         $response = curl_exec($curl);
         $resultado = json_decode($response);
-       
+        dd($result);
  
     curl_close($curl);
     if($resultado->refresh_token <> ''){

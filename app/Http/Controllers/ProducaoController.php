@@ -10,17 +10,19 @@ use App\Models\produtos_pedidos;
 use App\Models\ordem_producao;
 use App\Models\historico_producao;
 use App\Models\Funcionario;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class ProducaoController extends Controller
 {
 
    public function buscar($endereco){
-
+      $base = User::findOrFail(1);
+      
       $servername = "localhost";
-      $username   = "root";
-      $password   = "";
-      $db_name    = "token_bling";
+      $username   = $base->base_user;
+      $password   = $base->base_senha;
+      $db_name    = $base->base_bd;
 
       $conexao = mysqli_connect($servername, $username, $password, $db_name);
 
@@ -31,8 +33,8 @@ class ProducaoController extends Controller
 
       $access_token   = $resultado_access_token['access_token'];
       $refresh_token  = $resultado_access_token['refresh_token'];
-      $client_id      = 'b8067100823265ed261424ced482412f0d023717';
-      $client_secret  = '4819d8d11ff2379f6050bb4d0c66630e698198ae1a1945faf8cc128259bd';
+      $client_id      = $base->cliente_id;
+      $client_secret  = $base->client_secret;
 
 
 
@@ -57,10 +59,12 @@ class ProducaoController extends Controller
 
    public function atualiza_status($id,$situacao){
       $endereco = 'https://api.bling.com.br/Api/v3/pedidos/vendas/'.$id.'/situacoes/'.$situacao;
+      $base = User::findOrFail(1);
+
       $servername = "localhost";
-      $username   = "root";
-      $password   = "";
-      $db_name    = "token_bling";
+      $username   = $base->base_user;
+      $password   = $base->base_senha;
+      $db_name    = $base->base_bd;
 
       $conexao = mysqli_connect($servername, $username, $password, $db_name);
 
@@ -71,15 +75,13 @@ class ProducaoController extends Controller
 
       $access_token   = $resultado_access_token['access_token'];
       $refresh_token  = $resultado_access_token['refresh_token'];
-      $client_id      = 'b8067100823265ed261424ced482412f0d023717';
-      $client_secret  = '4819d8d11ff2379f6050bb4d0c66630e698198ae1a1945faf8cc128259bd';
-
-
-
+      $client_id      = $base->cliente_id;
+      $client_secret  = $base->client_secret;
+     // dd($cliante_id);
 
       $curl = curl_init();
          curl_setopt_array($curl, array(
-      //      CURLOPT_URL => 'https://api.bling.com.br/Api/v3/pedidos/vendas?idsSituacoes%5B%5D=6',
+          //  CURLOPT_URL => 'https://api.bling.com.br/Api/v3/pedidos/vendas?idsSituacoes%5B%5D=',
             CURLOPT_URL => $endereco,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => 'PATCH',
@@ -98,7 +100,9 @@ class ProducaoController extends Controller
 
    public function index ()
    {
-      $link = "https://www.bling.com.br/Api/v3/oauth/authorize?response_type=code&client_id=b8067100823265ed261424ced482412f0d023717&state=c35a7890e8e21c0a6955f31df4682966"; 
+      $base = User::findOrFail(1);
+     // $link = $base->link; 
+      $link = 'https://www.bling.com.br/Api/v3/oauth/authorize?response_type=code&client_id=b8067100823265ed261424ced482412f0d023717&state=39aca769a8955ab803077a1dd7594760';
       return redirect($link);
      
       // return view("bling.index");
@@ -119,52 +123,75 @@ class ProducaoController extends Controller
       $liberados = DB::table('pedidos')  
                   ->where('pedidos.status','=','Liberado para Produção')                
                   ->get();
+      
       $emitir_nota = DB::table('pedidos')  
                   ->where('pedidos.status','=','Emitir Nota Fiscal')                
                   ->get();
       $em_producao = DB::table('pedidos')  
                   ->where('pedidos.status','=','Em Produção')                
                   ->get();
-     // dd($liberados);            
+      $producao_finalizada = DB::table('pedidos')  
+                  ->where('pedidos.status','=','Produção Finalizada')                
+                  ->get();
+      $pendentes = DB::table('pedidos')  
+                  ->where('pedidos.status','=','Pendente')                
+                  ->get();
+      $lojas = DB::table('loja')                             
+            ->get();
+
+    //  dd($lojas);            
       return view("bling.cpanel.pedidos_index",[
          'resultado' => $resultado,
+         'lojas' => $lojas,
          'pedidos'=>$pedidos,
          'liberados'=>$liberados,
          'emitir_nota'=>$emitir_nota,
-         'em_producao'=>$em_producao        
+         'em_producao'=>$em_producao,  
+         'producao_finalizada'=>$producao_finalizada,
+         'pendentes'=>$pendentes   
      ]);
    }
    public function emAbertos ()
    {
-      $resultado= $this->buscar('https://api.bling.com.br/Api/v3/pedidos/vendas?idsSituacoes%5B%5D=6');      
-      //dd($resultado); 
+      $resultado= $this->buscar('https://api.bling.com.br/Api/v3/pedidos/vendas?idsSituacoes%5B%5D=6');   
+      //$resultado= $this->buscar('https://api.bling.com.br/Api/v3/pedidos/vendas/22366539120');
+      //dd($resultado);
+      $lojas = DB::table('loja')                             
+            ->get();
+
       return view("bling.cpanel.pedidos_emabertos",[
-         'resultado' => $resultado            
+         'resultado' => $resultado,
+         'lojas'=>$lojas           
      ]);
    }
   
    public function detalhesPedidoAberto ($id)
    {
+      
       $resultado= $this->buscar('https://api.bling.com.br/Api/v3/pedidos/vendas/'.$id);
-      //dd($resultado);         
+      //dd($resultado); 
+      $lojas = DB::table('loja')                             
+            ->get();        
       return view("bling.cpanel.pedido_detalhes",[
-         'resultado' => $resultado->data           
+         'resultado' => $resultado->data,
+         'lojas'=>$lojas           
      ]);
    }
 
-   
+  
 
    public function liberados(Request $request){
     //  DD($request);
       $liberados = DB::table('produtos_pedido')
                      ->join('pedidos','produtos_pedido.id_pedido','=','pedidos.id')
                      ->where('pedidos.status','=','Liberado para Produção')
+                     ->orwhere('produtos_pedido.status','=','Liberado para Produção')
                      ->select('produtos_pedido.*','produtos_pedido.id as id_produto','pedidos.*')    
                      ->distinct()
                      ->get();
 
       
-      //dd($liberados);
+     // dd($liberados);
       return view("bling.cpanel.pedidos_liberados",[
          'liberados' =>$liberados     
      ]);
@@ -177,17 +204,56 @@ class ProducaoController extends Controller
       $produto = $request->produto;
       $tecnica = $request->tecnica;
 
-      if(!empty($data)){
+      if((!empty($data))and(!empty($produto)and(!empty($tecnica)))){
          $liberados = DB::table('pedidos')
                     ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id')
                     ->where('pedidos.status','=','Liberado para Produção')
                     ->where('pedidos.data_envio','=',$data)
                     ->where('produtos_pedido.produto','like','%'.$produto.'%')
                     ->where('produtos_pedido.tecnica','=',$tecnica)
-                    ->select('produtos_pedido.*','pedidos.*') 
+                    ->select('produtos_pedido.*','pedidos.*','produtos_pedido.id as id_produto') 
                     ->get();
       
-      }  
+      }else{
+         if((!empty($data))){
+            $liberados = DB::table('pedidos')
+                       ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id')
+                       ->where('pedidos.status','=','Liberado para Produção')
+                       ->where('pedidos.data_envio','=',$data)    
+                       ->select('produtos_pedido.*','pedidos.*','produtos_pedido.id as id_produto')
+                       ->get();
+         
+         }
+         if((!empty($produto))){
+            $liberados = DB::table('pedidos')
+                       ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id')
+                       ->where('pedidos.status','=','Liberado para Produção')
+                       ->where('produtos_pedido.produto','like','%'.$produto.'%')  
+                       ->select('produtos_pedido.*','pedidos.*','produtos_pedido.id as id_produto')
+                       ->get();
+         
+         }
+         if((!empty($tecnica))){
+            $liberados = DB::table('pedidos')
+                       ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id')
+                       ->where('pedidos.status','=','Liberado para Produção')
+                       ->where('produtos_pedido.tecnica','=',$tecnica)  
+                       ->select('produtos_pedido.*','pedidos.*','produtos_pedido.id as id_produto')
+                       ->get();
+         
+         }
+         if((!empty($data))and(!empty($tecnica))){
+            $liberados = DB::table('pedidos')
+                       ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id')
+                       ->where('pedidos.status','=','Liberado para Produção')
+                       ->where('pedidos.data_envio','=',$data)    
+                       ->where('produtos_pedido.tecnica','=',$tecnica)  
+                       ->select('produtos_pedido.*','pedidos.*','produtos_pedido.id as id_produto')
+                       ->get();
+         
+         }
+         
+      }
       // dd($liberados);
       return view("bling.cpanel.pedidos_liberados",[
          'liberados' =>$liberados     
@@ -201,9 +267,13 @@ class ProducaoController extends Controller
       ->where('produtos_pedido.id_pedido','=',$id)     
       ->get();
 
+      $lojas = DB::table('loja')                             
+            ->get();
+
      //   dd($resultado);         
       return view("bling.cpanel.pedido_edit",[
-         'resultado' => $resultado,
+         'liberados' => $resultado,
+         'lojas'=>$lojas,
          'itens'=>$itens         
      ]); 
    }
@@ -212,32 +282,55 @@ class ProducaoController extends Controller
 
    public function salvar_pedido (Request $request)
    {
+      //dd($request);
       $mensagem='';
       $resultado= $this->buscar('https://api.bling.com.br/Api/v3/pedidos/vendas?idsSituacoes%5B%5D=6');
+      $falta = false;
+      foreach($request->personalizacao as $dados){        
+         if($dados==''){
+           $falta = true;
+         }
+      } 
       
-      if(($request->personalizacao0==null)
-          or($request->data_envio==null)
-          or($request->cor0==null)
-          or($request->tecnica0==null)){
+      if($request->data_envio==''){
+           $falta = true;
+         }
+     
+      foreach($request->cor as $dados){
+         if($dados==''){
+           $falta = true;
+         }
+      } 
+   //    dd($falta); 
+      foreach($request->tecnica as $dados){
+         if($dados==''){
+           $falta = true;
+         }
+      } 
+     
+      if($falta == true){
          $mensagem = 'ATENÇÃO Complete todos os Campos!';
          $liberados = DB::table('pedidos')
                            ->where('pedidos.status','=','Liberado para Produção')
                            ->get();
+         $lojas = DB::table('loja')                             
+         ->get();                  
 
          $resultado= $this->buscar('https://api.bling.com.br/Api/v3/pedidos/vendas/'.$request->id);
                return view("bling.cpanel.pedido_detalhes",[
                   'resultado' => $resultado->data,
+                  'lojas'=>$lojas,
                    'liberados' =>$liberados,
                    'mensagem' => $mensagem
                   ]);
 
       }else{      
-      
-               //dd($request);
+                        //dd($request);
                $pedido = new pedidos;
                $pedido->numero= $request->numero;
                $pedido->id_bling = $request->id;
                $pedido->id_loja = $request->id_loja;
+               $pedido->loja = $request->loja;
                $pedido->cliente = $request->cliente;
                $pedido->status = "Liberado para Produção";
                $pedido->data_compra = $request->data;
@@ -245,186 +338,37 @@ class ProducaoController extends Controller
                $pedido->obs = $request->obs;
                $pedido->save();
 
-               $id = DB::table('pedidos')
-                     ->where('pedidos.numero','=',$request->numero)
-                     ->get(); 
-               $id = $id[0]->id;
-
-               ///   dd($request);
-                  $item = new produtos_pedidos;
+               $id = $pedido->id;
+             //  dd($id); 
+            
+            $quantidade = count($request->controle);  
+           //dd($request);  
+           $contador=1;
+             foreach ($request->controle as $cont){
+                  $item = new produtos_pedidos;                  
                   $item->id_pedido = $id;
-                  $item->quantidade = $request->qt0;
-                  $item->produto = $request->descricao0;
-                  $item->cor = $request->cor0; 
-                  $item->personalizacao = $request->personalizacao0;                 
-                  $item->tecnica = $request->tecnica0;
-                  $item->obs = $request->obs0;
-                  $item->sku = $request->codigo0;
-                  $item->status = 'Pré-Produção';
+                  $item->quantidade = $request->qt[$cont];
+                  $item->produto = $request->descricao[$cont];
+                  $item->cor = $request->cor[$cont]; 
+                  $item->personalizacao = $request->personalizacao[$cont];                 
+                  $item->tecnica = $request->tecnica[$cont];
+                 // $item->obs = $request->obs;
+                  $item->sku = $request->codigo[$cont];
+                  $item->status = 'Liberado para Produção';
+                  $item->controle = $contador.' de '.$quantidade;
                   $item->save();
-
-                  if (isset($request->personalizacao1)){
-                     $item = new produtos_pedidos;                 
-                     $item->id_pedido = $id;
-                     $item->quantidade = $request->qt1;
-                     $item->produto = $request->descricao1;
-                     $item->cor=$request->cor1;
-                     $item->personalizacao = $request->personalizacao1;                   
-                     $item->tecnica = $request->tecnica1;
-                     $item->obs = $request->obs1;
-                     $item->sku = $request->codigo1;
-                     $item->status = 'Pré-Produção';
-                     $item->save();
-
-                  }
-                  if (isset($request->personalizacao2)){
-                     $item = new produtos_pedidos;
-                     $item->id_pedido = $id;
-                     $item->quantidade = $request->qt2;
-                     $item->cor=$request->cor2;
-                     $item->produto = $request->descricao2;
-                     $item->personalizacao = $request->personalizacao2;                     
-                     $item->tecnica = $request->tecnica2;
-                     $item->obs = $request->obs2;
-                     $item->sku = $request->codigo2;
-                     $item->status = 'Pré-Produção';
-                     $item->save();
-
-                  }
-                  if (isset($request->personalizacao3)){
-                     $item = new produtos_pedidos;
-                     $item->id_pedido = $id;
-                     $item->cor=$request->cor3;
-                     $item->quantidade = $request->qt3;
-                     $item->produto = $request->descricao3;
-                     $item->personalizacao = $request->personalizacao3;                    
-                     $item->tecnica = $request->tecnica3;
-                     $item->obs = $request->obs3;
-                     $item->sku = $request->codigo3;
-                     $item->status = 'Pré-Produção';
-                     $item->save();
-
-                  }
-                  if (isset($request->personalizacao4)){
-                     $item = new produtos_pedidos;
-                     $item->id_pedido = $id;
-                     $item->cor=$request->cor4;
-                     $item->quantidade = $request->qt4;
-                     $item->produto = $request->descricao4;
-                     $item->personalizacao = $request->personalizacao4;                    
-                     $item->tecnica = $request->tecnica4;
-                     $item->obs = $request->obs4;
-                     $item->sku = $request->codigo4;
-                     $item->status = 'Pré-Produção';
-                     $item->save();
-
-                  }
-                  if (isset($request->personalizacao5)){
-                     $item = new produtos_pedidos;
-                     $item->id_pedido = $id;
-                     $item->cor=$request->cor5;
-                     $item->quantidade = $request->qt5;
-                     $item->produto = $request->descricao5;
-                     $item->personalizacao = $request->personalizacao5;                     
-                     $item->tecnica = $request->tecnica5;
-                     $item->obs = $request->obs5;
-                     $item->sku = $request->codigo5;
-                     $item->status = 'Pré-Produção';
-                     $item->save();
-
-                  }
-                  if (isset($request->personalizacao6)){
-                     $item = new produtos_pedidos;
-                     $item->id_pedido = $id;
-                     $item->cor=$request->cor6;
-                     $item->quantidade = $request->qt6;
-                     $item->produto = $request->descricao6;
-                     $item->personalizacao = $request->personalizacao6;                  
-                     $item->tecnica = $request->tecnica6;
-                     $item->obs = $request->obs6;
-                     $item->sku = $request->codigo6;
-                     $item->status = 'Pré-Produção';
-                     $item->save();
-
-                  }
-                  if (isset($request->personalizacao7)){
-                     $item = new produtos_pedidos;
-                     $item->id_pedido = $id;
-                     $item->cor=$request->cor7;
-                     $item->quantidade = $request->qt7;
-                     $item->produto = $request->descricao7;
-                     $item->personalizacao = $request->personalizacao7;                    
-                     $item->tecnica = $request->tecnica7;
-                     $item->obs = $request->obs7;
-                     $item->sku = $request->codigo7;
-                     $item->status = 'Pré-Produção';
-                     $item->save();
-
-                  }
-                  if (isset($request->personalizacao8)){
-                     $item = new produtos_pedidos;
-                     $item->id_pedido = $id;
-                     $item->cor=$request->cor8;
-                     $item->quantidade = $request->qt8;
-                     $item->produto = $request->descricao8;
-                     $item->personalizacao = $request->personalizacao8;
-                     $item->tecnica = $request->tecnica8;
-                     $item->obs = $request->obs8;
-                     $item->sku = $request->codigo8;
-                     $item->status = 'Pré-Produção';
-                     $item->save();
-
-                  }
-                  if (isset($request->personalizacao9)){
-                     $item = new produtos_pedidos;
-                     $item->id_pedido = $id;
-                     $item->cor=$request->cor9;
-                     $item->quantidade = $request->qt9;
-                     $item->produto = $request->descricao9;
-                     $item->personalizacao = $request->personalizacao9;                    
-                     $item->tecnica = $request->tecnica9;
-                     $item->obs = $request->obs9;
-                     $item->sku = $request->codigo9;
-                     $item->status = 'Pré-Produção';
-                     $item->save();
-
-                  }
+                  $contador=$contador+1;
+              }   
                   
-            // $this->atualiza_status($request->id,21);
-               $liberados = DB::table('pedidos')
-                           ->where('pedidos.status','=','Liberado para Produção')
-                           ->get();
-               $pedidos = DB::table('pedidos')                  
-                           ->get();
-              
-               $emitir_nota = DB::table('pedidos')  
-                           ->where('pedidos.status','=','Emitir Nota Fiscal')                
-                           ->get();
-               $em_producao = DB::table('pedidos')  
-                           ->where('pedidos.status','=','Em Produção')                
-                           ->get();
-               
-                       
-               return view("bling.cpanel.pedidos_index",[
-                  'resultado' => $resultado,
-                  'pedidos'=>$pedidos,
-                  'liberados'=>$liberados,
-                  'emitir_nota'=>$emitir_nota,
-                  'em_producao'=>$em_producao        
-              ]);
-
-               
-         }
-             
+               $this->atualiza_status($request->id,21);
+               return redirect ('/bling/pedidos/abertos');
+            
+      }       
 
      }
         
  public function ordem(){
-     $ordens = DB::table('historico_producao') 
-               ->join('ordem_producao','historico_producao.id_ordem','=','ordem_producao.id')             
-               ->join('funcionarios','funcionarios.id','=','historico_producao.id_funcionario')
-               //->where('ordem_producao.status','=','historico_producao.situacao') 
-               ->select('historico_producao.*','ordem_producao.*','funcionarios.nome as nome')    
+     $ordens = DB::table('ordem_producao')            
                ->get();
      // dd($ordens);         
      $producao = DB::table('ordem_producao')               
@@ -473,6 +417,7 @@ public function salvar_selecionados(Request $request){
          $ordem = new ordem_producao;
          $ordem->status = $request->status;
          $ordem->descricao = $request->descricao;
+         $ordem->nome_funcionario= $nome_funcionario ;
          $ordem->data_inicio = $request->data_inicio;
          $ordem->data_fim = $request->data_fim;
          $ordem->obs = $request->obs;
@@ -496,13 +441,14 @@ public function salvar_selecionados(Request $request){
 
          foreach ($request->selecionados as $marcados){
             //dd($marcados);
-            $pedido = produtos_pedidos::findOrFail($marcados); 
-            $pedido->id_ordem = $id_ordem;
-            $pedido->status = "Emitir Nota Fiscal";
-            $pedido->save();
-            $pedido = pedidos::findOrFail($pedido->id_pedido);
+            $produto = produtos_pedidos::findOrFail($marcados); 
+            $produto->id_ordem = $id_ordem;
+            $produto->status = "Emitir Nota Fiscal";
+            $produto->save();
+            $pedido = pedidos::findOrFail($produto->id_pedido);
             $pedido->status ="Emitir Nota Fiscal";
             $pedido->save();
+            $this->atualiza_status($pedido->id_bling,15);
          }
 
          $ordem = ordem_producao::findOrFail($id_ordem); 
@@ -511,10 +457,16 @@ public function salvar_selecionados(Request $request){
             ->where('id_ordem','=',$id_ordem)
             ->select('historico_producao.*','funcionarios.nome as nome')
             ->get();
+            $pedidos=  DB::table('produtos_pedido')
+            ->join('pedidos','produtos_pedido.id_pedido','=','pedidos.id')
+             ->where('produtos_pedido.id_ordem','=',$id_ordem)
+              ->get();
+
 
          return view("bling.cpanel.ordem_detalhes",[
             'ordem' => $ordem,   
-            'historico' =>$historico                
+            'historico' =>$historico,
+            'pedidos'=>$pedidos                
          ]);
 
       }else{
@@ -541,7 +493,7 @@ public function salvar_selecionados(Request $request){
         
         // dd($tecnica);     
          $quant=$quant+ $p->quantidade ; 
-         $obs = $obs."\r\n Pedido: ".pedidos::findOrFail($p->id_pedido)->numero;
+         
       }     
    }
    $tecnica = $p->tecnica; 
@@ -595,10 +547,14 @@ public function salvar_selecionados(Request $request){
            ->where('id_ordem','=',$id_ordem)
            ->select('historico_producao.*','funcionarios.nome as nome')
            ->get();
-      
+      $pedidos=  DB::table('produtos_pedido')
+             ->join('pedidos','produtos_pedido.id_pedido','=','pedidos.id')
+              ->where('produtos_pedido.id_ordem','=',$id_ordem)
+               ->get();
       return view("bling.cpanel.ordem_detalhes",[
         'ordem' => $ordem,   
-        'historico' =>$historico                
+        'historico' =>$historico,
+        'pedidos' => $pedidos                
       ]);
   
     }else{
@@ -612,17 +568,22 @@ public function salvar_selecionados(Request $request){
 
  }
 
- public function imprimir($id_ordem){
+ public function imprimir_ordem($id_ordem){
    $ordem = ordem_producao::findOrFail($id_ordem); 
    $historico= DB::table('historico_producao')
         ->join('funcionarios','funcionarios.id','=','historico_producao.id_funcionario')
         ->where('id_ordem','=',$id_ordem)
         ->select('historico_producao.*','funcionarios.nome as nome')
         ->get();
+   $pedidos=  DB::table('produtos_pedido')
+        ->join('pedidos','produtos_pedido.id_pedido','=','pedidos.id')
+         ->where('produtos_pedido.id_ordem','=',$id_ordem)
+          ->get();
    
    return view("bling.cpanel.ordem_detalhes",[
      'ordem' => $ordem,   
-     'historico' =>$historico                
+     'historico' =>$historico,
+     'pedidos' =>$pedidos                
    ]);
  }
 
@@ -638,22 +599,24 @@ public function salvar_selecionados(Request $request){
       $id_funcionario = $funcionario->id;
       $ordem = ordem_producao::findOrFail($request->id_ordem); 
       $ordem->status = $request->status;
+      $ordem->nome_funcionario = $nome_funcionario;
       $ordem->descricao = $request->descricao;
       $obs = $ordem->obs;
+      //dd($obs);
       $permissao=0;
       if($ordem->data_inicio <> $request->data_inicio){
-         $obs = $obs .  "/r/nData Inicial alterada de:$ordem->data_inicio para $request->data_inicio por: $nome_funcionario ";
+         $obs = $obs .  "- Data Inicial alterada de:$ordem->data_inicio para $request->data_inicio por: $nome_funcionario ";
          $permissao=1;
       }
       $ordem->data_inicio = $request->data_inicio;
       if($ordem->data_fim <> $request->data_fim){
-         $obs =$obs . "/r/nData Fim alterada de:$ordem->data_fim para $request->data_fim  por: $nome_funcionario ";
+         $obs =$obs . " - Data Fim alterada de:$ordem->data_fim para $request->data_fim  por: $nome_funcionario ";
          $permissao=1;
       }
       $ordem->data_fim = $request->data_fim;
       $ordem->Qt = $request->qt;
 
-      $ordem->obs = $obs. " ";
+      $ordem->obs = $obs." ".$request->obs;
       $ordem->save();
           
       
@@ -671,7 +634,12 @@ public function salvar_selecionados(Request $request){
       date_default_timezone_set('America/Sao_Paulo');
       $historico_ordem->data = date('Y/m/d');
       $historico_ordem->hora = date('H:i:s' );
-      $historico_ordem->qt_feita = $request->qt_feita;
+      if($request->qt_feita<=$ordem->Qt){
+         $historico_ordem->qt_feita = $request->qt_feita;
+      }else{
+         $historico_ordem->qt_feita = $ordem->Qt;
+      }
+      
       $historico_ordem->obs = $request->obs;
       $historico_ordem->save();
 
@@ -681,6 +649,28 @@ public function salvar_selecionados(Request $request){
            ->where('id_ordem','=',$request->id_ordem)
            ->select('historico_producao.*','funcionarios.nome as nome')
            ->get();
+      $produtos_pedidos = DB::table('produtos_pedido')
+               ->where('produtos_pedido.id_ordem','=',$request->id_ordem)
+               ->get();
+      foreach($produtos_pedidos as $produto){                
+         if(($produto->status<>'Etiqueta Impressa')and($produto->status<>'BIPADO SEM FINALIZAR')and($produto->status<>'Finalizado')){
+             
+            $ped = produtos_pedidos::findOrFail($produto->id);
+            $ped->status=$request->status; 
+           // dd($produto);
+            $ped->save(); 
+            $id_pedido = $produto->id_pedido;          
+         }
+       //  dd('teste');
+            
+         $ped = pedidos::findOrFail($id_pedido);
+         if(($ped->status<>'Emitir Nota Fiscal')and($ped->status<>'Etiqueta Impressa')){
+            $ped->status=$request->status;   
+            $ped->save();
+         }
+         
+         
+      }
       
         return redirect('/bling/ordem');
     }else{
@@ -702,20 +692,23 @@ public function salvar_selecionados(Request $request){
         ->where('id_ordem','=',$id)
         ->select('historico_producao.*','funcionarios.nome as nome')
         ->get();
-  // dd($id);
+   //dd($ordem);
+   $pedidos=  DB::table('produtos_pedido')
+             ->join('pedidos','produtos_pedido.id_pedido','=','pedidos.id')
+              ->where('produtos_pedido.id_ordem','=',$id)
+               ->get();
+   //dd($pedidos);            
   
    return view("bling.cpanel.ordem_edit",[
      'ordem' => $ordem,   
-     'historico' =>$historico                
+     'historico' =>$historico ,
+     'pedidos'=>$pedidos             
    ]);
 
  }
  public function nao_iniciadas(){
    $naoiniciadas = DB::table('ordem_producao')  
-                  ->join('historico_producao','historico_producao.id_ordem','=','ordem_producao.id')             
-                  ->join('funcionarios','funcionarios.id','=','historico_producao.id_funcionario')
                   ->where('ordem_producao.status','=','Não Iniciada')  
-                  ->where('historico_producao.situacao','=','Não Iniciada')              
                   ->get();
   // dd($naoiniciadas); 
    
@@ -726,10 +719,7 @@ public function salvar_selecionados(Request $request){
 
  public function costurando(){
    $costurando= DB::table('ordem_producao')  
-                  ->join('historico_producao','historico_producao.id_ordem','=','ordem_producao.id')             
-                  ->join('funcionarios','funcionarios.id','=','historico_producao.id_funcionario')
-                  ->where('ordem_producao.status','=','Costurando')  
-                  ->where('historico_producao.situacao','=','Costurando')              
+                  ->where('ordem_producao.status','=','Costurando')           
                   ->get();
   // dd($naoiniciadas); 
    
@@ -740,10 +730,7 @@ public function salvar_selecionados(Request $request){
 
  public function finalizadas(){
    $finalizadas= DB::table('ordem_producao')  
-                  ->join('historico_producao','historico_producao.id_ordem','=','ordem_producao.id')             
-                  ->join('funcionarios','funcionarios.id','=','historico_producao.id_funcionario')
-                  ->where('ordem_producao.status','=','Produção Finalizada')  
-                  ->where('historico_producao.situacao','=','Produção Finalizada')              
+                  ->where('ordem_producao.status','=','Produção Finalizada')          
                   ->get();
    //dd($finalizadas); 
    
@@ -754,10 +741,9 @@ public function salvar_selecionados(Request $request){
   
  public function em_producao(){
    $emproducao = DB::table('ordem_producao')  
-                  ->join('historico_producao','historico_producao.id_ordem','=','ordem_producao.id')             
-                  ->join('funcionarios','funcionarios.id','=','historico_producao.id_funcionario')
+
                   ->where('ordem_producao.status','=','Em Produção')      
-                  ->where('historico_producao.situacao','=','Em Produção')            
+       
                   ->get();
   // dd($naoiniciadas); 
    
@@ -769,10 +755,9 @@ public function salvar_selecionados(Request $request){
  public function pausadas(){
    
    $pausadas = DB::table('ordem_producao')  
-                  ->join('historico_producao','historico_producao.id_ordem','=','ordem_producao.id')             
-                  ->join('funcionarios','funcionarios.id','=','historico_producao.id_funcionario')
+
                   ->where('ordem_producao.status','=','Pausada')      
-                  ->where('historico_producao.situacao','=','Pausada')            
+                 
                   ->get();
   
    
@@ -783,13 +768,18 @@ public function salvar_selecionados(Request $request){
 
  public function index_expedicao(){
    $pedidos = DB::table('pedidos')
-             ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id') 
-             ->join('ordem_producao','produtos_pedido.id_ordem','=','ordem_producao.id')   
-             ->orderBy('pedidos.data_envio') 
+             ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id')               
+             ->where('pedidos.status','<>','Etiqueta Impressa')    
+             ->where('pedidos.status','<>','Cancelado')     
+             ->where('pedidos.status','<>','Cancelado Devolução')     
+             ->select('pedidos.*','produtos_pedido.*','produtos_pedido.status as status_producao' )              
+            
              ->get();  
-   //dd($pedidos);
+  // dd($pedidos);
+  $etiqueta=false;
    return view("bling.cpanel.expedicao_index",[
-      'pedidos' => $pedidos
+      'pedidos' => $pedidos,
+      'etiqueta' =>$etiqueta
    ] );
  }
 
@@ -799,10 +789,511 @@ public function pedidos_imprimir_ordem($id_ordem){
          ->where('produtos_pedido.id_ordem','=',$id_ordem)  
          ->get(); 
  //  dd($pedidos);
-    return view("bling.cpanel.pedido_imprimir",[
+    return view("bling.cpanel.pedido_imprimir_dp",[
             'pedidos' => $pedidos
          ] );
 }
+public function imprimir_pedido($id){
+   $pedido = pedidos::findOrFail($id);
+        
+   $detalhes_pedido= $this->buscar('https://api.bling.com.br/Api/v3/pedidos/vendas/'.$pedido->id_bling);
+  // dd($detalhes_pedido->data->parcelas[0]->formaPagamento); 
+  $contato =  $this->buscar('https://api.bling.com.br/Api/v3/contatos/'.$detalhes_pedido->data->contato->id);
+  //dd($contato);
+  $id_formaPagamento=$detalhes_pedido->data->parcelas[0]->formaPagamento->id;
+ // dd($id_formaPagamento);
+  $formaPagamento =  $this->buscar('https://api.bling.com.br/Api/v3/formas-pagamentos/'.$id_formaPagamento);
+ // dd($formaPagamento);
+    return view("bling.cpanel.pedido_imprimir_pedido",[
+            'pedido' => $pedido,
+            'detalhes_pedido' =>$detalhes_pedido->data,
+            'contato'=>$contato->data,
+            'formaPagamento'=>$formaPagamento->data
+         ] );
+}
+public function imprimir_dp($id){
+   $pedidos = DB::table('pedidos')
+         ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id') 
+         ->where('produtos_pedido.id_pedido','=',$id)  
+         ->get(); 
+ //  dd($pedidos);
+    return view("bling.cpanel.pedido_imprimir_dp",[
+            'pedidos' => $pedidos
+         ] );
+}
+public function nota_fiscal_index(){
+   $pedidos = DB::table('pedidos')   
+   ->join('loja','loja.nome','=','pedidos.loja')
+   ->where('pedidos.status','=','Emitir Nota Fiscal')   
+   ->select('pedidos.*','loja.nota_fiscal as nota_fiscal')
+   ->get();  
+  // dd($pedidos);
+
+   return view("bling.cpanel.nota_fiscal_index",[
+      'pedidos' => $pedidos
+   ] );
+}
+public function emitir_nota(Request $request){
+        $base = User::findOrFail(1);
+      $servername = "localhost";
+      $username   = $base->base_user;
+      $password   = $base->base_senha;
+      $db_name    = $base->base_bd;
+
+      $conexao = mysqli_connect($servername, $username, $password, $db_name);
+
+
+      $sql_access_token = mysqli_query($conexao,"SELECT * FROM token") or die("Erro");
+      $resultado_access_token	= mysqli_fetch_assoc($sql_access_token);
+      
+
+      $access_token   = $resultado_access_token['access_token'];
+      $refresh_token  = $resultado_access_token['refresh_token'];
+      $client_id      = $base->cliente_id;
+      $client_secret  = $base->client_secret;
+
+    // dd($request); 
+   foreach($request->pedido as $pedido){
+      //dd($request); 
+      $pedidos = pedidos::findOrFail($pedido); 
+      
+     if(isset($request->marcado[$pedido])){
+               $id_bling = $pedidos->id_bling;  
+              // dd($pedidos);
+               $loja = DB::table('loja')
+                       ->where('loja.nome','=',$pedidos->loja)
+                       ->get();
+               
+            // dd($loja);      
+               $endereco = 'https://api.bling.com.br/Api/v3/pedidos/vendas/'.$id_bling.'/gerar-nfe';
+            
+             if(isset($loja[0])){               
+              // dd($loja);
+               $loja = $loja[0]->nota_fiscal;
+             }else{
+               $loja=0;
+             }
+             //dd($loja);
+               if (($loja=='1')and($id_bling<>'')){
+                  $curl = curl_init();
+                     curl_setopt_array($curl, array(            
+                        CURLOPT_URL => $endereco,
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_CUSTOMREQUEST => 'POST',
+                        CURLOPT_POSTFIELDS => '',
+                     CURLOPT_HTTPHEADER => array(
+                        'accept: application/json',
+                        'Authorization: Bearer '.$access_token
+                     ),
+                     ));
+                     $response = curl_exec($curl);
+                  
+                  curl_close($curl);       
+                  $pedidos->status='Em Produção';
+                  $pedidos->save();
+               }      
+            $pedidos->status='Em Produção';
+            $pedidos->save();
+         }      
+   }
+
+       $mensagem="Pedidos enviados para emissão de Nota Fiscal!";
+
+
+       $pedidos = DB::table('pedidos')        
+         ->join('loja','loja.nome','=','pedidos.loja')
+         ->where('pedidos.status','=','Emitir Nota Fiscal')   
+         ->select('pedidos.*','loja.nota_fiscal as nota_fiscal')       
+         ->get();  
+   return view("bling.cpanel.nota_fiscal_index",[
+      'pedidos' => $pedidos,
+      'mensagem' =>$mensagem
+   ] );
+}
+
+public function pedidos_em_producao(){
+   $pedidos = DB::table('pedidos')      
+   ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id')  
+   ->where('pedidos.status','=','Em Produção') 
+   ->orderBy('pedidos.data_envio','asc') 
+   ->get();  
+  // dd($pedidos);
+   return view("bling.cpanel.pedidos_em_producao",[
+      'em_producao' => $pedidos
+   ] );
+}
+
+public function pedidos_producao_finalizada(){
+   $pedidos = DB::table('pedidos')      
+   ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id')  
+   ->where('pedidos.status','=','Produção Finalizada') 
+   ->orderBy('pedidos.data_envio','asc') 
+   ->get();  
+   //dd($pedidos);
+   return view("bling.cpanel.pedidos_producao_finalizada",[
+      'producao_finalizada' => $pedidos
+   ] );
+}
+public function expedicao_checkout(Request $request){
+  // dd($request);
+  $mensagem='';
+  $finalizado=false;
+  $etiqueta=false;
+  if($request->qt==''){
+   $request->qt=1;
+  }
+  $produto = produtos_pedidos::findOrFail($request->cod_produto);
+  if(isset($produto)){
+  // dd($produto);
+      $pedido = pedidos::findOrFail($produto->id_pedido);
+      if(($produto->concluido<$produto->quantidade)and($request->qt<=$produto->quantidade)){
+         $produto->concluido = $produto->concluido+$request->qt; 
+      }           
+      if($produto->concluido==$produto->quantidade){
+         $produto->status='Finalizado'; 
+         
+         $produtos_finalizados = DB::table('produtos_pedido')
+                                    ->where('produtos_pedido.id_ordem','=',$produto->id_ordem)
+                                    ->get();
+           // dd($produtos_finalizados);
+            foreach($produtos_finalizados as $finalizado){
+               $fechar_ordem = false;
+               if($finalizado->status=='Finalizado'){
+                $fechar_ordem = true;
+               }
+            }
+             //dd($fechar_ordem);
+            if($fechar_ordem==true){
+             //  dd($produto);
+               $ordem= ordem_producao::findOrFail($produto->id_ordem);
+               $ordem->status = "Fechada";
+               $ordem->save();
+            } 
+         
+      }else{
+         $mensagem="Pedido ".$pedido->numero. " - FALTA PRODUTOS PARA FINALIZAÇÃO";
+      }
+      $produto->save();
+      
+      $produtos = DB::table('produtos_pedido')
+                  ->where('produtos_pedido.id_pedido','=',$pedido->id)
+                  ->get();
+     // dd($produtos);
+     $finalizado=true;
+      foreach($produtos as $prod){        
+         if($prod->status <>'Finalizado'){
+            $finalizado=false;
+         }
+      }      
+      if (($finalizado)and($pedido->status<>'Emitir Nota Fiscal')) {
+         $pedido->status='Finalizado';
+         $pedido->save();
+         
+      }         
+      if(($finalizado==true)and($pedido->status=='Finalizado')){          
+      //  $this->imprimir_etiqueta($pedido->id,'normal');
+        $this->atualiza_status($pedido->id_bling,'9');
+        $etiqueta=true;        
+      }else{
+         if($finalizado==false){
+            $mensagem='FALTA PRODUTOS PARA FINALIZAR';
+         }else{
+            $mensagem='EMITIR NOTA FISCAL';
+         }
+         
+      }
+  }
+
+
+
+  $pedidos = DB::table('pedidos')
+         ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id') 
+         ->where('pedidos.id','=',$pedido->id) 
+         ->select('pedidos.*','produtos_pedido.*','produtos_pedido.status as status_producao' )          
+         ->get();  
+//dd($pedidos);
+return view("bling.cpanel.expedicao_index",[
+   'pedidos' => $pedidos,
+   'mensagem'=>$mensagem,
+   'etiqueta'=>$etiqueta
+] );
+}
+
+
+public function produto_pedido_delete($id){
+   $produto = produtos_pedidos::findOrFail($id);
+   $produto->delete();
+   return redirect('/bling/pedidos/liberados'); 
+  }
+public function gera_etiqueta($id_bling){
+  // dd($id_bling);
+
+   $endereco = 'https://api.bling.com.br/Api/v3/logisticas/etiquetas?formato=PDF&idsVendas%5B%5D='.$id_bling;
+   $base = User::findOrFail(1);
+
+   $servername = "localhost";
+   $username   = $base->base_user;
+   $password   = $base->base_senha;
+   $db_name    = $base->base_bd;
+
+   $conexao = mysqli_connect($servername, $username, $password, $db_name);
+
+
+   $sql_access_token = mysqli_query($conexao,"SELECT * FROM token") or die("Erro");
+   $resultado_access_token	= mysqli_fetch_assoc($sql_access_token);
+
+
+   $access_token   = $resultado_access_token['access_token'];
+   $refresh_token  = $resultado_access_token['refresh_token'];
+   $client_id      = $base->cliente_id;
+   $client_secret  = $base->client_secret;
+  // dd($endereco);
+
+   $curl = curl_init();
+      curl_setopt_array($curl, array(
+       //  CURLOPT_URL => 'https://api.bling.com.br/Api/v3/pedidos/vendas?idsSituacoes%5B%5D=',
+         CURLOPT_URL => $endereco,
+         CURLOPT_RETURNTRANSFER => true,
+         CURLOPT_CUSTOMREQUEST => 'GET',
+         CURLOPT_POSTFIELDS => '',
+      CURLOPT_HTTPHEADER => array(
+         'accept: application/json',
+         'Authorization: Bearer '.$access_token
+      ),
+      ));
+      $response = curl_exec($curl);
+      //dd(json_decode($response)->error->type);
+      if (isset(json_decode($response)->error->type)) {
+         $erro=json_decode($response)->error->type;
+      }else{
+         $erro="";
+      }
+      if($erro<>''){
+         return 'ETIQUETA AINDA NÃO ESTÁ PRONTA';
+
+      }else{
+          return json_decode($response);
+      }
+
+   curl_close($curl);
+
+
+}
+public function imprimir_etiqueta($id,$conf){
+      
+      $pedido = pedidos::findOrFail($id);
+      $id_bling = $pedido->id_bling;
+      $loja = $pedido->loja;
+      $emite_nota = DB::table('loja')
+                    ->where('loja.nome','=',$loja)
+                    ->get()[0]->nota_fiscal;
+    //   dd($emite_nota);
+
+  
+   if($conf=='admin'){
+      if($emite_nota=='1'){
+         $link= $this->gera_etiqueta($id_bling)->data[0]->link;
+      }else{
+         $link='https://app.upseller.com/pt/order/in-process';         
+      }
+      
+     // dd($link);
+      $pedido->status ='BIPADO SEM FINALIZAR';   
+      $pedido->save();
+      
+
+      return redirect($link) ;
+      
+
+   }else{
+      $produtos = DB::table('produtos_pedido')
+                  ->where('produtos_pedido.id_pedido','=',$pedido->id)
+                  ->get();
+      foreach($produtos as $prod){
+         $finalizado=true;
+         if($prod->status <>'Finalizado'){
+            $finalizado=false;
+         }
+      }                 
+      if($finalizado==true){   
+         
+         if($emite_nota=='1'){
+            $link= $this->gera_etiqueta($id_bling)->data[0]->link;
+         }else{
+            $link='https://app.upseller.com/pt/order/in-process';
+         }
+         //dd($link);
+         $pedido->status='Etiqueta Impressa';
+    
+         $pedido->save();     
+         return redirect($link) ;               
+       }else{
+                  $mensagem="PEDIDO NÃO FINALIZADO - FALTA PRODUTOS";
+                  $pedidos = DB::table('pedidos')
+                  ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id') 
+                  ->join('ordem_producao','produtos_pedido.id_ordem','=','ordem_producao.id')   
+                  ->where('pedidos.id','=',$pedido->id) 
+                  ->select('pedidos.*','produtos_pedido.*','ordem_producao.*','produtos_pedido.status as status_producao' )              
+                  ->orderBy('pedidos.data_envio','asc') 
+                  ->get(); 
+                  
+                  if($conf=='admin'){
+                     $etiqueta=true;
+                  }else{
+                     $etiqueta=false;
+                  }
+               //  dd($etiqueta);
+               //dd($pedidos);
+               return view("bling.cpanel.expedicao_index",[
+                  'pedidos' => $pedidos,
+                  'mensagem'=>$mensagem,
+                  'etiqueta'=>$etiqueta
+         ] );
+       }
+      }
+  
+
+}
+public function pedidos_pendentes(){
+   $pedidos = DB::table('pedidos') 
+   ->where('pedidos.status','=','Pendente') 
+   ->orderBy('pedidos.data_envio','asc') 
+   ->get();  
+  // dd($pedidos);
+   return view("bling.cpanel.pedidos_pendentes",[
+      'pendentes' => $pedidos
+   ] );
+}
+public function expedicao_admin(){
+   $pedidos = DB::table('pedidos') 
+   ->where('pedidos.status','<>','Etiqueta Impressa') 
+   ->where('pedidos.status','<>','Cancelado')
+   ->where('pedidos.status','<>','Cancelado Devolução')
+   ->orderBy('pedidos.data_envio','desc') 
+   ->get();  
+  // dd($pedidos);
+  $etiqueta=true;
+   return view("bling.cpanel.expedicao_admin",[
+      'pedidos' => $pedidos,
+      'etiqueta'=> $etiqueta
+   ] );  
+}
+public function expedicao_admin_fechadas(){
+   $pedidos = DB::table('pedidos') 
+   ->where('pedidos.status','=','Etiqueta Impressa') 
+   ->orderBy('pedidos.data_envio','asc') 
+   ->get();  
+  // dd($pedidos);
+   return view("bling.cpanel.expedicao_admin",[
+      'pedidos' => $pedidos
+   ] );  
+}
+
+public function pedido_atualizar(Request $request){
+      $mensagem='';
+      $pedido = pedidos::findOrFail($request->id_pedido);  
+      if(($request->status=='Cancelado')or($request->status=='Cancelado')){
+         $this->atualiza_status($pedido->id_bling,12);
+      }
+     
+                            
+               $pedido->status = $request->status;
+               $pedido->data_envio = $request->data_envio;
+               $pedido->obs = $request->obs;
+               $pedido->save();
+
+               $itens = DB::table('produtos_pedido')
+                     ->where('produtos_pedido.id_pedido','=',$pedido->id)
+                     ->get();
+               foreach ($itens as $produto){
+                  $item = produtos_pedidos::findOrfail($produto->id);
+                  $item->status = $request->status;
+                  $item->save();
+               }
+             
+ 
+               $liberados = DB::table('pedidos')
+                           ->where('pedidos.status','=','Liberado para Produção')
+                           ->get();
+               $pedidos = DB::table('pedidos')                  
+                           ->get();
+              
+               $emitir_nota = DB::table('pedidos')  
+                           ->where('pedidos.status','=','Emitir Nota Fiscal')                
+                           ->get();
+               $em_producao = DB::table('pedidos')  
+                           ->where('pedidos.status','=','Em Produção')                
+                           ->get();
+               $producao_finalizada = DB::table('pedidos')  
+                           ->where('pedidos.status','=','Produção Finalizada')                
+                           ->get();
+                       
+               $pendentes = DB::table('pedidos')  
+                           ->where('pedidos.status','=','Pendente')                
+                           ->get();
+         
+                 
+              $resultado=  $this->buscar('https://api.bling.com.br/Api/v3/pedidos/vendas?idsSituacoes%5B%5D=6');
+              $lojas = DB::table('loja')                       
+                       ->get();    
+               return view("bling.cpanel.pedidos_index",[
+                  'resultado' => $resultado,
+                  'lojas'=>$lojas,
+                  'pedidos'=>$pedidos,
+                  'liberados'=>$liberados,
+                  'emitir_nota'=>$emitir_nota,
+                  'em_producao'=>$em_producao,  
+                  'producao_finalizada'=>$producao_finalizada,
+                  'pendentes'=>$pendentes   
+              ]);
+            
+   
 
 }
 
+public function pedido_atualizar_edit($id){ 
+    //  dd($id);
+      $resultado= pedidos::findOrFail($id); 
+      $itens = DB::table('produtos_pedido')
+      ->where('produtos_pedido.id_pedido','=',$id)     
+      ->get();
+
+     //   dd($resultado);         
+      return view("bling.cpanel.pedido_edit_ordem",[
+         'liberados' => $resultado,
+         'itens'=>$itens         
+     ]); 
+   
+
+}
+
+public function pedido_atualizar_ordem(Request $request){
+   $mensagem='';
+  
+            $pedido = pedidos::findOrFail($request->id_pedido);
+            
+            $pedido->status = $request->status;
+            $pedido->data_envio = $request->data_envio;
+            $pedido->obs = $request->obs;
+            $pedido->save();
+
+            $pedidos = DB::table('pedidos')
+            ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id') 
+            ->join('ordem_producao','produtos_pedido.id_ordem','=','ordem_producao.id')  
+            ->where('pedidos.status','<>','Etiqueta Impressa')             
+            ->select('pedidos.*','produtos_pedido.*','ordem_producao.*','produtos_pedido.status as status_producao' )              
+           
+            ->get();  
+ // dd($pedidos);
+ $etiqueta=false;
+  return view("bling.cpanel.expedicao_index",[
+     'pedidos' => $pedidos,
+     'etiqueta' =>$etiqueta
+  ] );
+         
+
+
+}
+
+
+}

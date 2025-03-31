@@ -32,6 +32,9 @@
 </nav>
 <br>
     <CENter><h1>Emitir Nota Fiscal - <?php echo "(".count($emitir_nota)." Produtos )"; ?></h1></center>
+    <div class="col-sm-12" style="text-align: right;">
+               <a href="/bling/pedidos"  class="btn btn-primary">Voltar</a>
+    </div>
     <div>
     
     <form action="/bling/ordem/emitir_nota" method="post">
@@ -43,6 +46,7 @@
               <th scope="col">Data Compra</th>
               <th scope="col">Data Envio</th>
               <th scope="col">Id Loja</th>
+              <th scope="col">Loja</th>
               <th scope="col">Cliente</th>
               <th scope="col">Selecionar</th>
               <th scope="col">Ação</th>
@@ -59,6 +63,7 @@
                       <td><?php echo date('d/m/Y', strtotime($pedido->data_compra)); ?></td>
                       <td><?php echo date('d/m/Y', strtotime($pedido->data_envio)); ?></td>
                       <td>{{$pedido->id_loja}}</td>
+                      <td>{{$pedido->loja}}</td>
                       <td>{{$pedido->cliente}}</td>    
                       <td>
                         <input type="checkbox" name="marcado[{{$pedido->id_produto}}]" id="marcado">
@@ -91,7 +96,9 @@
     <script src="../../dist/js/bootstrap.min.js"></script>
     <script src="../../assets/js/vendor/holder.min.js"></script>
 
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
 <script>
     $("h3.symple-toggle-trigger").click(function(){
         $(this).toggleClass("active").next().slideToggle("fast");
@@ -99,22 +106,22 @@
     });
 
     new DataTable('#myTable', {
-    language: {
-        info: 'Mostrando _PAGE_ de _PAGES_',
+    pageLength: 50,
+    language: {        
+         info: 'Mostrando _PAGE_ de _PAGES_',        
         infoEmpty: 'Sem registros',
         infoFiltered: '(Filtrado de _MAX_ Total de Registros)',
         lengthMenu: 'Monstrar _MENU_ registros por pagina',
         search:         "Procurar:",
         paginate: {
-            first:      "Primeiro",
-            last:       "Último",
-            next:       "Próximo",
-            previous:   "Anterior"
+            first:      " Primeiro",
+            last:       " Último ",
+            next:       " Próximo ",
+            previous:   "Anterior "
         },
         zeroRecords: 'Não existe registro...'
     }
 });
 </script>
-
 </body>
 </html>

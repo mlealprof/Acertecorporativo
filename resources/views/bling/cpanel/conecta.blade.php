@@ -1,9 +1,9 @@
 <?php
 echo "Conexão";
 $servername = "localhost";
-$username   = "root";
-$password   = "";
-$db_name    = "token_bling";
+$username   = "thequ927_teste";
+$password   = "thequ927_teste";
+$db_name    = "thequ927_teste";
 
 $conexao = mysqli_connect($servername, $username, $password, $db_name);
 

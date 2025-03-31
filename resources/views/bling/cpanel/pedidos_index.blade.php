@@ -33,7 +33,12 @@
 
   <body>
     <br><br>
-    <CENter><h1>LISTAGEM DE PEDIDOS</h1></CENter><br><HR>
+    <CENter><h1>LISTAGEM DE PEDIDOS</h1></CENter><br>
+    <div style="text-align: right;">
+        
+               <a href="/bling"><button  class="btn btn-primary">Voltar</button></a>            
+    </div>
+    <HR>
 
     @if (isset($mensagem))
        @if ($mensagem<>'')
@@ -49,41 +54,67 @@
       <a href="/bling/pedidos/abertos">
       <div class="card-body" style="background:green; color:white;">
         
-        <h2 class="card-title"><b>Em Aberto</b> <br><br> <?php echo "(".count($resultado->data)." Pedidos )"; ?></h2>
+        <h2 class="card-title"><b>Em Aberto</b> <br><br><br>  <?php echo "(".count($resultado->data)." Pedidos )"; ?></h2>
               
         
       </div>
       </a>
     </div>
   </div>
-  <div class="col-sm-3">
-    <div class="card" style="background:#836FFF; color:white;">
+  <div class="col-sm-2">
+    <div class="card" >
     <a href="/bling/pedidos/liberados">
     
-      <div class="card-body">
-        <h2><b>Liberados para Produção</b><br><br> <?php echo "(".count($liberados)." Pedidos )"; ?></h2>
+      <div class="card-body" style="background:#836FFF;">
+       
+        <h2><b>Liberados</b><br><br><br>  <?php echo "(".count($liberados)." Pedidos )"; ?></h2>
      
       </div>
      </a>
     </div>
   </div>
   <div class="col-sm-2">
-    <div class="card"style="background:#836F00; color:white;">
-      <div class="card-body">
+    <div class="card" >
+    <a href="/bling/pedidos/pendentes">
+    
+      <div class="card-body" style="background:#00CED1;">
+        <h2><b>Pendentes</b><br><br><br>  <?php echo "(".count($pendentes)." Pedidos )"; ?></h2>
      
-        <h2><b>Emitir Nota</b><br><br> <?php echo "(".count($emitir_nota)." Pedidos )"; ?></h2>
+      </div>
+     </a>
+    </div>
+  </div>
+  <div class="col-sm-2">
+    <div class="card"style=>
+    <a href="/bling/pedidos/nota_fiscal">
+      <div class="card-body" style="background:#000FFF; color:white;">
+     
+        <h2><b>Emitir Nota</b><br><br><br>  <?php echo "(".count($emitir_nota)." Pedidos )"; ?></h2>
         
       </div>
+    </a>
     </div>
   </div>
   <div class="col-sm-2">
     <div class="card">
-      <div class="card-body">
-        <h2 class="card-title">Em produção</h2>
-        
+    <a href="/bling/pedidos/em_producao">
+      <div class="card-body" style="background:#006FFF;">
+        <h2 class="card-title"><b>Em produção</b><br><br><br>  <?php echo "(".count($em_producao)." Pedidos )"; ?></h2>        
       </div>
+      </a>
     </div>
   </div>
+  <div class="col-sm-2">
+    <div class="card">
+    <a href="/bling/pedidos/producao_finalizada">
+      <div class="card-body" style="background:#230043; color:white;">
+        
+        <h2 class="card-title"><b>Produção Finalizada</b><br><br> <?php echo "(".count($producao_finalizada)." Pedidos )"; ?></h2>        
+      </div>
+      </a>
+    </div>
+  </div>
+
 </div>
 <br><hr>
 <div>
@@ -128,7 +159,9 @@
     <script src="../../assets/js/vendor/popper.min.js"></script>
     <script src="../../dist/js/bootstrap.min.js"></script>
     <script src="../../assets/js/vendor/holder.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
 <script>
     $("h3.symple-toggle-trigger").click(function(){
         $(this).toggleClass("active").next().slideToggle("fast");
@@ -136,17 +169,19 @@
     });
 
     new DataTable('#myTable', {
-    language: {
-        info: 'Mostrando _PAGE_ de _PAGES_',
+    pageLength: 20,
+    order: [[0, 'desc']],
+    language: {        
+         info: 'Mostrando _PAGE_ de _PAGES_',        
         infoEmpty: 'Sem registros',
         infoFiltered: '(Filtrado de _MAX_ Total de Registros)',
         lengthMenu: 'Monstrar _MENU_ registros por pagina',
         search:         "Procurar:",
         paginate: {
-            first:      "Primeiro",
-            last:       "Último",
-            next:       "Próximo",
-            previous:   "Anterior"
+            first:      " Primeiro",
+            last:       " Último ",
+            next:       " Próximo ",
+            previous:   "Anterior "
         },
         zeroRecords: 'Não existe registro...'
     }

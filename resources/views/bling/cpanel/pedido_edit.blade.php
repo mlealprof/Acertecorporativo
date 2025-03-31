@@ -32,13 +32,21 @@
            <div class="form-group mb-2 col-lg-2">
                 <label for="exampleFormControlInput1">Status</label>
                 <select class="form-control" id="status" name="status">                                     
-                      <option value="Em Aberto">Liberado para Produção</option>
+                <option value="{{$liberados->status}}">{{$liberados->status}}</option>
+                      <option value="Liberado para Produção">Liberado para Produção</option>
+                      <option value="Pendente">Pendente</option>
                       <option value="Em Produção">Em Produção</option> 
+                      <option value="Emitir Nota Fiscal">Emitir Nota Fiscal</option>
+                      <option value="Produção Finalizada">Produção Finalizada</option>
+                      <option value="Etiqueta Impressa">Etiqueta Impressa</option>
+                      <option value="Cancelado">Cancelado</option>
+                      <option value="Cancelado Devolução">Cancelado Devolução</option>
                 </select>           
              </div>
             <div class="form-group mb-2 col-lg-2">               
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Número</label>
+                    <input type="hidden" name="id_pedido" value="{{$liberados->id}}">
                     <input type="text" class="form-control" id="numero" name="numero" value={{$liberados->numero}}>
                  
                 </div>
@@ -86,6 +94,8 @@
                     <th scope="col">Técnica</th>
                     <th scope="col">Cor</th>
                     <th scope="col">Personalização</th>
+                    <th scope="col">Ação</th>
+
 
                     </tr>
                 </thead>
@@ -99,18 +109,20 @@
                             <td>{{$item->sku}}</td>                        
                             <td><select class="form-control" name=<?php echo 'tecnica'.$cont;?> id="tecnica">
                                       <option value="{{$item->tecnica}}">{{$item->tecnica}}</option>
-                                      <option value="Giro">Giro</option>
+                                      <option value="GIRO">Giro</option>
                                       <option value="DTF">DTF</option>
-                                      <option value="Laser">Laser</option>
-                                      <option value="Sublimação">Sublimação</option>
-                                      <option value="Outra">Outra</option>
+                                      <option value="LASER">Laser</option>
+                                      <option value="SUBLIMAÇÃO">Sublimação</option>
+                                      <option value="LISA">LISA</option>
+                                      <option value="ESTOQUE">Estoque</option>
+                                      <option value="OUTRA">Outra</option>
                                 </select>
                             </td>
                             <td>
                                 <input type="text" name= <?php echo 'cor'.$cont;?> size='5px' value={{$item->cor}}>
                             </td>
                             <td><textarea class="form-control" id="personalizacao" name=<?php echo 'personalizacao'.$cont;?> rows="2" >{{$item->personalizacao}}</textarea> </td>
-                            
+                            <td><a href="/bling/pedido/delete/{{$item->id}}">Del - {{$item->id}}</a></td>
                        </tr>
                      
                        
@@ -130,6 +142,8 @@
                 
 
             <div class="col-lg-12" style="text-align: right;">
+            <a href="/bling/pedidos/imprimir_pedido/{{$liberados->id}}"><input type="button"  class="btn btn-primary" value='Imprimir Pedido'></a>
+               <a href="/bling/pedidos/imprimir_dp/{{$liberados->id}}"><input type="button"  class="btn btn-primary" value='Imprimir DP'></a>
                <button type="submit" class="btn btn-primary">Salvar</button>
                <a href="/bling/pedidos"><input type="button"  class="btn btn-primary" value='Voltar'></a>
             </div>

@@ -36,9 +36,10 @@
     <CENter><h1>ORDEM DE PRODUCAO</h1></CENter><br><HR>
 
     <div style="text-align: right;">
-        <a href="/bling/ordem/add"><button   class="btn btn-primary">Adicionar Ordem</button></a>
+        <a href="/bling/ordem/add"><button   class="btn btn-primary">Adicionar Ordem</button></a>       
+               <a href="/bling"><button  class="btn btn-primary">Voltar</button></a>            
     </div>
-    
+
 
 
     @if (isset($mensagem))
@@ -110,6 +111,8 @@
               <th scope="col">N.º</th>        
               <th scope="col">Data Início</th>
               <th scope="col">Data Fim</th>
+              <th scope="col">Descrição</th>
+              <th scope="col">Qt</th>
               <th scope="col">Status</th>              
               <th scope="col">Responsável</th>              
               <th scope="col">Ação</th>
@@ -118,20 +121,22 @@
           </thead>
           <tbody>
               @foreach ($ordens as $ordem)
-                 @if ($ordem->status == $ordem->situacao)
+                 
                     <tr>
                         
                           <td>{{$ordem->id}}</td>
                           <td><?php echo date('d/m/Y', strtotime($ordem->data_inicio)); ?></td>
-                          <td><?php echo date('d/m/Y', strtotime($ordem->data_fim)); ?></td>
-                          <td>{{$ordem->status}}</td>
-                          <td>{{$ordem->nome}}</td>
+                          <td><?php echo date('d/m/Y', strtotime($ordem->data_fim)); ?></td>                          
+                          <td>{{$ordem->descricao}}</td>                    
+                      <td>{{$ordem->Qt}}</td>
+                      <td>{{$ordem->status}}</td>
+                          <td>{{$ordem->nome_funcionario}}</td>
                                               
                           <td>
-                                <a href="/bling/ordem/{{$ordem->id_ordem}}">Ver</a>
+                                <a href="/bling/ordem/{{$ordem->id}}">Ver</a>
                           </td>
                     </tr>
-                  @endif
+        
 
               @endforeach     
           </table>
@@ -153,7 +158,9 @@
     <script src="../../assets/js/vendor/popper.min.js"></script>
     <script src="../../dist/js/bootstrap.min.js"></script>
     <script src="../../assets/js/vendor/holder.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
 <script>
     $("h3.symple-toggle-trigger").click(function(){
         $(this).toggleClass("active").next().slideToggle("fast");
@@ -161,17 +168,19 @@
     });
 
     new DataTable('#myTable', {
-    language: {
-        info: 'Mostrando _PAGE_ de _PAGES_',
+    pageLength: 50,
+    order: [[2, 'desc']],
+    language: {        
+         info: 'Mostrando _PAGE_ de _PAGES_',        
         infoEmpty: 'Sem registros',
         infoFiltered: '(Filtrado de _MAX_ Total de Registros)',
         lengthMenu: 'Monstrar _MENU_ registros por pagina',
         search:         "Procurar:",
         paginate: {
-            first:      "Primeiro",
-            last:       "Último",
-            next:       "Próximo",
-            previous:   "Anterior"
+            first:      " Primeiro",
+            last:       " Último ",
+            next:       " Próximo ",
+            previous:   "Anterior "
         },
         zeroRecords: 'Não existe registro...'
     }

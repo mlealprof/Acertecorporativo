@@ -71,7 +71,7 @@
            </div>
            <div class="form-group mb-2 col-lg-2">
               <label for="exampleFormControlInput1">Quantidade</label>             
-             <input type="text" class="form-control" id="qt" name="qt" >
+             <input type="text" class="form-control" id="qt" name="qt" value="{{$ordem->Qt}}" >
               
            </div>
             
@@ -81,8 +81,34 @@
         
         <div class="form-group">
             <label for="exampleFormControlTextarea1">OBS.:</label>
-            <textarea class="form-control"  rows="5" >{{$ordem->obs}}</textarea>
+            <textarea class="form-control" name="obs" rows="5" >{{$ordem->obs}}</textarea>
         </div>
+        
+
+        <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">N.º Pedido</th>
+                                <th scope="col">Qt</th>
+                                <th scope="col">Id Loja</th>
+                                <th scope="col">Cliente</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($pedidos as $pedido)
+                            <tr>                               
+                                <td>{{$pedido->numero}}</td>
+                                <td>{{$pedido->quantidade}}</td>
+                                <td>{{$pedido->id_loja}}</td>
+                                <td>{{$pedido->cliente}}</td>
+                            </tr>
+                            @endforeach
+
+                        </tbody>
+        </table>
+
+
         
         <hr>
         
@@ -163,5 +189,16 @@
     <script src="../../assets/js/vendor/popper.min.js"></script>
     <script src="../../dist/js/bootstrap.min.js"></script>
     <script src="../../assets/js/vendor/holder.min.js"></script>
+    <script>
+        document.querySelectorAll("textarea").forEach(function(textarea) {
+            textarea.style.height = textarea.scrollHeight + "px";
+            textarea.style.overflowY = "hidden";
+
+            textarea.addEventListener("input", function() {
+               this.style.height = "auto";
+               this.style.height = this.scrollHeight + "px";
+                  });
+                  });
+    </script>
   </body>
 </html>

@@ -32,6 +32,7 @@
 </nav>
 <br>
     <CENter><h1>Liberados para Produção - <?php echo "(".count($liberados)." Produtos )"; ?></h1></center>
+    
     <div>
             <form method="post" action="/bling/pedidos/liberados">
             @csrf
@@ -53,6 +54,7 @@
                         <option value="DTF">DTF</option>
                         <option value="LASER">Laser</option>
                         <option value="SUBLIMAÇÃO">Sublimação</option>
+                        <option value="LISA">LISA</option>
                         <option value="OUTRA">Outra</option>
                                 
                 </select>
@@ -60,6 +62,7 @@
             <div class="col-sm-2" style="text-align: right;">
                 <br>    
                <button type="submit" class="btn btn-primary">Filtrar</button>
+               <a href="/bling/pedidos"  class="btn btn-primary">Voltar</a>
             </div>
 
         </form>
@@ -68,6 +71,7 @@
 
 
         <br>
+        
         <form action="/bling/ordem/selecionados" method="post">
         @csrf
         <table class="display table table-success table-striped" id='myTable'>
@@ -99,6 +103,7 @@
                       <td>{{$pedido->produto}}</td>
                       <td>{{$pedido->tecnica}}</td>
                       <td>
+                     
                         <input type="checkbox" name="marcado[{{$pedido->id_produto}}]" id="marcado">
                         <input type="hidden" name="id_pedido[{{$cont}}]" id="id_pedido" value="{{$pedido->id_produto}}">
                         <input type="hidden" name="tecnica[{{$cont}}]" id="tecnica" value="{{$pedido->tecnica}}">
@@ -113,11 +118,10 @@
           <input type="hidden" name="cont" id="cont" value="{{$cont}}">
           <div class="col-lg-12" style="text-align: right;">
               <button type="submit" class="btn btn-primary">Criar Ordem</button>
-</div>
+              <a href="/bling/pedidos"  class="btn btn-primary">Voltar</a>
+         </div>
           </form>
-          <div class="col-lg-2" style="text-align: right;">
-               <a href="/bling/pedidos"><button  class="btn btn-primary">Voltar</button></a>
-         </div>  
+
         
 
     <!-- Principal JavaScript do Bootstrap
@@ -129,7 +133,9 @@
     <script src="../../dist/js/bootstrap.min.js"></script>
     <script src="../../assets/js/vendor/holder.min.js"></script>
 
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
 <script>
     $("h3.symple-toggle-trigger").click(function(){
         $(this).toggleClass("active").next().slideToggle("fast");
@@ -137,22 +143,23 @@
     });
 
     new DataTable('#myTable', {
-    language: {
-        info: 'Mostrando _PAGE_ de _PAGES_',
+    pageLength: 20,
+    order: [[2, 'asc']],
+    language: {        
+         info: 'Mostrando _PAGE_ de _PAGES_',        
         infoEmpty: 'Sem registros',
         infoFiltered: '(Filtrado de _MAX_ Total de Registros)',
         lengthMenu: 'Monstrar _MENU_ registros por pagina',
         search:         "Procurar:",
         paginate: {
-            first:      "Primeiro",
-            last:       "Último",
-            next:       "Próximo",
-            previous:   "Anterior"
+            first:      " Primeiro",
+            last:       " Último ",
+            next:       " Próximo ",
+            previous:   "Anterior "
         },
         zeroRecords: 'Não existe registro...'
     }
 });
 </script>
-
 </body>
 </html>

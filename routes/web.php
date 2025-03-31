@@ -23,7 +23,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/bling', [App\Http\Controllers\ProducaoController::class, 'index']);
-Route::get('/bling/cpanel', [App\Http\Controllers\ProducaoController::class, 'cpanel']);
+Route::get('/bling/cpanel', [App\Http\Controllers\ProducaoController::class, 'cpanel_principal']);
 Route::get('/bling/pedidos', [App\Http\Controllers\ProducaoController::class, 'listarPedidos'])->middleware('auth');
 Route::get('/bling/pedidos/abertos', [App\Http\Controllers\ProducaoController::class, 'emAbertos'])->middleware('auth');
 Route::get('/bling/pedidos/liberados', [App\Http\Controllers\ProducaoController::class, 'liberados'])->middleware('auth');

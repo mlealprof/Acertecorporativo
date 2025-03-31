@@ -37,6 +37,9 @@
                     <div class="form-group mb-2 col-lg-2">
                        <td style='border: 1px solid black;'> <label for="exampleFormControlInput1">Data Fim:<?php echo date('d/m/Y',strtotime($ordem->data_fim));?></label>  </td>
                     </div>
+                    <div class="form-group mb-2 col-lg-2">
+                       <td style='border: 1px solid black;'> <label for="exampleFormControlInput1">Qt:{{$ordem->Qt}}</label>  </td>
+                    </div>
                 </TR>
            </table>         
         </div>
@@ -45,9 +48,32 @@
         
         <div class="form-group">
             <label for="exampleFormControlTextarea1">OBS.:</label><br>
-            <textarea class="form-control" id="obs" name="obs" rows="10">{{$ordem->obs}}</textarea>
             
+            <?php echo nl2br($ordem->obs);?>
         </div>
+        <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">N.º Pedido</th>
+                                <th scope="col">Qt</th>
+                                <th scope="col">Id Loja</th>
+                                <th scope="col">Cliente</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($pedidos as $pedido)
+                            <tr>                               
+                                <td>{{$pedido->numero}}</td>
+                                <td>{{$pedido->quantidade}}</td>
+                                <td>{{$pedido->id_loja}}</td>
+                                <td>{{$pedido->cliente}}</td>
+                            </tr>
+                            @endforeach
+
+                        </tbody>
+        </table>
+
        
       <div>
       <table class="table table-striped">
@@ -89,13 +115,14 @@
       
        <div class="row"> 
             <div class="col-lg-12" style="text-align: right;">
-            <a href="/bling/ordem/imprimir_pedidos/{{$ordem->id}}"><input type="button"  class="btn btn-primary" value='Imprimir Pedidos'></a>              
+            <a href="/bling/ordem/imprimir_pedidos/{{$ordem->id}}"><input type="button"  class="btn btn-primary" value='Imprimir DP'></a>              
                <a href="/bling/ordem"><input type="button"  class="btn btn-primary" value='Voltar'></a>
             </div>
        </div>
   
 
 </div>
+   
 
     <!-- Principal JavaScript do Bootstrap
     ================================================== -->
@@ -105,7 +132,9 @@
     <script src="../../assets/js/vendor/popper.min.js"></script>
     <script src="../../dist/js/bootstrap.min.js"></script>
     <script src="../../assets/js/vendor/holder.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
 <script>
     $("h3.symple-toggle-trigger").click(function(){
         $(this).toggleClass("active").next().slideToggle("fast");
@@ -113,21 +142,23 @@
     });
 
     new DataTable('#myTable', {
-    language: {
-        info: 'Mostrando _PAGE_ de _PAGES_',
+    pageLength: 50,
+    language: {        
+         info: 'Mostrando _PAGE_ de _PAGES_',        
         infoEmpty: 'Sem registros',
         infoFiltered: '(Filtrado de _MAX_ Total de Registros)',
         lengthMenu: 'Monstrar _MENU_ registros por pagina',
         search:         "Procurar:",
         paginate: {
-            first:      "Primeiro",
-            last:       "Último",
-            next:       "Próximo",
-            previous:   "Anterior"
+            first:      " Primeiro",
+            last:       " Último ",
+            next:       " Próximo ",
+            previous:   "Anterior "
         },
         zeroRecords: 'Não existe registro...'
     }
 });
 </script>
+
   </body>
 </html>
