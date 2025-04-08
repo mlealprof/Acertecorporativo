@@ -29,6 +29,8 @@
                       <option value="Falta">Falta</option>  
                       <option value="Férias">Férias</option>  
                       <option value="Folga">Folga</option> 
+                      <option value="Atestado">Atestado</option> 
+                      <option value="Acerto de Horas">Acerto de Horas</option> 
                 </select>
                 
              </div>

@@ -9,14 +9,16 @@ use App\Models\Funcionario;
 class FuncionariosController extends Controller
 {
     public function index($id){
+        
         if($id=='nao'){
             $funcionarios = DB::table('funcionarios')
-            ->where('funcionarios.Ativo','0')
+            ->where('funcionarios.Ativo','=','2')
             ->orderBy('nome')
             ->get();
+           // dd($funcionarios);
         }else{
             $funcionarios = DB::table('funcionarios')
-            ->where('funcionarios.Ativo','1')
+            ->where('funcionarios.Ativo','=','1')
             ->orderBy('nome')
             ->get(); 
         }
