@@ -15,7 +15,6 @@
               <tr>
               <th scope="col">N.º Ordem</th>        
               <th scope="col">Descrição</th>
-              <th scope="col">Status</th>
               <th scope="col">Situação</th>
               <th scope="col">Funcionário</th>
               <th scope="col">Dt Final</th>            
@@ -23,6 +22,7 @@
               <th scope="col">Qt Feita</th>
               <th scope="col">Valor</th>
               <th scope="col">Validado</th>
+              <th scope="col">Selecionar</th>
 
 
               </tr>
@@ -30,16 +30,20 @@
           <tbody>
               @foreach ($ordens as $ordem)
                 <tr>                     
-                      <td>{{$pedido->numero}}</td>
-                      <td>{{$pedido->numero}}</td>
-                      <td>{{$pedido->numero}}</td>
-                      <td>{{$pedido->numero}}</td>
-                      <td>{{$pedido->numero}}</td>
-                      <td>{{$pedido->numero}}</td>
-                      <td>{{$pedido->numero}}</td>
-                      <td>{{$pedido->numero}}</td>
-                      <td>{{$pedido->numero}}</td>
-                      <td>{{$pedido->numero}}</td>                     
+                      <td>{{$ordem->id_ordem}}</td>
+                      <td>{{$ordem->descricao}}</td>
+                      <td>{{$ordem->situacao}}</td>
+                      <td>{{$ordem->funcionario}}</td>
+                      <td>{{$ordem->data_fim}}</td>
+                      <td>{{$ordem->data}}</td>
+                      <td><input type="text" name="valor" value="{{$ordem->qt_feita}}"size="3"></td>
+                      <td><input type="text" name="valor" value="{{$ordem->valor}}" size="4"></td>    
+                      @if($ordem->validado==False)    
+                         <td>Não</td>
+                      @else      
+                         <td>Sim</td>
+                      @endif   
+                      <td><input type="checkbox" name="marcado[]"></td>          
                 </tr>
          
               @endforeach     
@@ -85,3 +89,5 @@
 
   </body>
 </html>
+
+@stop

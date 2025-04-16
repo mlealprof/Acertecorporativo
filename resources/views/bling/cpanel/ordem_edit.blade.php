@@ -92,6 +92,7 @@
                                 <th scope="col">Qt</th>
                                 <th scope="col">Id Loja</th>
                                 <th scope="col">Cliente</th>
+                                <th scope="col">Produto</th>
                                 
                             </tr>
                         </thead>
@@ -102,6 +103,7 @@
                                 <td>{{$pedido->quantidade}}</td>
                                 <td>{{$pedido->id_loja}}</td>
                                 <td>{{$pedido->cliente}}</td>
+                                <td>{{$pedido->produto}}</td>
                             </tr>
                             @endforeach
 

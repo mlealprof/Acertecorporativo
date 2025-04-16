@@ -641,6 +641,7 @@ public function salvar_selecionados(Request $request){
       }
       
       $historico_ordem->obs = $request->obs;
+      $historico_ordem->valor="0.10";
       $historico_ordem->save();
 
       $ordem = ordem_producao::findOrFail($request->id_ordem); 
@@ -1301,9 +1302,12 @@ public function validar_ordem(){
              ->where('historico_producao.situacao','=','Costurando')
              ->orwhere('historico_producao.situacao','=','Produção Finalizada')
              ->where('historico_producao.validado','=','false')
-           //  ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id') 
+             ->join('funcionarios','funcionarios.id','=','historico_producao.id_funcionario')
+             ->join('ordem_producao','ordem_producao.id','=','historico_producao.id_ordem')
+             ->select('historico_producao.*','funcionarios.nome as funcionario','ordem_producao.data_fim as data_fim')
+            
              ->get();
-   dd($ordens);
+   //dd($ordens);
    return view("producao.validar_ordem",[      
       'ordens' =>$ordens
    ] );
