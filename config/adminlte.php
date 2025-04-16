@@ -351,7 +351,23 @@ return [
         
         ['header' => '__________________'],
 
-
+        ['header' => 'PRODUÇÃO'],        
+        [
+            'text'        => 'Validar Ordem',
+            'url'         => '/validar_ordem',
+            'icon'        => 'far fa-fw fa-file',
+            'label'       => '',
+            'label_color' => '',
+        ],
+        [
+            'text'        => 'Relatórios Ordem',
+            'url'         => '/rel_ordem',
+            'icon'        => 'far fa-fw fa-file',
+            'label'       => '',
+            'label_color' => '',
+        ],
+        
+        ['header' => '__________________'],
 
 
 
@@ -360,7 +376,7 @@ return [
         ['header' => '    Lançamentos'],
         [
             'text'        => 'Funcionários',
-            'url'         => '/funcionarios',
+            'url'         => '/funcionarios/sim',
             'icon'        => 'far fa-fw fa-file',
             'label'       => '',
             'label_color' => 'success',

@@ -341,7 +341,8 @@ class PontoController extends Controller
             $id_funcionario = 0;
         }
         
-        $funcionarios = DB::table('funcionarios')        
+        $funcionarios = DB::table('funcionarios')  
+        ->where('funcionarios.Ativo','=','1')      
         ->get(); 
 
         $relatorio =DB::table('ponto')
@@ -497,8 +498,10 @@ public function relatorio_plano(){
 
 
     public function lancamentos(){
-        $funcionarios = DB::table('funcionarios')        
-        ->get(); 
+        $funcionarios = DB::table('funcionarios') 
+                        ->where('funcionarios.Ativo','=','1')       
+                       ->get(); 
+       //     dd($funcionarios);
         $relatorio =DB::table('ponto')   
                  ->join('funcionarios','funcionarios.id','=','ponto.id_funcionario')
                  ->where('ponto.data','=',date('Y/m/d'))

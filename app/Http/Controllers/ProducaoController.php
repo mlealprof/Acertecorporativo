@@ -1295,5 +1295,19 @@ public function pedido_atualizar_ordem(Request $request){
 
 }
 
+public function validar_ordem(){
+   
+   $ordens = DB::table('historico_producao')
+             ->where('historico_producao.situacao','=','Costurando')
+             ->orwhere('historico_producao.situacao','=','Produção Finalizada')
+             ->where('historico_producao.validado','=','false')
+           //  ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id') 
+             ->get();
+   dd($ordens);
+   return view("producao.validar_ordem",[      
+      'ordens' =>$ordens
+   ] );
+}
+
 
 }

@@ -9,7 +9,7 @@
 @stop
 
 @section('content')
-<a href="/funcionarios?filtro='inativos'><button type="button" class="btn btn-primary">Inativos</button></a>
+<a href="/funcionarios/nao"><button type="button" class="btn btn-primary">Inativos</button></a>
     <table class="display table table-striped" id="myTable">
         <thead>
         <tr>

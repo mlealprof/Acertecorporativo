@@ -8,8 +8,20 @@ use App\Models\Funcionario;
 
 class FuncionariosController extends Controller
 {
-    public function index(){
-        $funcionarios = DB::table('funcionarios')->orderBy('nome')->get();
+    public function index($id){
+        
+        if($id=='nao'){
+            $funcionarios = DB::table('funcionarios')
+            ->where('funcionarios.Ativo','=','2')
+            ->orderBy('nome')
+            ->get();
+           // dd($funcionarios);
+        }else{
+            $funcionarios = DB::table('funcionarios')
+            ->where('funcionarios.Ativo','=','1')
+            ->orderBy('nome')
+            ->get(); 
+        }
 //dd($funcionarios);
         return view('funcionarios.index',[        
             'funcionarios'=>$funcionarios
@@ -18,9 +30,10 @@ class FuncionariosController extends Controller
 
     public function novo(){
         $funcionarios = DB::table('funcionarios')->orderBy('nome')->get();
-        
+        $funcionario = Funcionario::findOrFail(1); 
                 return view('funcionarios.create',[        
-                    'funcionarios'=>$funcionarios
+                    'funcionarios'=>$funcionarios,
+                    'funcionario' => $funcionario  
                 ]); 
     }
 
@@ -35,7 +48,8 @@ class FuncionariosController extends Controller
     public function salvar(Request $request){        
         
         $funcionario = new Funcionario;
-        $funcionario->nome =  $request->nome;      
+        $funcionario->nome =  $request->nome;   
+        $funcionario->Ativo =  $request->Ativo;     
         $funcionario->cpf =  $request->cpf;
         $funcionario->senha =  $request->senha;
         $funcionario->Dt_admissao =  $request->data;
@@ -60,8 +74,15 @@ class FuncionariosController extends Controller
                 ]); 
     }
 
+
+
+    
     public function ponto(){
-        return view('web.ponto'); 
+        $funcionario = new Funcionario;
+        $funcionario->nome='';
+        return view('web.ponto',[        
+            'funcionario'=>$funcionario
+        ]);  
     }
 
 
@@ -69,7 +90,8 @@ class FuncionariosController extends Controller
     {
         $funcionario = Funcionario::findOrFail($request->id_funcionario);        
         
-        $funcionario->nome =  $request->nome;      
+        $funcionario->nome =  $request->nome;   
+        $funcionario->Ativo =  $request->Ativo;     
         $funcionario->cpf =  $request->cpf;
         $funcionario->senha =  $request->senha;
         $funcionario->Dt_admissao =  $request->data;
