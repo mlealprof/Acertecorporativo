@@ -1308,6 +1308,48 @@ public function validar_ordem(){
       'ordens' =>$ordens
    ] );
 }
+public function pagina_atualiza_produto($id){
+  // dd($id);
+   $pedido =  pedidos::findOrFail($id);
+   $itens = DB::table('produtos_pedido')
+            ->where('produtos_pedido.id_pedido','=',$id)
+            ->get();
+  return view("bling.cpanel.produto_atualizar",[
+         'pedido' => $pedido,
+         'itens' => $itens
+  ]);
+}
+
+public function atualiza_produto_pedido(Request $request){
+ //  dd($request);
+   $id_produto=$request->id_produto;
+   $id_pedido=$request->id_pedido;
+
+   $produto = produtos_pedidos::findOrFail($id_produto);
+   //dd($produto);
+   $produto->cor = $request->cor;
+   $produto->tecnica = $request->tecnica;
+   $produto->personalizacao = $request->personalizacao;
+   $produto->save();
+  // dd($produto);
+  $pedido =  pedidos::findOrFail($id_pedido);
+  //dd($pedido);    
+  $itens = DB::table('produtos_pedido')
+  ->where('produtos_pedido.id_pedido','=',$id_pedido)     
+  ->get();
+
+  $lojas = DB::table('loja')                             
+        ->get();
+
+         
+  return view("bling.cpanel.pedido_edit",[
+     'liberados' => $pedido,
+     'lojas'=>$lojas,
+     'itens'=>$itens         
+ ]); 
+   
+
+}
 
 
 }

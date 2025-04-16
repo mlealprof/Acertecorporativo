@@ -59,9 +59,10 @@
               <th scope="col">Data Envio</th>
               <th scope="col">Id Loja</th>
               <th scope="col">Loja</th>
-              <th scope="col">Cliente</th> 
+              <th scope="col">Cliente</th>
+ 
               <th scope="col">Status</th>
-              <th scope="col">Responsável</th>
+      
               <th scope="col">Ação</th>
 
               </tr>
@@ -73,11 +74,10 @@
                       <td><?php echo date('d/m/Y', strtotime($pedido->data_envio)); ?></td>
                       <td>{{$pedido->id_loja}}</td>
                       <td>{{$pedido->loja}}</td>
-                      <td>{{$pedido->cliente}}</td>
+                      <td>{{$pedido->cliente}}</td>     
               
                       <td>{{$pedido->status}}</td>
-                     
-                      <td></td>
+   
                       <td>
                       
                             <a href="/bling/pedido/atualizar/{{$pedido->id}}">Detalhes</a>   <br>                        

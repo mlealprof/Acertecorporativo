@@ -47,29 +47,29 @@
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Número</label>
                     <input type="hidden" name="id_pedido" value="{{$liberados->id}}">
-                    <input type="text" class="form-control" id="numero" name="numero" value={{$liberados->numero}}>
+                    <input type="text" class="form-control" id="numero" name="numero" value="{{$liberados->numero}}">
                  
                 </div>
             </div>
             <div class="form-group mb-2 col-lg-3">
                 <label for="exampleFormControlInput1">ID Loja</label>
-                <input type="text" class="form-control" id="id_loja" name="id_loja" value={{$liberados->id_loja}} >           
+                <input type="text" class="form-control" id="id_loja" name="id_loja" value="{{$liberados->id_loja}}" >           
              </div>
              <div class="form-group mb-2 col-lg-4">
                 <label for="exampleFormControlInput1">Cliente</label>
                 
-                <input type="text" class="form-control" id="cliente" name="cliente" value={{$liberados->cliente}} >           
+                <input type="text" class="form-control" id="cliente" name="cliente" value="{{$liberados->cliente}}" >           
              </div>
         </div>
         
         <div class="row">
            <div class="form-group mb-2 col-lg-3">
               <label for="exampleFormControlInput1">Data Compra</label>
-              <input type="date" class="form-control" id="data" name="data"   value={{$liberados->data_compra}}>           
+              <input type="date" class="form-control" id="data" name="data"   value="{{$liberados->data_compra}}">           
            </div>
            <div class="form-group mb-2 col-lg-3">
               <label for="exampleFormControlInput1">Data Envio</label>
-              <input type="date" class="form-control" id="data_envio" name="data_envio"  value={{$liberados->data_envio}} >           
+              <input type="date" class="form-control" id="data_envio" name="data_envio"  value="{{$liberados->data_envio}}" >           
            </div>
 
 
@@ -100,34 +100,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                     <?php $cont = 0;?>
+
+                
+               
                     @foreach ($itens as $item)
-                       
-                       <tr>                        
-                            <td>{{$item->quantidade}}</td>
-                            <td width="500px">{{$item->produto}}</td>                            
-                            <td>{{$item->sku}}</td>                        
-                            <td><select class="form-control" name=<?php echo 'tecnica'.$cont;?> id="tecnica">
-                                      <option value="{{$item->tecnica}}">{{$item->tecnica}}</option>
-                                      <option value="GIRO">Giro</option>
-                                      <option value="DTF">DTF</option>
-                                      <option value="LASER">Laser</option>
-                                      <option value="SUBLIMAÇÃO">Sublimação</option>
-                                      <option value="LISA">LISA</option>
-                                      <option value="ESTOQUE">Estoque</option>
-                                      <option value="OUTRA">Outra</option>
-                                </select>
-                            </td>
-                            <td>
-                                <input type="text" name= <?php echo 'cor'.$cont;?> size='5px' value={{$item->cor}}>
-                            </td>
-                            <td><textarea class="form-control" id="personalizacao" name=<?php echo 'personalizacao'.$cont;?> rows="2" >{{$item->personalizacao}}</textarea> </td>
-                            <td><a href="/bling/pedido/delete/{{$item->id}}">Del - {{$item->id}}</a></td>
-                       </tr>
-                     
-                       
-                       <?php $cont = $cont+1;?>
-                       
+
+                        <tr>                        
+                              <td>{{$item->quantidade}}</td>
+                              <td width="500px">{{$item->produto}}</td>                            
+                              <td>{{$item->sku}}</td>                        
+                              <td>
+                                  {{$item->tecnica}}
+                              </td>
+                              <td>
+                                 {{$item->cor}}
+                              </td>
+                              <td>{{$item->personalizacao}}</td>
+                              <td>Id_Produto: {{$item->id}} Ordem: {{$item->id_ordem}}</td>
+                              <td>
+                                  <a href="/bling/pedido/alterar_produto/{{$item->id_pedido}}">Alterar Produtos</a>
+                              </td>
+                        </tr>
 
                     @endforeach
                     

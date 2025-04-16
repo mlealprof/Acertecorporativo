@@ -120,7 +120,7 @@
                                 <input type="text" name= <?php echo 'cor'.$cont;?> size='5px' value={{$item->cor}}>
                             </td>
                             <td><textarea class="form-control" id="personalizacao" name=<?php echo 'personalizacao'.$cont;?> rows="2" >{{$item->personalizacao}}</textarea> </td>
-                            
+                            <td>Ordem: {{$item->id_ordem}}</td>
                        </tr>
                      
                        
@@ -143,7 +143,7 @@
             <a href="/bling/pedidos/imprimir_pedido/{{$liberados->id}}"><input type="button"  class="btn btn-primary" value='Imprimir Pedido'></a>
                <a href="/bling/pedidos/imprimir_dp/{{$liberados->id}}"><input type="button"  class="btn btn-primary" value='Imprimir DP'></a>
                <button type="submit" class="btn btn-primary">Salvar</button>
-               <a href="/bling/pedidos"><input type="button"  class="btn btn-primary" value='Voltar'></a>
+               <a href="/bling/expedicao"><input type="button"  class="btn btn-primary" value='Voltar'></a>
             </div>
        </div>
          

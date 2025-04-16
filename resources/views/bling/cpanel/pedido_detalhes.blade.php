@@ -40,7 +40,7 @@
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Número</label>
                     <input type="text" class="form-control" id="numero" name="numero" value="{{$resultado->numero}}">
-                    <input type="hidden" id='id' name="id" value={{$resultado->id}}>
+                    <input type="hidden" id='id' name="id" value="{{$resultado->id}}">
                 </div>
             </div>
             <div class="form-group mb-2 col-lg-3">
