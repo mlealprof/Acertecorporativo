@@ -9,7 +9,7 @@
 @section('content')
 
  
-<div>
+
 <table class="display table table-success table-striped" id='myTable'>
               <thead>
               <tr>
@@ -28,27 +28,36 @@
               </tr>
           </thead>
           <tbody>
-              @foreach ($ordens as $ordem)
-                <tr>                     
-                      <td>{{$ordem->id_ordem}}</td>
-                      <td>{{$ordem->descricao}}</td>
-                      <td>{{$ordem->situacao}}</td>
-                      <td>{{$ordem->funcionario}}</td>
-                      <td>{{$ordem->data_fim}}</td>
-                      <td>{{$ordem->data}}</td>
-                      <td><input type="text" name="valor" value="{{$ordem->qt_feita}}"size="3"></td>
-                      <td><input type="text" name="valor" value="{{$ordem->valor}}" size="4"></td>    
-                      @if($ordem->validado==False)    
-                         <td>Não</td>
-                      @else      
-                         <td>Sim</td>
-                      @endif   
-                      <td><input type="checkbox" name="marcado[]"></td>          
-                </tr>
-         
-              @endforeach     
+            <form action="/producao/validacao_ordem" method="post">
+            @csrf
+                @foreach ($ordens as $ordem)
+                    <tr>                     
+                        <td>{{$ordem->id_ordem}}</td>
+                        <td>{{$ordem->descricao}}</td>
+                        <td>{{$ordem->situacao}}</td>
+                        <td>{{$ordem->funcionario}}</td>
+                        <td>{{$ordem->data_fim}}</td>
+                        <td>{{$ordem->data}}</td>
+                        <td>{{$ordem->qt_feita}}</td>
+                        <td><input type="text" name="valor" value="{{$ordem->valor}}" size="4"></td>    
+                        @if($ordem->validado==False)    
+                            <td>Não</td>
+                        @else      
+                            <td>Sim</td>
+                        @endif   
+                        <td><input type="checkbox" name="marcado[{{$ordem->id}}]">                         
+                        </td>          
+                    </tr>            
+                @endforeach  
+               
+                <div class="row"> 
+                    <div class="col-lg-12" style="text-align: right;">
+                       <button type="submit" class="btn btn-primary">Validar Selecionados</button>  
+                    </div>
+                </div>
+            </form>   
           </table>
-</div>
+
 
     <!-- Principal JavaScript do Bootstrap
     ================================================== -->

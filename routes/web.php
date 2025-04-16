@@ -68,6 +68,7 @@ Route::get('/bling/expedicao/admin/fechadas', [App\Http\Controllers\ProducaoCont
 Route::get('/bling/expedicao/etiqueta/{id}/{conf}', [App\Http\Controllers\ProducaoController::class, 'imprimir_etiqueta','id','conf']);
 Route::get('/bling/pedido/delete/{id}', [App\Http\Controllers\ProducaoController::class, 'produto_pedido_delete','id']);
 Route::get('/validar_ordem', [App\Http\Controllers\ProducaoController::class, 'validar_ordem']);
+Route::post('/producao/validacao_ordem', [App\Http\Controllers\ProducaoController::class, 'validando_ordem']);
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

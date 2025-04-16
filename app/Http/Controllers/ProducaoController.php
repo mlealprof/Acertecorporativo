@@ -1355,5 +1355,9 @@ public function atualiza_produto_pedido(Request $request){
 
 }
 
+public function validando_ordem(Request $request){
+   dd($request);
+
+}
 
 }
