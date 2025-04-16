@@ -23,13 +23,19 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/bling', [App\Http\Controllers\ProducaoController::class, 'index']);
-Route::get('/bling/cpanel', [App\Http\Controllers\ProducaoController::class, 'cpanel_principal']);
+Route::get('/bling/cpanel', [App\Http\Controllers\ProducaoController::class, 'cpanel']);
 Route::get('/bling/pedidos', [App\Http\Controllers\ProducaoController::class, 'listarPedidos'])->middleware('auth');
 Route::get('/bling/pedidos/abertos', [App\Http\Controllers\ProducaoController::class, 'emAbertos'])->middleware('auth');
 Route::get('/bling/pedidos/liberados', [App\Http\Controllers\ProducaoController::class, 'liberados'])->middleware('auth');
+Route::get('/bling/pedidos/produto/delete/{id}', [App\Http\Controllers\ProducaoController::class, 'pedido_delete_produto'])->middleware('auth');
 Route::post('/bling/pedidos/liberados', [App\Http\Controllers\ProducaoController::class, 'liberadosFiltro'])->middleware('auth');
+Route::post('/bling/pedidos/atualizar', [App\Http\Controllers\ProducaoController::class, 'pedido_atualizar'])->middleware('auth');
+Route::get('/bling/pedido/atualizar/{id}', [App\Http\Controllers\ProducaoController::class, 'pedido_atualizar_edit','$id'])->middleware('auth');
+Route::post('/bling/pedidos/atualizar_pedido_ordem', [App\Http\Controllers\ProducaoController::class, 'pedido_atualizar_ordem'])->middleware('auth');
 Route::get('/bling/pedido/{id}', [App\Http\Controllers\ProducaoController::class, 'detalhesPedidoAberto','id'])->middleware('auth');
 Route::get('/bling/pedido/liberados/{id}', [App\Http\Controllers\ProducaoController::class, 'detalhesPedidoLiberado','id'])->middleware('auth');
+Route::get('/bling/pedidos/imprimir_pedido/{id}', [App\Http\Controllers\ProducaoController::class,  'imprimir_pedido','id']);
+Route::get('/bling/pedidos/imprimir_dp/{id}', [App\Http\Controllers\ProducaoController::class,  'imprimir_dp','id']);
 Route::post('/bling/pedidos/busca', [App\Http\Controllers\ProducaoController::class, 'pesquisa'])->middleware('auth');
 Route::post('/bling/pedidos/salvar', [App\Http\Controllers\ProducaoController::class, 'salvar_pedido'])->middleware('auth');
 Route::get('/bling/ordem', [App\Http\Controllers\ProducaoController::class, 'ordem']);
@@ -43,10 +49,26 @@ Route::get('/bling/ordem/finalizadas', [App\Http\Controllers\ProducaoController:
 Route::get('/bling/ordem/costurando', [App\Http\Controllers\ProducaoController::class, 'costurando']);
 Route::post('/bling/ordem/selecionados', [App\Http\Controllers\ProducaoController::class, 'selecionados']);
 Route::post('/bling/ordem/salvar_selecionados', [App\Http\Controllers\ProducaoController::class, 'salvar_selecionados']);
-Route::get('/bling/ordem/imprimir/{id}', [App\Http\Controllers\ProducaoController::class, 'imprimir','id']);
+Route::get('/bling/ordem/imprimir/{id}', [App\Http\Controllers\ProducaoController::class, 'imprimir_ordem','id']);
 Route::get('/bling/ordem/{id}', [App\Http\Controllers\ProducaoController::class, 'detalhe_ordem','id']);
 Route::get('/bling/expedicao  ', [App\Http\Controllers\ProducaoController::class, 'index_expedicao']);
+Route::get('/bling/expedicao/admin  ', [App\Http\Controllers\ProducaoController::class, 'expedicao_admin']);
 Route::get('/bling/ordem/imprimir_pedidos/{id}', [App\Http\Controllers\ProducaoController::class, 'pedidos_imprimir_ordem','id']);
+Route::get('/bling/pedidos/nota_fiscal', [App\Http\Controllers\ProducaoController::class, 'nota_fiscal_index']);
+Route::get('/bling/pedidos/pendentes', [App\Http\Controllers\ProducaoController::class, 'pedidos_pendentes']);
+Route::get('/bling/pedido/alterar_produto/{id}', [App\Http\Controllers\ProducaoController::class, 'pagina_atualiza_produto','id']);
+Route::post('/bling/pedido/atualiza_produto', [App\Http\Controllers\ProducaoController::class, 'atualiza_produto_pedido']);
+
+
+Route::post('/bling/pedidos/emitir_nota', [App\Http\Controllers\ProducaoController::class, 'emitir_nota']);
+Route::get('/bling/pedidos/em_producao', [App\Http\Controllers\ProducaoController::class, 'pedidos_em_producao']);
+Route::get('/bling/pedidos/producao_finalizada', [App\Http\Controllers\ProducaoController::class, 'pedidos_producao_finalizada']);
+Route::post('/bling/expedicao/checkout', [App\Http\Controllers\ProducaoController::class, 'expedicao_checkout']);
+Route::get('/bling/expedicao/admin/fechadas', [App\Http\Controllers\ProducaoController::class, 'expedicao_admin_fechadas']);
+Route::get('/bling/expedicao/etiqueta/{id}/{conf}', [App\Http\Controllers\ProducaoController::class, 'imprimir_etiqueta','id','conf']);
+Route::get('/bling/pedido/delete/{id}', [App\Http\Controllers\ProducaoController::class, 'produto_pedido_delete','id']);
+Route::get('/validar_ordem', [App\Http\Controllers\ProducaoController::class, 'validar_ordem']);
+
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/', [App\Http\Controllers\web\HomerController::class, 'home']);
@@ -92,7 +114,7 @@ Route::get('/continuar_comprando', [App\Http\Controllers\CarrinhoController::cla
 Route::get('/imprimir_orcamento', [App\Http\Controllers\CarrinhoController::class, 'imprimir_orcamento'])->name('site.imprimir_orcamento')->middleware('auth');
 Route::get('/orcamento', [App\Http\Controllers\CarrinhoController::class, 'orcamento'])->name('site.orcamento')->middleware('auth');
 Route::get('/checkout', [App\Http\Controllers\CarrinhoController::class, 'checkout'])->name('site.checkout');
-Route::get('/funcionarios', [App\Http\Controllers\FuncionariosController::class, 'index'])->middleware('auth');
+Route::get('/funcionarios/{id}', [App\Http\Controllers\FuncionariosController::class, 'index','$id'])->middleware('auth');
 Route::get('/funcionarios/novo', [App\Http\Controllers\FuncionariosController::class, 'novo'])->middleware('auth');
 Route::post('/funcionarios/salvar', [App\Http\Controllers\FuncionariosController::class, 'salvar'])->middleware('auth');
 Route::get('/funcionarios/{id}/editar', [App\Http\Controllers\FuncionariosController::class, 'editar','id'])->middleware('auth');
