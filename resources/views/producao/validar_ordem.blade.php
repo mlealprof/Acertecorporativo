@@ -8,11 +8,13 @@
 
 @section('content')
 
- 
+<form action="/producao/validacao_ordem" method="post"> 
+@csrf
+
 
 <table class="display table table-success table-striped" id='myTable'>
-              <thead>
-              <tr>
+        <thead>
+            <tr>
               <th scope="col">N.º Ordem</th>        
               <th scope="col">Descrição</th>
               <th scope="col">Situação</th>
@@ -25,27 +27,32 @@
               <th scope="col">Selecionar</th>
 
 
-              </tr>
+            </tr>
           </thead>
+          
           <tbody>
-            <form action="/producao/validacao_ordem" method="post">
-            @csrf
+              
                 @foreach ($ordens as $ordem)
                     <tr>                     
-                        <td>{{$ordem->id_ordem}}</td>
+                        <td><a href="/bling/ordem/{{$ordem->id_ordem}}" target="_blank">{{$ordem->id_ordem}}</a></td>
                         <td>{{$ordem->descricao}}</td>
                         <td>{{$ordem->situacao}}</td>
-                        <td>{{$ordem->funcionario}}</td>
-                        <td>{{$ordem->data_fim}}</td>
-                        <td>{{$ordem->data}}</td>
-                        <td>{{$ordem->qt_feita}}</td>
-                        <td><input type="text" name="valor" value="{{$ordem->valor}}" size="4"></td>    
+                        <td>{{$ordem->funcionario}}</td>                        
+                        <td><?php echo date('d/m/Y', strtotime($ordem->data_fim)); ?></td>
+                        <td><?php echo date('d/m/Y', strtotime($ordem->data)); ?></td>
+                        <td><input type="text" name="qt_feita[{{$ordem->id}}]" value="{{$ordem->qt_feita}}" size="2"></td>
+                        @if($ordem->data_fim >= $ordem->data)
+                           <td><input type="text" name="valor[{{$ordem->id}}]" value="{{$ordem->valor}}" size="4"></td>    
+                        @else
+                           <td style="border: 1px solid black; border-radius: 1px;" bgcolor="red"><input type="text" name="valor[{{$ordem->id}}]" value="0" size="4"></td>
+                        @endif
                         @if($ordem->validado==False)    
                             <td>Não</td>
                         @else      
                             <td>Sim</td>
                         @endif   
-                        <td><input type="checkbox" name="marcado[{{$ordem->id}}]">                         
+                    
+                        <td><input type="checkbox" name="marcado[]" value="{{$ordem->id}} ">                         
                         </td>          
                     </tr>            
                 @endforeach  
@@ -53,12 +60,13 @@
                 <div class="row"> 
                     <div class="col-lg-12" style="text-align: right;">
                        <button type="submit" class="btn btn-primary">Validar Selecionados</button>  
+              
                     </div>
                 </div>
-            </form>   
+             
           </table>
 
-
+     </form> 
     <!-- Principal JavaScript do Bootstrap
     ================================================== -->
     <!-- Foi colocado no final para a página carregar mais rápido -->
@@ -77,7 +85,7 @@
     });
 
     new DataTable('#myTable', {
-    pageLength: 20,
+    pageLength: 1000,
     order: [[0, 'desc']],
     language: {        
          info: 'Mostrando _PAGE_ de _PAGES_',        

@@ -40,7 +40,8 @@
                       <option value="Produção Finalizada">Produção Finalizada</option>
                       <option value="Etiqueta Impressa">Etiqueta Impressa</option>
                       <option value="Cancelado">Cancelado</option> 
-                      <option value="Cancelado Devolução">Cancelado Devolução</option>
+                      <option value="Devolução Erro">Devolução Erro</option>
+                      <option value="Devolução Desistência">Devolução Des  istência</option>
                 </select>           
              </div>
             <div class="form-group mb-2 col-lg-2">               
