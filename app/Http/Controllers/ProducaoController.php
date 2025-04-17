@@ -602,7 +602,7 @@ public function salvar_selecionados(Request $request){
       $ordem->nome_funcionario = $nome_funcionario;
       $ordem->descricao = $request->descricao;
       $obs = $ordem->obs;
-      //dd($obs);
+     // dd($obs);
       $permissao=0;
       if($ordem->data_inicio <> $request->data_inicio){
          $obs = $obs .  "- Data Inicial alterada de:$ordem->data_inicio para $request->data_inicio por: $nome_funcionario ";

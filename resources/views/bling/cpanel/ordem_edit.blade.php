@@ -94,6 +94,7 @@
                                 <th scope="col">Id Checkout</th>
                                 <th scope="col">Cliente</th>
                                 <th scope="col">Produto</th>
+                                <th scope="col">Status Produção</th>
                                 
                             </tr>
                         </thead>
@@ -105,6 +106,7 @@
                                 <td>{{$pedido->id}}</td>
                                 <td>{{$pedido->cliente}}</td>
                                 <td><?php echo mb_strimwidth($pedido->produto, 0, 50, "..."); ?></td>
+                                <td>{{$pedido->status}}</td>
                             </tr>
                             @endforeach
 
