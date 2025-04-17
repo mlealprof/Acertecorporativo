@@ -1302,15 +1302,15 @@ public function pedido_atualizar_ordem(Request $request){
 
 public function validar_ordem(){
    
-   $ordens = DB::table('historico_producao')
+   $ordens = DB::table('historico_producao')          
              ->where('historico_producao.situacao','=','Costurando')
-             ->orwhere('historico_producao.situacao','=','Produção Finalizada')
-             ->where('historico_producao.validado','=','false')
+             ->orwhere('historico_producao.situacao','=','Produção Finalizada')             
              ->join('funcionarios','funcionarios.id','=','historico_producao.id_funcionario')
              ->join('ordem_producao','ordem_producao.id','=','historico_producao.id_ordem')
              ->select('historico_producao.*','funcionarios.nome as funcionario','ordem_producao.data_fim as data_fim')
             
              ->get();
+   $ordens = $ordens->where('validado','=','0');
    //dd($ordens);
    return view("producao.validar_ordem",[      
       'ordens' =>$ordens
@@ -1360,8 +1360,32 @@ public function atualiza_produto_pedido(Request $request){
 }
 
 public function validando_ordem(Request $request){
-   dd($request);
+ //  dd($request);
+   foreach ($request->marcado as $marcado){
+    //  dd($marcado);
+      $historico_ordem =  historico_producao::findOrFail($marcado);
+      $historico_ordem->validado = 1;
+      $historico_ordem->valor = $request->valor[$marcado];
+      $historico_ordem->qt_feita = $request->qt_feita[$marcado];
+      $historico_ordem->save();
 
+   }
+   
+
+   $ordens = DB::table('historico_producao')
+             
+             ->where('historico_producao.situacao','=','Costurando')
+             ->orwhere('historico_producao.situacao','=','Produção Finalizada')             
+             ->join('funcionarios','funcionarios.id','=','historico_producao.id_funcionario')
+             ->join('ordem_producao','ordem_producao.id','=','historico_producao.id_ordem')
+             ->select('historico_producao.*','funcionarios.nome as funcionario','ordem_producao.data_fim as data_fim')
+            
+             ->get();
+   $ordens = $ordens->where('validado','=','0');
+   //dd($ordens);
+   return view("producao.validar_ordem",[      
+      'ordens' =>$ordens
+   ] );
 }
 
 }

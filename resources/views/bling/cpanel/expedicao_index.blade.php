@@ -104,7 +104,7 @@
                       <td>{{$pedido->concluido}}</td>
                       <td>{{$pedido->produto}}</td>
                       <td>{{$pedido->status}}</td>                    
-                      <td>{{$pedido->id_ordem}}</td>
+                      <td><a href="/bling/ordem/{{$pedido->id_ordem}}" target="_blank">{{$pedido->id_ordem}}</a></td>
                       <td>{{$pedido->status_producao}}</td>
 
                       <td>
