@@ -1388,4 +1388,111 @@ public function validando_ordem(Request $request){
    ] );
 }
 
+public function relatorio_producao(){
+   $fechamento='';
+   $funcionarios = DB::table('funcionarios')
+                   ->where('funcionarios.ativo','=','1')
+                   ->get();
+   $mes = '';
+   $funcionario='';
+   $producao = DB::table('historico_producao')
+                     ->select('id', 'qt_feita','valor', DB::raw('SUM((valor * qt_feita)) as total'))
+                     ->where('historico_producao.validado','=','1')
+                     ->where('historico_producao.id_funcionario','=','0')
+
+                     ->groupBy('id','qt_feita','valor')                  
+                     ->get();
+   //dd($producao);
+   $qt_feitas = $producao->sum('qt_feita');
+   $valor_total=$producao->sum('total');
+
+ //  dd($valor_total);
+
+
+
+
+
+   $funcionarios = DB::table('funcionarios')
+                   ->where('funcionarios.ativo','=','1')
+                   ->get();
+   return view("producao.rel_producao",[      
+
+      'funcionarios'=>$funcionarios,
+      'mes'=>$mes,
+      'func'=>$funcionario,
+      'producao' => $producao,
+      'qt_feita' => $qt_feitas,
+      'valor_total' =>$valor_total
+   ] );
+
+}
+
+public function filtro_relatorio_producao(Request $request){
+   $mes = $request->mes;
+   if($mes == 0){
+      $mes = date('m');           
+  }
+   //dd($mes);
+
+   $ano = $request->ano;
+   $funcionario =  funcionario::findOrFail($request->id_funcionario)->nome;
+
+   $producao = DB::table('historico_producao')
+                     ->select('id', 'qt_feita','valor', DB::raw('SUM((valor * qt_feita)) as total'))
+                     ->where('historico_producao.validado','=','1')
+                     ->where('historico_producao.id_funcionario','=',$request->id_funcionario)
+                     ->whereYear('data', '=', $ano)
+                     ->whereMonth('data', '=', $mes)  
+                     ->groupBy('id','qt_feita','valor')                  
+                     ->get();
+  // dd($producao);
+   $qt_feitas = $producao->sum('qt_feita');
+   $valor_total=$producao->sum('total');
+
+ //  dd($valor_total);
+
+
+   $pedidos_finalizados = DB::table('pedidos')
+                           ->where('pedidos.status','=','Etiqueta Impressa')
+                           ->whereYear('data_compra', '=', $ano)
+                           ->whereMonth('data_compra', '=', $mes) 
+                           ->get()->count();
+
+   $pedidos_cancelados = DB::table('pedidos')
+                           ->where('pedidos.status','=','Cancelado')
+                           ->whereYear('data_compra', '=', $ano)
+                           ->whereMonth('data_compra', '=', $mes) 
+                           ->get()->count();
+  $pedidos_devolucao_desistencia = DB::table('pedidos')
+                           ->where('pedidos.status','=','Devolução Desistência')
+                           ->whereYear('data_compra', '=', $ano)
+                           ->whereMonth('data_compra', '=', $mes) 
+                           ->get()->count();
+   $pedidos_devolucao_erro = DB::table('pedidos')
+                           ->where('pedidos.status','=','Devolução Erro')
+                           ->whereYear('data_compra', '=', $ano)
+                           ->whereMonth('data_compra', '=', $mes) 
+                           ->get()->count();
+
+
+   $funcionarios = DB::table('funcionarios')
+                   ->where('funcionarios.ativo','=','1')
+                   ->get();
+   $mes = $mes.'/'.$ano;
+   return view("producao.rel_producao",[      
+
+      'funcionarios'=>$funcionarios,
+      'mes'=>$mes,
+      'func'=>$funcionario,
+      'producao' => $producao,
+      'qt_feita' => $qt_feitas,
+      'valor_total' =>$valor_total,
+      'pedidos_finalizados' =>$pedidos_finalizados,
+      'pedidos_cancelados'=>$pedidos_cancelados,
+      'pedidos_devolucao_desistencia'=>$pedidos_devolucao_desistencia,
+      'pedidos_devolucao_erro'=>$pedidos_devolucao_erro
+   ] );
+
+}
+
 }
