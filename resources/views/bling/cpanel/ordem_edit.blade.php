@@ -51,6 +51,7 @@
                       <option value="Pausada">Pausada</option> 
                       <option value="Costurando">Costurando</option> 
                       <option value="Produção Finalizada">Produção Finalizada</option> 
+                      <option value="Fechada">Fechada</option> 
                 </select>           
              </div>
              <input type="hidden" name="id_ordem" id="id_ordem" value="{{$ordem->id}}">
@@ -90,7 +91,7 @@
                             <tr>
                                 <th scope="col">N.º Pedido</th>
                                 <th scope="col">Qt</th>
-                                <th scope="col">Id Loja</th>
+                                <th scope="col">Id Checkout</th>
                                 <th scope="col">Cliente</th>
                                 <th scope="col">Produto</th>
                                 
@@ -101,9 +102,9 @@
                             <tr>                               
                                 <td>{{$pedido->numero}}</td>
                                 <td>{{$pedido->quantidade}}</td>
-                                <td>{{$pedido->id_loja}}</td>
+                                <td>{{$pedido->id}}</td>
                                 <td>{{$pedido->cliente}}</td>
-                                <td>{{$pedido->produto}}</td>
+                                <td><?php echo mb_strimwidth($pedido->produto, 0, 50, "..."); ?></td>
                             </tr>
                             @endforeach
 

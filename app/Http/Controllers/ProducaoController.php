@@ -769,11 +769,12 @@ public function salvar_selecionados(Request $request){
 
  public function index_expedicao(){
    $pedidos = DB::table('pedidos')
-             ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id')               
+             ->join('produtos_pedido','produtos_pedido.id_pedido','=','pedidos.id')   
+             ->join('ordem_producao','ordem_producao.id','=','produtos_pedido.id_ordem')            
              ->where('pedidos.status','<>','Etiqueta Impressa')    
              ->where('pedidos.status','<>','Cancelado')     
              ->where('pedidos.status','<>','Cancelado Devolução')     
-             ->select('pedidos.*','produtos_pedido.*','produtos_pedido.status as status_producao' )              
+             ->select('pedidos.*','produtos_pedido.*','produtos_pedido.status as status_produto','ordem_producao.status as status_producao' )              
             
              ->get();  
   // dd($pedidos);
@@ -957,11 +958,14 @@ public function expedicao_checkout(Request $request){
                                     ->where('produtos_pedido.id_ordem','=',$produto->id_ordem)
                                     ->get();
            // dd($produtos_finalizados);
-            foreach($produtos_finalizados as $finalizado){
-               $fechar_ordem = false;
-               if($finalizado->status=='Finalizado'){
-                $fechar_ordem = true;
+           $fechar_ordem = true;
+            foreach($produtos_finalizados as $finalizado){               
+               if((($finalizado->status=='Finalizado')or($finalizado->status=='Costurando')or($finalizado->status=='Etiqueta Impressa'))and($fechar_ordem==true)){
+                   $fechar_ordem = true;
+               }else{
+                  $fechar_ordem  = false;
                }
+ 
             }
              //dd($fechar_ordem);
             if($fechar_ordem==true){
